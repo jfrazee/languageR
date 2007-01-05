@@ -40,11 +40,13 @@ Dutch children).
    linear mixed-effects models}.  Manuscript, Radboud University Nijmegen.
 }
 \examples{
+\dontrun{
 data(beginningReaders)
 library(lme4, keep.source = FALSE)
 beginningReaders.lmer = lmer(LogRT ~  PC1 + PC2 + PC3  + ReadingScore +
   OrthLength + I(OrthLength^2) + LogFrequency + LogFamilySize +
   (1|Word) + (1+LogFrequency|Subject) + (OrthLength|Subject) + (PC1|Subject), 
   data = beginningReaders)
+}
 }
 \keyword{datasets}

@@ -31,20 +31,22 @@ length: the case of derivational affixes in Dutch, \emph{Journal of the
 Acoustical Society of America}, 118, 2561-2569.
 }
 \examples{
-data(durationsGe)
-durationsGe$Frequency = log(durationsGe$Frequency + 1)
-durationsGe$YearOfBirth = durationsGe$YearOfBirth - 1900
+	\dontrun{
+    data(durationsGe)
+    durationsGe$Frequency = log(durationsGe$Frequency + 1)
+    durationsGe$YearOfBirth = durationsGe$YearOfBirth - 1900
 
-durationsGe.lm = lm(DurationOfPrefix ~ Frequency+SpeechRate, data = durationsGe)
-summary(durationsGe.lm)
+    durationsGe.lm = lm(DurationOfPrefix ~ Frequency+SpeechRate, data = durationsGe)
+    summary(durationsGe.lm)
 
-# ---- model criticism
-
-plot(durationsGe.lm)
-outliers = c(271, 392, 256, 413, 118, 256)
-durationsGe.lm = lm(DurationOfPrefix ~ Frequency + SpeechRate, 
-  data = durationsGe[-outliers, ])
-summary(durationsGe.lm)
+    # ---- model criticism
+    
+    plot(durationsGe.lm)
+    outliers = c(271, 392, 256, 413, 118, 256)
+    durationsGe.lm = lm(DurationOfPrefix ~ Frequency + SpeechRate, 
+      data = durationsGe[-outliers, ])
+    summary(durationsGe.lm)
+  }
 
 }
 \keyword{datasets}

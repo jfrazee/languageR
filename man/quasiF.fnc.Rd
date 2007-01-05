@@ -29,7 +29,7 @@ quasiF.fnc(ms1, ms2, ms3, ms4, df1, df2, df3, df4)
 }
 \author{R. H. Baayen}
 \seealso{ ~~objects to See Also as \code{\link{quasiF.split.plot.fnc}}.}
-\examples{
+\examples{\dontrun{
   data(splitplot)
 
   splitplot.lm = lm(RT ~ SOA + Item + Subject + 
@@ -48,7 +48,7 @@ quasiF.fnc(ms1, ms2, ms3, ms4, df1, df2, df3, df4)
   # much simpler is
   quasiF.split.plot.fnc(splitplot)$quasiF
 
-}
+}}
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
 \keyword{ regression }

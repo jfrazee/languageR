@@ -33,12 +33,12 @@ O'Shannessy, C. (2006) \emph{Language contact and child bilingual acquisition:
 Learning a mixed language and Warlpiri in northern Australia}, PhD Thesis,
 University of Sydney, Australia.}
 }
-\examples{
+\examples{\dontrun{
 data(warlpiri)
 library(lme4, keep.source = FALSE)
 warlpiri.lmer = lmer(CaseMarking ~ WordOrder * AgeGroup + 
   AnimacyOfSubject + (1|Text) + (1|Speaker), 
   family = "binomial", data = warlpiri, method = "Laplace")
 warlpiri.lmer
-}
+}}
 \keyword{datasets}

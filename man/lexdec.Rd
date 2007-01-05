@@ -62,7 +62,7 @@
 \source{
 Data collected with Jen Hay, University of Canterbury, Christchurch, New Zealand, 2004.
 }
-\examples{
+\examples{\dontrun{
 data(lexdec)
 library(lme4, keep.source = FALSE)
 
@@ -95,5 +95,5 @@ data = lexdec[abs(scale(resid(lexdec.lmerB)))<2,])
 qqnorm(resid(lexdec.lmerC))
 pvals.fnc(lexdec.lmerC)$summary
 
-}
+}}
 \keyword{datasets}

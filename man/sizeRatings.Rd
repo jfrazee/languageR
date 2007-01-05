@@ -26,12 +26,12 @@
   Data collected with Jen Hay, University of Canterbury, Christchurch,
   New Zealand, 2004.
 }
-\examples{
+\examples{\dontrun{
 data(sizeRatings)
 library(lme4, keep.source = FALSE)
 sizeRatings.lmer = lmer(Rating ~ Class * Naive + 
   MeanFamiliarity * Language + (1|Subject) + (1|Word), 
   data = sizeRatings)
 pvals.fnc(sizeRatings.lmer)$summary
-}
+}}
 \keyword{datasets}

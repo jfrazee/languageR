@@ -54,9 +54,11 @@ R. Harald Baayen
 %\code{\link{text2spc.fnc}} and the \code{\link{zipfR}} package.
 %}
 \examples{
-data(alice, through, oz)
-compare.richness.fnc(tolower(alice), tolower(through[1:length(alice)]))
-compare.richness.fnc(tolower(alice), tolower(oz[1:25942]))
+	\dontrun{
+     data(alice, through, oz)
+     compare.richness.fnc(tolower(alice), tolower(through[1:length(alice)]))
+     compare.richness.fnc(tolower(alice), tolower(oz[1:25942]))
+  }
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

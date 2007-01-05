@@ -29,13 +29,13 @@ simulateLatinsquare.fnc(dat, with = TRUE, trial = 0, nruns = 100,
   \item{with}{Logical, TRUE if SOA effect is built into the simulations.}
 }
 \author{R. H. Baayen}
-\examples{
+\examples{\dontrun{
   data(latinsquare)
 	\dontrun{
 	library(lme4)
   simulateLatinsquare.fnc(latinsquare, nruns=100)
 	}
-}
+}}
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
 \keyword{ regression }

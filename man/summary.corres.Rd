@@ -5,7 +5,7 @@
   This function provides a concise summary of a correspondence object.
 }
 \usage{
-summary.corres(object, n = 2, returnList = FALSE, head = TRUE, ...)
+\method{summary}{corres}(object, n = 2, returnList = FALSE, head = TRUE, ...)
 }
 \arguments{
   \item{object}{A correspondence object as produced by \code{corres}.}
@@ -22,12 +22,12 @@ summary.corres(object, n = 2, returnList = FALSE, head = TRUE, ...)
 }
 \author{R. H. Baayen}
 \seealso{See also \code{\link{corres.fnc}}.}
-\examples{
+\examples{\dontrun{
   data(oldFrench)
   oldFrench.ca = corres.fnc(oldFrench)
   oldFrench.ca
   summary(oldFrench.ca)
-}
+}}
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
 \keyword{ multivariate }

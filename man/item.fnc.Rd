@@ -18,10 +18,10 @@ item.fnc(data)
 \author{R. H. Baayen}
 \seealso{See Also \code{\link{simulateRegression.fnc}} and
 \code{\link{make.reg.fnc}}.}
-\examples{
+\examples{\dontrun{
   dat = make.reg.fnc()
   dat.lm = item.fnc(dat)
   summary(dat.lm)
-}
+}}
 \keyword{ regression }
 %\keyword{ ~kwd2 }% __ONLY ONE__ keyword per line

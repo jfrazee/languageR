@@ -42,6 +42,7 @@ Empirical, Theoretical, and Computational Perspectives}, Berlin: Mouton de
 Gruyter, pp. 529-555.
 }
 \examples{
+\dontrun{
 data(etymology)
 
 # ---- EtymAge should be an ordered factor, set contrasts accordingly
@@ -82,5 +83,6 @@ plot(etymology.lrm)
 resid(etymology.lrm, 'score.binary', pl = TRUE)
 plot.xmean.ordinaly(EtymAge ~ NcountStem, data = etymology)
 par(mfrow = c(1, 1))
+}
 }
 \keyword{datasets}

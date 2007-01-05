@@ -151,7 +151,7 @@ Dunn, M., Terrill, A., Reesink, G., Foley, R. A. and Levinson, S. C. (2005)
 Structural phylogenetics and the reconstruction of ancient language history,
 \emph{Science}, 309, 2072-2075.
 }
-\examples{
+\examples{\dontrun{
 data(phylogeny)
 library(ape)
 
@@ -188,5 +188,5 @@ papuan.dist.tr$tip.label =
   as.character(papuan.meta$Language[as.numeric(
     papuan.dist.tr$tip.label)])
 plot(papuan.dist.tr, type = "u", font = as.numeric(as.factor(fonts)))
-}
+}}
 \keyword{datasets}

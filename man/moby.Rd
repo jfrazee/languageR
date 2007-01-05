@@ -13,8 +13,8 @@ punctuation marks removed.
 \source{
   The project Gutenberg at \url{http://www.gutenberg.org/wiki/Main_Page}
 }
-\examples{
+\examples{\dontrun{
   data(moby)
   moby[1:2]
-}
+}}
 \keyword{datasets}

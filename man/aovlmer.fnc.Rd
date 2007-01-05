@@ -39,11 +39,13 @@ aovlmer.fnc(object, mcmc, which, noMCMC, ...)
 \author{R. H. Baayen, D. Bates}
 \seealso{See also lmer, mcmcsamp.}
 \examples{
+	\dontrun{
 	library(lme4, keep.source=FALSE)
 	library(coda)
 	data(latinsquare)
 	l.lmer = lmer(RT~SOA+(1|Word)+(1|Subject), data=latinsquare)
 	mcmc = mcmcsamp(l.lmer, n=10000)
 	aovlmer.fnc(l.lmer, mcmc, c("SOAmedium", "SOAshort"))
+	}
 }
 \keyword{ regression }

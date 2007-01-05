@@ -5,7 +5,7 @@
  Returns the first rows of a growth object.
 }
 \usage{
-head.growth(x, n = 6, ...)
+	\method{head}{growth}(x, n = 6, ...)
 }
 \arguments{
   \item{x}{A growth object.}
@@ -16,11 +16,11 @@ head.growth(x, n = 6, ...)
 }
 \author{R. H. Baayen}
 \seealso{See Also \code{\link{growth.fnc}}.}
-\examples{
+\examples{\dontrun{
   data(alice)
   alice.growth = growth.fnc(alice)
   head(alice.growth)
-}
+}}
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
 \keyword{ internal }

@@ -16,7 +16,7 @@ Spassova, M. S. (2006) \emph{Las marcas sintacticas de atribucion forense de
 autoria de textos escritos en espanol}, Masters thesis, Institut Universitari
 de Linguistica Aplicada, Universitat Pompeu Fabra, Barcelona. 
 }
-\examples{
+\examples{\dontrun{
 data(spanish)
 data(spanishMeta)
 
@@ -55,5 +55,5 @@ for (i in 1:15) {
 ncorrect = sum(predictedClasses==as.character(spanishMeta$Author))
 ncorrect
 sum(dbinom(ncorrect:15, 15, 1/3))
-}
+}}
 \keyword{datasets}

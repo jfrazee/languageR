@@ -39,9 +39,9 @@ shadenormal.fnc(qnts = c(0.025, 0.975))
 
 }
 \author{R. H. Baayen}
-\examples{
+\examples{\dontrun{
 shadenormal.fnc()
-}
+}}
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
 \keyword{ misc }

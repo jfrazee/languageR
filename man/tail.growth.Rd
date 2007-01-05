@@ -5,7 +5,7 @@
   Prints last rows of growth object.
 }
 \usage{
-tail.growth(x, n = 6, ...)
+\method{tail}{growth}(x, n = 6, ...)
 }
 \arguments{
   \item{x}{A growth object.}
@@ -14,10 +14,10 @@ tail.growth(x, n = 6, ...)
 }
 \author{R. H. Baayen}
 \seealso{See Also \code{\link{growth.fnc}}.}
-\examples{
+\examples{\dontrun{
   data(alice)
   alice.growth = growth.fnc(alice)
   tail(alice.growth)
-}
+}}
 \keyword{ models }
 %\keyword{ ~kwd2 }% __ONLY ONE__ keyword per line

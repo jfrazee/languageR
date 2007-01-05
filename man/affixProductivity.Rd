@@ -101,6 +101,7 @@ for 27 English affixes in 44 texts.
   \emph{Journal of Quantitative Linguistics}, 1, 16-34.
 }
 \examples{
+\dontrun{
 data(affixProductivity)
 affixes.pr = prcomp(affixProductivity[,1:(ncol(affixProductivity)-3)], 
 center = TRUE, scale. = TRUE)
@@ -113,5 +114,6 @@ panel = panel.superpose,
 key = list(title  = "texts in productivity space",
 text   = list(c("Religious", "Children", "Literary", "Other")),
 points = list(pch = super.sym$pch[1:4], col = super.sym$col[1:4])))
+}
 }
 \keyword{datasets}

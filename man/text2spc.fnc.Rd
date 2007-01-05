@@ -16,12 +16,12 @@ text2spc.fnc(text)
 }
 \author{R. H. Baayen}
 \seealso{See the documentation for \code{zipfR} for \code{spc} objects.}
-\examples{
+\examples{\dontrun{
   library(zipfR)
   data(alice)
   alice.spc = text2spc.fnc(alice)
   plot(alice.spc)
-}
+}}
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
 \keyword{ models }

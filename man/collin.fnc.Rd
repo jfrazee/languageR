@@ -29,8 +29,10 @@ Series in Probability and Mathematical Statistics, New York.
 \author{F. J. Tweedie}
 \seealso{\code{\link{kappa}}}
 \examples{
-data(english)
-collin.fnc(english[english$AgeSubj=="young",], 7:29)$cnumber
+	\dontrun{
+     data(english)
+     collin.fnc(english[english$AgeSubj=="young",], 7:29)$cnumber
+  }
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

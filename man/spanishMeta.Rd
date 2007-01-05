@@ -24,7 +24,7 @@ Spassova, M. S. (2006) \emph{Las marcas sintacticas de atribucion forense de
 autoria de textos escritos en espanol}, Masters thesis, Institut Universitari
 de Linguistica Aplicada, Universitat Pompeu Fabra, Barcelona. 
 }
-\examples{
+\examples{\dontrun{
 data(spanishMeta)
-}
+}}
 \keyword{datasets}

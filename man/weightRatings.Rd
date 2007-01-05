@@ -24,9 +24,9 @@
 Data collected with Jen Hay, University of Canterbury, Christchurch,
 New Zealand, 2004.
 }
-\examples{
+\examples{\dontrun{
 data(weightRatings)
 xylowess.fnc(Rating ~ Frequency | Subject, data = weightRatings, 
   xlab = "log Frequency", ylab = "Weight Rating")
-}
+}}
 \keyword{datasets}

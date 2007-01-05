@@ -5,7 +5,7 @@
   Print method for growth objects.
 }
 \usage{
-print.growth(x, ...)
+\method{print}{growth}(x, ...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -19,13 +19,13 @@ print.growth(x, ...)
 }
 \author{R. H. Baayen}
 \seealso{See also \code{\link{growth.fnc}}.}
-\examples{
+\examples{\dontrun{
   data(alice)
   alice.growth = growth.fnc(alice)
   alice.growth
   # for accessing the printed data frame:
   alice.growth@data$data[1:4,]
-}
+}}
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
 \keyword{ models }

@@ -85,7 +85,7 @@ Ernestus, M., van Mulken, M. and Baayen, R. H. (2007)
 De syntax van Oud-Franse ridders en heiligen in ruimte en tijd
 To appear in \emph{Onze Taal}.
 }
-\examples{
+\examples{\dontrun{
 data(oldFrench)
 data(oldFrenchMeta)
 
@@ -94,5 +94,5 @@ oldFrench.ca = corres.fnc(oldFrench)
 plot(oldFrench.ca, rlabels = oldFrenchMeta$Genre, 
 rcol = as.numeric(oldFrenchMeta$Genre), rcex = 0.5, 
 extreme = 0.1, ccol = "blue")
-}
+}}
 \keyword{datasets}

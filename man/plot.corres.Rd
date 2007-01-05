@@ -5,7 +5,7 @@
 This function defines a plot method for correspondence objects.
 }
 \usage{
-plot.corres(x, main = "", addcol = TRUE, extreme = 0, rcex = 1, rcol = 1, 
+\method{plot}{corres}(x, main = "", addcol = TRUE, extreme = 0, rcex = 1, rcol = 1, 
 rlabels = "", stretch = 1.4, ccex = 1, ccol = 2, clabels = "", ...)
 }
 \arguments{
@@ -29,7 +29,7 @@ rlabels = "", stretch = 1.4, ccex = 1, ccol = 2, clabels = "", ...)
 }
 \author{R. H. Baayen}
 \seealso{See Also \code{\link{corres.fnc}}, \code{link{corsup.fnc}}.}
-\examples{
+\examples{\dontrun{
   data(oldFrench)
   data(oldFrenchMeta)
 
@@ -40,7 +40,7 @@ rlabels = "", stretch = 1.4, ccex = 1, ccol = 2, clabels = "", ...)
   plot(oldFrench.ca, rlabels = oldFrenchMeta$Genre, 
   rcol = as.numeric(oldFrenchMeta$Genre), rcex = 0.5, 
   extreme = 0.1, ccol = "blue")
-}
+}}
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
 \keyword{ multivariate }

@@ -18,7 +18,7 @@
     \item{\code{RT}}{a numeric vector for simulated RTs.}
   }
 }
-\examples{
+\examples{\dontrun{
 data(shrinkage)
 
 library(lme4, keep.source=FALSE)
@@ -50,5 +50,5 @@ mtext("mixed-effects regression", 3, 1)
 points(subj$rank, 400+subj$ranef, col="blue")
 abline(h=400)
 par(mfrow=c(1,1))
-}
+}}
 \keyword{datasets}

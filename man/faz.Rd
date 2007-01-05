@@ -23,6 +23,7 @@ into the presence of the past in newspaper texts,
 \emph{Computers and the Humanities}, 35, 237-253.
 }
 \examples{
+\dontrun{
 data(faz)
 faz$Distance = 1:nrow(faz)
 
@@ -58,6 +59,7 @@ faz.both = lm(LogFrequency ~ ShiftedLogDistance:PastBreakPoint, data = faz)
 plot(faz$LogDistance, faz$LogFrequency, 
 xlab = "log Distance", ylab = "log Frequency", col = "darkgrey")
 lines(faz$LogDistance, fitted(faz.both))
+}
 
 }
 \keyword{datasets}

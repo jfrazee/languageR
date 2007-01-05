@@ -22,14 +22,14 @@ growth2vgc.fnc(growth)
 }
 \author{R. H. Baayen}
 \seealso{See also \code{\link{growth.fnc}}and the zipfR package.}
-\examples{
+\examples{\dontrun{
 library(zipfR)
 
 data(alice)
 alice.growth = growth.fnc(text = alice, size = 648, nchunks = 40)
 alice.vgc = growth2vgc.fnc(alice.growth)
 plot(alice.vgc)
-}
+}}
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
 \keyword{ models }

@@ -5,7 +5,7 @@
   This function defines the plot method for growth objects.
 }
 \usage{
-plot.growth(x, w = "all", ...)
+\method{plot}{growth}(x, w = "all", ...)
 }
 \arguments{
   \item{x}{A growth object.}
@@ -18,12 +18,12 @@ plot.growth(x, w = "all", ...)
 }
 \author{R. H. Baayen}
 \seealso{See Also \code{\link{growth.fnc}}.}
-\examples{
+\examples{\dontrun{
   data(alice)
   alice.growth = growth.fnc(alice)
   plot(alice.growth)
   plot(alice.growth, w = "Yule")
-}
+}}
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
 \keyword{ models }

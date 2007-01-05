@@ -55,7 +55,7 @@ De Vaan, L., Schreuder, R. and Baayen, R. H. (2007) Regular morphologically
 complex neologisms leave detectable traces in the mental lexicon, \emph{The
 Mental Lexicon}, 2, in press.
 }
-\examples{
+\examples{\dontrun{
 data(selfPacedReadingHeid)
 
 # data validation
@@ -84,5 +84,5 @@ selfPacedReadingHeid[abs(scale(resid(selfPacedReadingHeid.lmer))) < 2.5, ])
 qqnorm(resid(selfPacedReadingHeid.lmerA))
 
 pvals.fnc(selfPacedReadingHeid.lmerA)$summary
-}
+}}
 \keyword{datasets}

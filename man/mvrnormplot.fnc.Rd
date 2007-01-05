@@ -20,9 +20,9 @@ mvrnormplot.fnc(r, n, limits)
 }
 \author{R. H. Baayen}
 \seealso{mvrnorm (MASS package)}
-\examples{
+\examples{\dontrun{
 	mvrnormplot.fnc(r=0.9, n=100)
-}
+}}
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
 \keyword{ misc }

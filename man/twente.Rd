@@ -17,10 +17,10 @@
 \source{
   Twente News Corpus.
 }
-\examples{
+\examples{\dontrun{
 data(twente)
 library(zipfR)
 twente.spc = spc(m=twente$m, Vm = twente$Vm)
 plot(twente.spc)
-}
+}}
 \keyword{datasets}

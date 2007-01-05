@@ -5,7 +5,7 @@
   Prints eigenvalues and eigenvalue rates for a correspondence object.
 }
 \usage{
-print.corres(x, ...)
+\method{print}{corres}(x, ...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -17,11 +17,11 @@ print.corres(x, ...)
 }
 \author{R. H. Baayen}
 \seealso{See also \code{\link{corres.fnc}}. }
-\examples{
+\examples{\dontrun{
   data(oldFrench)
   oldFrench.ca = corres.fnc(oldFrench)
   oldFrench.ca
-}
+}}
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
 \keyword{ multivariate }

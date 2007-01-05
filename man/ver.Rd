@@ -19,7 +19,7 @@
 Baayen, R. H. and Lieber, R. (1997) Word Frequency Distributions and Lexical
 Semantics, \emph{Computers and the {H}umanities}, 30, 281-291.
 }
-\examples{
+\examples{\dontrun{
 data(ver)
 ver$Frequency = log(ver$Frequency)
 
@@ -44,5 +44,5 @@ legend=c("transparent", "opaque"))
 # test whether the difference is significant
 
 ks.test(jitter(ver.transp), jitter(ver.opaque))
-}
+}}
 \keyword{datasets}

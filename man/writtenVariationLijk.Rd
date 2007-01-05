@@ -33,7 +33,7 @@ Keune, K., Ernestus, M., Van Hout, R. and Baayen, R.H. (2005) Social,
 geographical, and register variation in Dutch: From written 'mogelijk' to
 spoken 'mok', \emph{Corpus Linguistics and Linguistic Theory}, 1, 183-223.
 }
-\examples{
+\examples{\dontrun{
 data(writtenVariationLijk)
 
 library(lme4, keep.source=FALSE)
@@ -46,5 +46,5 @@ writtenVariationLijk.lmerA = lmer(Count ~ Country * Register + (Country|Word),
 anova(writtenVariationLijk.lmer, writtenVariationLijk.lmerA)
 
 writtenVariationLijk.lmerA
-}
+}}
 \keyword{datasets}

@@ -36,6 +36,7 @@ Ernestus, M. and Baayen, R. H. (2003) Predicting the unpredictable:
 Interpreting neutralized segments in Dutch, \emph{Language}, 79, 5-38.
 }
 \examples{
+\dontrun{
 data(finalDevoicing)
 library(rpart)
 
@@ -73,5 +74,6 @@ par(mfrow=c(1,1))
 # ---- model validation
 
 validate(finalDevoicing.lrm, B = 200)
+}
 }
 \keyword{datasets}

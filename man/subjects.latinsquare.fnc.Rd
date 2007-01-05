@@ -23,10 +23,10 @@ subjects.latinsquare.fnc(dat)
 }
 \author{R. H. Baayen}
 \seealso{See also \code{\link{simulateLatinsquare.fnc}}.}
-\examples{
+\examples{\dontrun{
 data(latinsquare)
 subjects.latinsquare.fnc(latinsquare)$p
-}
+}}
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
 \keyword{ regression }

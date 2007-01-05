@@ -23,10 +23,10 @@ Baayen, R. H. (2001) \emph{Word Frequency Distributions}, Dordrecht: Kluwer.
 }
 \author{R. H. Baayen}
 \seealso{See also \code{\link{spectrum.fnc}} and \code{\link{growth.fnc}}.}
-\examples{
+\examples{\dontrun{
   data(alice)
   yule.fnc(spectrum.fnc(alice))
-}
+}}
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
 \keyword{ models }

@@ -23,9 +23,9 @@ De Vaan, L., Schreuder, R. and Baayen, R. H. (2007) Regular morphologically
 complex neologisms leave detectable traces in the mental lexicon, \emph{The
 Mental Lexicon}, 2, in press.
 }
-\examples{
+\examples{\dontrun{
 data(heid)
 heid = aggregate(heid$RT, list(heid$Word, heid$BaseFrequency), mean)
 colnames(heid) = c("Word", "BaseFrequency", "MeanRT")
-}
+}}
 \keyword{datasets}

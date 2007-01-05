@@ -20,7 +20,7 @@ plot.logistic.fit.fnc(x = dative.glmm, data = dative, ...)
   A plot is produced on the graphics device.
 }
 \author{R. H. Baayen}
-\examples{
+\examples{\dontrun{
 data(dative)
 library(lme4, keep.source=FALSE)
 
@@ -31,7 +31,7 @@ dative.glmm = lmer(RealizationOfRecipient ~ AccessOfTheme +
    data = dative, family = "binomial", method = "PQL")
 
 plot.logistic.fit.fnc (dative.glmm, dative)
-}
+}}
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
 \keyword{ regression }

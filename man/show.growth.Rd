@@ -5,7 +5,7 @@
   A print method for growth objects created with \code{growth.fnc}.
 }
 \usage{
-show.growth(x)
+\method{show}{growth}(x)
 }
 \arguments{
   \item{x}{A growth object.}
@@ -16,11 +16,11 @@ show.growth(x)
 }
 \author{R. H. Baayen}
 \seealso{See Also \code{\link{growth.fnc}}.}
-\examples{
+\examples{\dontrun{
   data(alice)
   alice.growth = growth.fnc(alice, chunks= c(5000, 10000, 15000))
   alice.growth
-}
+}}
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
 \keyword{ models }

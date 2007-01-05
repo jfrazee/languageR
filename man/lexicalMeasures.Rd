@@ -48,7 +48,7 @@ Baayen, R.H., Feldman, L. and Schreuder, R. (2006)
    monomorphemic words, \emph{Journal of Memory and Language},
    53, 496-512.
 }
-\examples{
+\examples{\dontrun{
 data(lexicalMeasures)
 data(lexicalMeasuresDist)
 
@@ -66,5 +66,5 @@ cluster = cutree(diana(lexicalMeasures.dist), 5),
 class = lexicalMeasuresClasses$Class)
 x = x[order(x$cluster), ]
 x
-}
+}}
 \keyword{datasets}

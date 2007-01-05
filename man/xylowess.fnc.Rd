@@ -24,11 +24,11 @@ xylowess.fnc(fmla = Rating ~ Frequency | Subject, data = weight,
 }
 \author{R. H. Baayen}
 \seealso{See also \code{\link{xyplot}}.}
-\examples{
+\examples{\dontrun{
   data(weightRatings)
   xylowess.fnc(Rating ~ Frequency | Subject, data = weightRatings,
     xlab = "log Frequency", ylab = "Weight Rating")
-}
+}}
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
 \keyword{ regression }

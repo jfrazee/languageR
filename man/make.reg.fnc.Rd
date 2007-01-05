@@ -31,7 +31,7 @@ learn = FALSE, learnRate = 10, stdevItem = 40, stdevSubj = 80,
 }
 \author{R. H. Baayen}
 \seealso{\code{\link{simulateRegression.fnc}}}
-\examples{
+\examples{\dontrun{
   simdat = make.reg.fnc()
   library(lme4, keep.source = FALSE)
   simdat.lmer = lmer(RT ~ X + Y + Z + (1|Subject) + (1|Item), 
@@ -42,7 +42,7 @@ learn = FALSE, learnRate = 10, stdevItem = 40, stdevSubj = 80,
   simdat.lmer = lmer(RT ~ X + Y + Z + Trial + (1|Subject) + (1|Item), 
     data = simdat)
   simdat.lmer
-}
+}}
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
 \keyword{ regression }

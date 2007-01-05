@@ -41,7 +41,7 @@ De Vaan, L., Schreuder, R. and Baayen, R. H. (2007) Regular morphologically
 complex neologisms leave detectable traces in the mental lexicon, \emph{The
 Mental Lexicon}, 2, in press.
 }
-\examples{
+\examples{\dontrun{
 data(primingHeid)
 
 library(lme4, keep.source=FALSE)
@@ -56,5 +56,5 @@ primingHeid.lmer = lmer(RT ~ RTtoPrime * ResponseToPrime + Condition +
 (1|Subject) + (1|Word), 
 data = primingHeid[abs(scale(resid(primingHeid.lmer)))<2.5,])
 pvals.fnc(primingHeid.lmer)$summary
-}
+}}
 \keyword{datasets}

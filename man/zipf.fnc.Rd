@@ -30,11 +30,11 @@ Baayen, R. H. (2001) \emph{Word Frequency Distributions}, Dordrecht: Kluwer.
 }
 \author{R. H. Baayen}
 \seealso{See also \code{\link{growth.fnc}}.}
-\examples{
+\examples{\dontrun{
 data(alice)
 alice.zipf = zipf.fnc(alice, plot = TRUE) 
 head(alice.zipf)
-}
+}}
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
 \keyword{ models }

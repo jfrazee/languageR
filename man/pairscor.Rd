@@ -25,10 +25,10 @@ pairscor.fnc(data, hist = TRUE, smooth = TRUE,
 }
 \author{R. Harald Baayen}
 \seealso{See Also \code{\link{pairs}} and \code{\link{panel.smooth}}.}
-\examples{
+\examples{\dontrun{
   data(lexicalMeasures)
   pairscor.fnc(lexicalMeasures[,c("CelS", "Vf", "Ient", "NsyS", "Ncou")])
-}
+}}
 %function(data) {
 %	pairs(data, lower.panel = pairscor.lower, upper.panel = pairscor.upper)
 %  }

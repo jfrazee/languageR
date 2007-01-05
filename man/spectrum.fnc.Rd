@@ -22,12 +22,12 @@ R. H. Baayen (2001) \emph{Word Frequency Distributions}, Dordrecht: Kluwer.
 }
 \author{R. H. Baayen}
 \seealso{See Also the \code{zipfR} package.}
-\examples{
+\examples{\dontrun{
 data(alice)
 alice.spectrum = spectrum.fnc(alice)
 head(alice.spectrum)
 tail(alice.spectrum)
-}
+}}
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
 \keyword{ models }

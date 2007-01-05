@@ -25,8 +25,8 @@ How to deal with "The language as fixed effect fallacy":
 common misconceptions and alternative solutions, 
 \emph{Journal of Memory and Language}, 41, 416-426.
 }
-\examples{
+\examples{\dontrun{
 data(splitplot)
 items.split.plot.fnc(splitplot)
-}
+}}
 \keyword{datasets}

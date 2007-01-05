@@ -26,10 +26,10 @@ Herdan, G. (1964) \emph{Quantitative Linguistics}, London: Buttersworths.
 }
 \author{R. H. Baayen}
 \seealso{See Also \code{\link{growth.fnc}}.}
-\examples{
+\examples{\dontrun{
   data(alice)
   herdan.fnc(alice, cumsum(rep(floor(length(alice)/40), 40)))
-}
+}}
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
 \keyword{ models }

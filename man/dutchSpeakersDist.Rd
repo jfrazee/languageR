@@ -24,25 +24,27 @@ Identification by Cross-entropy, \emph{Literary and Linguistic Computing}, 20,
 59-67.
 }
 \examples{
-data(dutchSpeakersDist)
-dutchSpeakersDist.d = as.dist(dutchSpeakersDist)
-dutchSpeakersDist.mds = cmdscale(dutchSpeakersDist.d, k = 3)
+	\dontrun{
+    data(dutchSpeakersDist)
+    dutchSpeakersDist.d = as.dist(dutchSpeakersDist)
+    dutchSpeakersDist.mds = cmdscale(dutchSpeakersDist.d, k = 3)
 
-data(dutchSpeakersDistMeta)
-dat = data.frame(dutchSpeakersDist.mds, 
-   Sex = dutchSpeakersDistMeta$Sex, 
-   Year = dutchSpeakersDistMeta$AgeYear, 
-   EduLevel = dutchSpeakersDistMeta$EduLevel)
-dat = dat[!is.na(dat$Year),]
+    data(dutchSpeakersDistMeta)
+    dat = data.frame(dutchSpeakersDist.mds, 
+       Sex = dutchSpeakersDistMeta$Sex, 
+       Year = dutchSpeakersDistMeta$AgeYear, 
+       EduLevel = dutchSpeakersDistMeta$EduLevel)
+    dat = dat[!is.na(dat$Year),]
 
-par(mfrow=c(1,2))
-plot(dat$Year, dat$X1, xlab="year of birth", 
-   ylab = "dimension 1", type = "p")
-lines(lowess(dat$Year, dat$X1))
-boxplot(dat$X3 ~ dat$Sex, ylab = "dimension 3")
-par(mfrow=c(1,1))
+    par(mfrow=c(1,2))
+    plot(dat$Year, dat$X1, xlab="year of birth", 
+       ylab = "dimension 1", type = "p")
+    lines(lowess(dat$Year, dat$X1))
+    boxplot(dat$X3 ~ dat$Sex, ylab = "dimension 3")
+    par(mfrow=c(1,1))
 
-cor.test(dat$X1, dat$Year, method="sp")
-t.test(dat$X3~dat$Sex)
+    cor.test(dat$X1, dat$Year, method="sp")
+    t.test(dat$X3~dat$Sex)
+	}
 }
 \keyword{datasets}

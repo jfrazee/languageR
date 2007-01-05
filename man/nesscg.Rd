@@ -18,10 +18,10 @@
 \source{
   The British National Corpus, see \url{http://www.natcorp.ox.ac.uk/}
 }
-\examples{
+\examples{\dontrun{
 data(nesscg)
 library(zipfR)
 nesscg.spc = spc(m=nesscg$m, Vm = nesscg$Vm)
 plot(nesscg.spc)
-}
+}}
 \keyword{datasets}

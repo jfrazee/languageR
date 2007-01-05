@@ -51,6 +51,7 @@ dative alternation, in Bouma, G. and Kraemer, I. and Zwarts, J.  (eds.),
 of Sciences, 33 pages, in press.
 }
 \examples{
+\dontrun{
 data(dative)
 
 # analysis with CART tree
@@ -97,5 +98,6 @@ dative.lmer = lmer(RealizationOfRecipient ~
   SemanticClass + Modality + (1|Verb), 
   data = dative, family = "binomial")
 dative.lmer
+}
 }
 \keyword{datasets}

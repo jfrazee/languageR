@@ -33,6 +33,8 @@ Identification by Cross-entropy, \emph{Literary and Linguistic Computing}, 20,
 59-67.
 }
 \examples{
-data(dutchSpeakersDistMeta)
+	\dontrun{
+     data(dutchSpeakersDistMeta)
+  }
 }
 \keyword{datasets}

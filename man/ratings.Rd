@@ -40,7 +40,7 @@
 Data collected together with Jen Hay at the University of Canterbury, Christchurch,
 New Zealand, 2004.
 }
-\examples{
+\examples{\dontrun{
 data(ratings)
 
 ratings.lm = lm(meanSizeRating ~ meanFamiliarity * Class + 
@@ -60,5 +60,5 @@ animals = animals[order(animals$meanFamiliarity),]
 
 lines(plants$meanFamiliarity, plants$fitted)
 lines(animals$meanFamiliarity, animals$fitted)
-}
+}}
 \keyword{datasets}

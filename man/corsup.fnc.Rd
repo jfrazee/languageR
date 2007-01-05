@@ -42,6 +42,7 @@ email: baayen@mpi.nl
 }
 \seealso{\code{\link{corres.fnc}}}
 \examples{
+ \dontrun{
   data(oldFrench)
   data(oldFrenchMeta)
   prose = oldFrench[oldFrenchMeta$Genre=="prose" & 
@@ -59,6 +60,7 @@ email: baayen@mpi.nl
           is.na(oldFrenchMeta$Year),]
   corsup.fnc(prose.ca, bycol = FALSE, supp = proseSup, font = 2, 
   cex = 0.8, labels = substr(rownames(proseSup), 1, 4)) 
+ }
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

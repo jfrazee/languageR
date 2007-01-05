@@ -33,15 +33,13 @@ simulateSplitPlot.fnc(dat, with = TRUE, nruns = 100, nsub = NA, nitem = NA, ...)
 }
 \author{R. H. Baayen}
 \seealso{See also \code{\link{subjects.split.plot.fnc}}.}
-\examples{
-\dontrun{
+\examples{\dontrun{
 data(splitplot)
 library(lme4)
 
 splitplot.sim = simulateSplitPlot.fnc(splitplot, nruns = 1000, with = TRUE) 
 splitplot.sim$alpha05
-}
-}
+}}
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
 \keyword{ regression }

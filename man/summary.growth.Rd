@@ -5,7 +5,7 @@
   Summary method for vocabulary growth objects created with \code{growth.fnc}.
 }
 \usage{
-summary.growth(object, ...)
+\method{summary}{growth}(object, ...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{

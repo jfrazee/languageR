@@ -91,7 +91,7 @@ to statistics}, Cambridge: Cambridge University Press.
 %~~ Optional links to other man pages, e.g. ~~
 %~~ \code{\link[<pkg>:<pkg>-package]{<pkg>}} ~~
 %}
-\examples{
+\examples{\dontrun{
   library(languageR)
   data(package="languageR")
-}
+}}

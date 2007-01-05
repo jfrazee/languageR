@@ -44,12 +44,12 @@ learnRate = 10, ...)
 }
 \author{R. H. Baayen}
 \seealso{See Also \code{\link{make.reg.fnc}}.}
-\examples{
+\examples{\dontrun{
 	library(lme4)
   simulateRegression.fnc(beta = c(400, 2, 6, 4), nruns = 5)
 
   \dontrun{simulateRegression.fnc(beta = c(400, 2, 6, 0), nruns = 1000, learn = TRUE)}
-}
+}}
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
 \keyword{ regression }

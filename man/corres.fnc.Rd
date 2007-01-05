@@ -37,6 +37,7 @@ email: baayen@mpi.nl
 \seealso{See \code{\link{corsup.fnc}} for adding supplementary data to a 
 correspondence plot, and \code{\link{plot.corres}} for plot options.}
 \examples{
+ \dontrun{
   data(oldFrench)
   oldFrench.ca = corres.fnc(oldFrench)
   oldFrench.ca
@@ -67,6 +68,7 @@ correspondence plot, and \code{\link{plot.corres}} for plot options.}
           is.na(oldFrenchMeta$Year),]
   corsup.fnc(prose.ca, bycol = FALSE, supp = proseSup, font = 2, 
   cex = 0.8, labels = substr(rownames(proseSup), 1, 4)) 
+ }
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

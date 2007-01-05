@@ -34,7 +34,7 @@ Vulanovic, R. and Baayen, R. H. (2006) Fitting the development of periphrastic
 do in all sentence types, in Grzybek, P. and Koehler, R. (eds.), Festschrift
 fuer Gabriel Altmann, Berlin: Walter de Gruyter, p. 679-688.
 }
-\examples{
+\examples{\dontrun{
 data(periphrasticDo)
 
 # add midpoints of time periods
@@ -71,5 +71,5 @@ for (i in 1:nlevels(periphrasticDo$type)) {
 }
 par(mfrow=c(1, 1))
 
-}
+}}
 \keyword{datasets}

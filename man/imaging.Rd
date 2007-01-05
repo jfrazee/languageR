@@ -31,7 +31,7 @@ to which phonological and semantic processes recruit the same brain areas.
   Differentiating lexical form, meaning, and structure
   in the neural language system, \emph{PNAS}, 102, 8375-8380.
 }
-\examples{
+\examples{\dontrun{
 data(imaging)
 
 imaging.lm = lm(FilteredSignal~BehavioralScore*Condition, data=imaging)
@@ -57,5 +57,5 @@ imaging.lm = lm(FilteredSignal ~ BehavioralScore * Condition,
 summary(imaging.lm)
 
 
-}
+}}
 \keyword{datasets}

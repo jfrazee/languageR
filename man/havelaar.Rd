@@ -21,7 +21,7 @@
 The text of Max Havelaar was obtained from the Project Gutenberg at
 at \url{http://www.gutenberg.org/wiki/Main_Page}
 }
-\examples{
+\examples{\dontrun{
 data(havelaar)
 
 n = 1000                          # token size of text fragments
@@ -37,5 +37,5 @@ ks.test(havelaar$Frequency, "ppois", lambda)
 ks.test(jitter(havelaar$Frequency), "ppois", lambda)
 
 
-}
+}}
 \keyword{datasets}

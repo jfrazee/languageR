@@ -29,6 +29,8 @@ dative alternation, in Bouma, G. and Kraemer, I. and Zwarts, J.  (eds.),
 of Sciences, 33 pages, in press.
 }
 \examples{
-data(dative)
+	\dontrun{
+    data(dative)
+  }
 }
 \keyword{datasets}

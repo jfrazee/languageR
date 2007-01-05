@@ -39,7 +39,7 @@ irregularity in Dutch, in Kepser, S. and Reis, M., \emph{Linguistic Evidence -
 Empirical, Theoretical, and Computational Perspectives}, Berlin: Mouton de
 Gruyter, pp. 529-555.
 }
-\examples{
+\examples{\dontrun{
 data(regularity)
 
 # ---- predicting regularity with a logistic regression model
@@ -76,5 +76,5 @@ library(e1071)
 regularity$AuxNum = as.numeric(regularity$Auxiliary)
 regularity.svm = svm(regularity[, -c(1,8,10)], regularity$Regularity, cross=10)
 summary(regularity.svm)
-}
+}}
 \keyword{datasets}

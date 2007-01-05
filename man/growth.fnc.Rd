@@ -60,10 +60,10 @@ growth.fnc(text = alice, size = 646, nchunks = 40, chunks = 0)
 }
 \author{R. H. Baayen}
 \seealso{See Also \code{\link{plot.growth}}, and the zipfR package.}
-\examples{
+\examples{\dontrun{
   data(alice)
   alice.growth = growth.fnc(alice)
   plot(alice.growth)
-}
+}}
 % R documentation directory.
 \keyword{ models }

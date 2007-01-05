@@ -13,8 +13,8 @@ punctuation marks removed.
 \source{
   The project Gutenberg at \url{http://www.gutenberg.org/wiki/Main_Page}
 }
-\examples{
+\examples{\dontrun{
   data(oz)
   oz[1:5]
-}
+}}
 \keyword{datasets}

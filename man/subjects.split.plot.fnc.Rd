@@ -20,10 +20,10 @@ subjects.split.plot.fnc(dat)
 }
 \author{R. H. Baayen}
 \seealso{See also \code{\link{simulateSplitPlot.fnc}}.}
-\examples{
+\examples{\dontrun{
   data(splitplot)
   subjects.split.plot.fnc(splitplot)
-}
+}}
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
 \keyword{ regression }

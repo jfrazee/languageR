@@ -29,9 +29,8 @@ How to deal with "The language as fixed effect fallacy":
 common misconceptions and alternative solutions, 
 \emph{Journal of Memory and Language}, 41, 416-426.
 }
-\examples{
+\examples{\dontrun{
 data(latinsquare)
-\dontrun{
 library(lme4)
 latinsquare.with = 
    simulate.latinsquare.fnc(latinsquare, nruns = 1000, with = TRUE) 
@@ -39,6 +38,5 @@ latinsquare.without =
    simulate.latinsquare.fnc(latinsquare, nruns = 1000, with = FALSE)
 latinsquare.with$alpha05
 latinsquare.without$alpha05
-}
-}
+}}
 \keyword{datasets}
