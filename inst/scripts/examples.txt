@@ -1,0 +1,2806 @@
+For three figures (7.5, 7.7, 7.10), the code is not presented in the main text
+nor in the documentation of languageR.  The code for these figures is 
+available in the scripts figure7.5.R, figure7.7.R, and figure7.10.R.
+
+
+--------------------------------------------------
+R as a calculator 1.1
+--------------------------------------------------
+
+1 + 2                   
+2 * 3                   # multiplication
+6 / 3                   # division
+2 ^ 3                   # power
+9 ^ 0.5                 # square root
+9 ^ 0.5 ^ 3
+(9 ^ 0.5) ^ 3
+9 ^ (0.5 ^ 3)
+x = 1 + 2
+x
+x <- 1 + 2
+1 + 2 -> x
+x = x + 1
+x = 3
+x + 1   # result is displayed, not assigned to x
+x       # so x is unchanged
+4 ^ 3
+x = 4
+y = 3
+x ^ y               
+sqrt(9)
+
+
+--------------------------------------------------
+Getting data into and out of R 1.2
+--------------------------------------------------
+
+head(verbs, n = 10)
+exp(2.6390573)
+log(14)
+write.table(verbs, file = "/home/harald/dativeS.txt")  # linux
+write.table(verbs, file = "/users/harald/dativeS.txt") # MacOSX
+write.table(verbs, file = "c:stats/dativeS.txt")       # Windows
+verbs = read.table("/home/harald/dativeS.txt", header = TRUE)
+help(verbs)
+example(verbs)
+
+
+--------------------------------------------------
+Accessing information in data frames 1.3
+--------------------------------------------------
+
+verbs[1, 5]
+verbs[ , ]          # this will display all 903 rows of verbs!
+verbs[ , 5]                    # show the elements of column 5
+verbs$LengthOfTheme                        # same as verbs[, 5]
+verbs[1, ]                         # show the elements of row 1
+col5 = verbs[ , 5]
+head(col5, n = 5)
+row1[1]
+col5[1]
+row1["RealizationOfRec"]
+
+rs = c(638, 799, 390, 569, 567)
+rs
+verbs[rs, ]
+1 : 5
+5 : 1
+verbs[rs, 1:3]
+verbs[rs, c("RealizationOfRec", "Verb", "AnimacyOfRec")]
+
+verbs[verbs$AnimacyOfTheme == "animate", ]
+subset(verbs, AnimacyOfTheme == "animate")
+verbs[verbs$AnimacyOfTheme == "animate" & verbs$LengthOfTheme > 2, ]
+head(rownames(verbs))
+colnames(verbs)
+
+verbs.rs = verbs[rs, ]
+verbs.rs[1, ]
+verbs.rs["638",]     # same output
+verbs[638, ]         # same output again
+verbs.rs$AnimacyOfRec
+verbs.rs$AnimacyOfRec = as.character(verbs.rs$AnimacyOfRec)
+verbs.rs$AnimacyOfRec
+verbs.rs$AnimacyOfRec = as.factor(verbs.rs$AnimacyOfRec)
+verbs.rs2 = verbs[c(638, 390), ]
+verbs.rs2
+verbs.rs2$AnimacyOfRec 
+as.factor(as.character(verbs.rs2$AnimacyOfRec))
+verbs.rs2$AnimacyOfRec[drop=TRUE]
+
+
+--------------------------------------------------
+Operations on data frames 1.4
+--------------------------------------------------
+
+--------------------------------------------------
+Sorting a data frame by one or more columns 1.4.1
+--------------------------------------------------
+
+verbs.rs[order(verbs.rs$RealizationOfRec), ]
+verbs.rs[order(verbs.rs$Verb, verbs.rs$LengthOfTheme), ]
+order(verbs.rs$Verb)
+v = c("pay", "sell", "lend", "sell", "send", 
+"sell", "give",  "give", "pay", "cost")
+v[order(v)]
+sort(v)    # same result
+v = sort(v)
+
+
+--------------------------------------------------
+Changing information in a data frame 1.4.2
+--------------------------------------------------
+
+verbs.rs["638", ]$RealizationOfRec = "NP"    
+verbs.rs$LengthOfTheme
+exp(verbs.rs$LengthOfTheme)
+nchar(c("antidisestablishmentarianism", "a"))
+verbs.rs$Length = nchar(as.character(verbs.rs$Verb))
+verbs.rs[1:4, c("Verb", "Length")]
+
+
+--------------------------------------------------
+Extracting contingency tables from data frames 1.4.3
+--------------------------------------------------
+
+levels(verbs$RealizationOfRec)
+levels(verbs$AnimacyOfRec)
+xtabs( ~ RealizationOfRec + AnimacyOfRec, data = verbs)
+verbs.xtabs = 
+xtabs( ~ AnimacyOfRec + AnimacyOfTheme + RealizationOfRec, 
+data = verbs)
+verbs.xtabs
+verbs.xtabs = xtabs( ~ AnimacyOfRec + RealizationOfRec, 
+data = verbs, subset = AnimacyOfTheme != "animate")
+verbs.xtabs
+sum(verbs.xtabs)
+sum(verbs.xtabs) == nrow(verbs[verbs$AnimacyOfTheme != "animate",])
+verbs.xtabs/sum(verbs.xtabs)
+100 * verbs.xtabs/sum(verbs.xtabs)
+prop.table(verbs.xtabs, 1)  # rows sum to 1
+prop.table(verbs.xtabs,2)   # columns sum to 1
+
+
+--------------------------------------------------
+Calculations on data frames 1.4.4
+--------------------------------------------------
+
+mean(1:5)
+mean(verbs[verbs$AnimacyOfRec == "animate", ]$LengthOfTheme)
+mean(verbs[verbs$AnimacyOfRec != "animate", ]$LengthOfTheme)
+tapply(verbs$LengthOfTheme, verbs$AnimacyOfRec, mean)
+with(verbs, tapply(LengthOfTheme, 
+list(AnimacyOfRec, AnimacyOfTheme), mean))
+
+heid[1:5, ]
+heid2 = aggregate(heid$RT, list(heid$Word), mean)
+heid2[1:5, ]
+colnames(heid2) = c("Word", "MeanRT")
+items = heid[, c("Word", "BaseFrequency")]
+nrow(items)
+items = unique(items)
+nrow(items)
+items[1:4, ]
+heid2 = merge(heid2, items, by.x = "Word", by.y = "Word")
+head(heid2, n = 4)
+heid3 = aggregate(heid$RT, list(heid$Word, heid$BaseFrequency), mean)
+colnames(heid3) = c("Word", "BaseFrequency", "MeanRT")
+head(heid3[order(heid3$Word),], 4)
+
+
+--------------------------------------------------
+Session management 1.5
+--------------------------------------------------
+
+objects() 
+rm(verbs.rs)
+objects()
+q() 
+q 
+
+
+--------------------------------------------------
+Exercises 1.6
+--------------------------------------------------
+
+composer = data.frame(Author = c("Cela","Mendoza","VargasLLosa"),
+Favorite = c("Stravinsky", "Bach", "Villa-Lobos"))
+composer
+
+
+--------------------------------------------------
+Graphical data exploration 2
+--------------------------------------------------
+
+
+--------------------------------------------------
+Random variables 2.1
+--------------------------------------------------
+
+
+
+--------------------------------------------------
+Visualizing single random variables 2.2
+--------------------------------------------------
+
+colnames(ratings)
+barplot(xtabs( ~ ratings$Length), xlab = "word length", col = "grey")
+mean(ratings$Length)
+median(ratings$Length)
+range(ratings$Length)
+min(ratings$Length)
+max(ratings$Length)
+
+library(MASS)
+detach(package:MASS)
+truehist(ratings$Length, xlab="word length", col="grey")
+truehist(ratings$Frequency, 
+xlab = "log word frequency", col = "grey")
+truehist(ratings$SynsetCount, 
+xlab = "log synset count", col = "grey")
+truehist(ratings$FamilySize, 
+xlab = "log family size", col = "grey")
+truehist(ratings$DerivEntropy, 
+xlab = "derivational entropy", col = "grey")
+
+par(mfrow = c(3, 2))       # plots arranged in 3 rows and 2 columns
+par(mfrow = c(1, 1))
+
+jpeg("barplot.jpeg", width = 400, height = 420)
+truehist(ratings$Frequency, xlab = "log word frequency")
+dev.off()
+
+postscript("barplot.ps", horizontal = FALSE,  height = 6, width = 6, 
+family = "Helvetica", paper = "special", onefile = FALSE)
+truehist(items$Frequency, xlab = "log word frequency")
+dev.off()
+
+truehist(lexdec$RT, col = "lightgrey", xlab = "log RT")
+h = hist(lexdec$RT, freq = FALSE, plot = FALSE)
+d = density(lexdec$RT)
+xlimit = range(h$breaks, d$x)     
+ylimit = range(0, h$density, d$y) 
+hist(lexdec$RT, freq=FALSE, xlim=xlimit, ylim=ylimit, main="",
+xlab="log RT", ylab="", col="lightgrey", border="darkgrey",
+breaks = seq(5.8, 7.6, by = 0.1)) 
+lines(d$x, d$y)
+lines(d)
+
+plot(h)
+plot(d)
+
+plot(sort(lexdec$RT), ylab = "log RT")
+plot(quantile(lexdec$RT), xaxt = "n", 
+xlab = "Quartiles", ylab = "log RT")
+mtext(c("0%", "25%", "50%", "75%", "100%"), 
+side = 1, at = 1:5, line = 1, cex = 0.7)
+plot(quantile(lexdec$RT, seq(0, 1, 0.1)), 
+xaxt = "n", xlab = "Deciles", ylab = "log RT")
+mtext(paste(seq(0, 100, 10), rep("%", 11), sep = ""), 
+side = 1, at = 1:11, line = 1, cex = 0.7, las = 2)
+seq(0, 1, 0.1)
+quantile(lexdec$RT, seq(0, 1, 0.1))
+paste("a", "b", "c")
+paste("a", "b", "c", sep = "")
+paste(seq(0, 100, 10), rep("%", 11), sep = "")
+boxplot(exp(lexdec$RT))    # upper panel
+boxplot(lexdec$RT)         # lower panel
+
+
+--------------------------------------------------
+Visualizing two or more variables 2.3
+--------------------------------------------------
+
+verbs.xtabs = xtabs( ~ AnimacyOfRec + RealizationOfRec, 
+data = verbs[verbs$AnimacyOfTheme != "animate", ])
+verbs.xtabs
+
+par(mfrow = c(1, 2))
+barplot(verbs.xtabs, legend.text=c("anim", "inanim"))
+barplot(verbs.xtabs, beside = T, legend.text = rownames(verbs.xtabs))
+par(mfrow = c(1, 1))
+
+verbs.xtabs = 
+xtabs( ~ AnimacyOfRec  + AccessOfRec + RealizationOfRecipient, 
+data = dative)
+verbs.xtabs
+
+y = as.data.frame.table(verbs.xtabs)
+y$Freq = rpois(12, mean(verbs.xtabs)) 
+y.xtabs = xtabs(Freq~AnimacyOfRec+AccessOfRec+RealizationOfRecipient,data=y)
+
+par(mfrow=c(1,2), mar=c(5,3,3,0))
+mosaicplot(verbs.xtabs, main = "dative", off=2)
+mosaicplot(y.xtabs, main = "uniform", off=2)
+par(mfrow=c(1,1))
+
+plot(ratings$Frequency, ratings$FamilySize)   
+lines(lowess(ratings$Frequency, ratings$FamilySize), col="darkgrey")
+plot(ratings$Frequency, ratings$FamilySize, type = "n", 
+xlab = "Frequency", ylab = "Family Size")   
+text(ratings$Frequency, ratings$FamilySize, 
+as.character(ratings$Word), cex = 0.7) 
+pairs(ratings[ , -c(1, 6:8, 10:14)])
+
+
+--------------------------------------------------
+Trellis graphics 2.4
+--------------------------------------------------
+
+library(lattice)
+bwplot(RT ~ Correct | NativeLanguage, data = lexdec)
+weightRatings[1:5, ]
+xylowess.fnc(Rating ~ Frequency | Subject, data = weightRatings, 
+xlab = "log Frequency", ylab = "Weight Rating")
+xyplot(Rating ~ Frequency | Subject, data = weightRatings, 
+xlab = "log Frequency", ylab = "Weight Rating")
+
+english = english[english$AgeSubject == "young", ]
+nrow(english)
+xylowess.fnc(FamilySize ~ NumberComplexSynsets | 
+equal.count(WrittenFrequency), data = english)
+
+
+--------------------------------------------------
+Exercises 2.5
+--------------------------------------------------
+
+moby.table = table(moby)
+moby.table = sort(moby.table, decreasing = TRUE)
+moby.table[1:5]
+ranks = 1 : length(moby.table)
+ranks[1:5]
+
+
+--------------------------------------------------
+Probability distributions 3
+--------------------------------------------------
+
+--------------------------------------------------
+Distributions 3.1
+--------------------------------------------------
+
+--------------------------------------------------
+Discrete distributions 3.2
+--------------------------------------------------
+
+dbinom(59000, 1000000, 0.05885575)
+dbinom(1, size = 1000000,  prob = 0.0000082)
+dbinom(1, 1000000, 0.0000082)
+dbinom(0, size = 1000000,  prob = 0.0000082) + 
+dbinom(1, size = 1000000,  prob = 0.0000082)
+sum(dbinom(0:1, size = 1000000,  prob = 0.0000082))
+pbinom(1, size = 1000000, prob = 0.0000082) 
+1 - pbinom(381, size = 1000000, prob = 0.00013288)
+n = 1000
+p = 0.05885575
+
+frequencies = seq(25, 95, by = 1)  # 25, 26, 27, ..., 94, 95
+probabilities = dbinom(frequencies, n, p)
+plot(frequencies, probabilities, type = "h", 
+xlab = "frequency", ylab = "probability of frequency")
+s = 500         # the number of random numbers
+n = 1000000     # number of trials in one experiment
+p = 0.0000082   # probability of success
+x = xtabs( ~ rbinom(s, n, p) ) / s
+x 
+plot(as.numeric(names(x)), x, type = "h",  xlim = c(0, 30),
+xlab = "frequency", ylab = "sample probability of frequency")
+pbinom(4, size = 10, prob = 0.5)  
+qbinom(0.3769531, size = 10, prob = 0.5) 
+
+havelaar$Frequency
+n = 1000 
+p = mean(havelaar$Frequency / n) 
+qnts = seq(0.005, 0.995, by=0.01)
+plot(qbinom(qnts, n, p), quantile(havelaar$Frequency,qnts),
+xlab = paste("quantiles of (", n, ",", round(p, 4), 
+")-binomial", sep=""), ylab = "frequencies")
+havelaar.tab = xtabs( ~ havelaar$Frequency) 
+havelaar.tab
+havelaar.probs = xtabs( ~ havelaar$Frequency)/nrow(havelaar)
+round(havelaar.probs, 3)
+sum(havelaar.probs)
+plot(as.numeric(names(havelaar.probs)), havelaar.probs, 
+xlim=c(0, 40), type="h", xlab="counts", ylab="relative frequency")
+mtext("observed", 3, 1) 
+n = 1000
+p = mean(havelaar$Frequency / n)
+p
+
+counts = 0:40 
+plot(counts, dbinom(counts, n, p), 
+type = "h", xlab = "counts", ylab = "probability")
+mtext("binomial (1000, 0.013)", 3, 1) 
+lambda = n * p 
+plot(counts, dpois(counts, lambda), 
+type = "h", xlab="counts", ylab="probability") 
+mtext("Poisson (13.4)", 3, 1) 
+sum(dpois(0:80, 100)) # sum of individual probabilities
+ppois(80, 100)        # joint probability of first 80
+
+
+--------------------------------------------------
+Continuous distributions 3.3
+--------------------------------------------------
+
+--------------------------------------------------
+The normal distribution 3.3.1
+--------------------------------------------------
+
+x = seq(-4, 4, 0.1)    
+y = dnorm(x)        
+plot(x, y, xlab = "x", ylab = "density", ylim = c(0, 0.8),
+type = "l")) # line type: the quoted character is lower case L
+mtext("normal(0, 1)", 3, 1)
+abline(v = 0, lty = 2) # the vertical dashed line
+lines(c(-1, 0), rep(dnorm(-1), 2), lty = 2) 
+
+x = seq(0, 8, 0.1)   
+y = dnorm(x, mean = 4, sd = 0.5)       
+pnorm(-1.96)
+qnorm(0.02499790)
+pnorm(0) - pnorm(-1)
+
+x = rnorm(10, 3, 0.1)
+x
+x - mean(x)
+(x - mean(x)) / sd(x)
+scale(x)
+mean(x)
+sd(x)
+
+pnorm(0, 1, 3) - pnorm(-1, 1, 3)
+pnorm(-1/3) - pnorm(-2/3)
+v = rnorm(20, 4, 2) # repeating this command
+sd(v)
+sqrt(var(v))        # square root of variance
+mean(v - mean(v))
+var(v)
+sum( (v - mean(v))^2)/(length(v) - 1)
+
+
+--------------------------------------------------
+The t, F and chi-squared distributions 3.3.2
+--------------------------------------------------
+
+pnorm(-3, 0, 1)
+pt(-3, 2)
+1 - pf(6, 1, 1)
+1 - pf(6, 20, 8)
+1 - pchisq(4, 1)
+1 - pchisq(4, 5)
+1 - pchisq(4, 10)
+
+
+--------------------------------------------------
+Exercises 3.4
+--------------------------------------------------
+
+alice[1:4]
+25942 %% 40    # %% is the remainder operator
+wonderland = data.frame(word = alice[1:25920], 
+chunk = cut(1:25920, breaks = 40, labels = F))
+wonderland[1:4, ]
+wonderland$alice = wonderland$word=="alice"
+countOfAlice = tapply(wonderland$alice, wonderland$chunk, sum) 
+countOfAlice
+countOfAlice.tab = xtabs(~countOfAlice)
+
+
+--------------------------------------------------
+Basic statistical methods 4
+--------------------------------------------------
+
+pt(-2, 10)
+2 * pt(-2, 10)
+2 * (1 - pt(2, 10))
+2 * (1 - pt(abs(-2), 10))
+2 * (1 - pt(abs(2), 10))
+
+
+--------------------------------------------------
+Tests for single vectors 4.1
+--------------------------------------------------
+
+--------------------------------------------------
+Distribution tests 4.1.1
+--------------------------------------------------
+
+plot(density(ver$Frequency))
+ver$Frequency = log(ver$Frequency)
+plot(density(ver$Frequency))
+qqnorm(rnorm(length(ver$Frequency), 4, 3))
+abline(v = qnorm(0.025), col = "grey")
+abline(h = qnorm(0.025, 4, 3), col = "grey")
+qqnorm(ver$Frequency)
+shapiro.test(ver$Frequency)
+ks.test(ver$Frequency, "pnorm", 
+mean(ver$Frequency), sd(ver$Frequency))
+ver$Frequency[1:5]
+jitter(ver$Frequency[1:5])
+ks.test(jitter(ver$Frequency), "pnorm", 
+mean(ver$Frequency), sd(ver$Frequency))
+
+intro = c(75, 68, 45, 40, 39, 39, 38, 33, 24, 24)
+names(intro) = c("the", "to", "of", "you", "is", "a", 
+"and", "in", "that", "data")
+the   to   of  you   is    a  and   in that data
+chisq.test(intro)
+x = c(37, 21, 26, 30, 23, 26, 41, 26, 37, 33)
+chisq.test(x)
+
+
+--------------------------------------------------
+Tests for the mean 4.1.2
+--------------------------------------------------
+
+meanLengthN = mean(durationsOnt$DurationPrefixNasal)
+meanLengthN
+t.test(durationsOnt$DurationPrefixNasal, mu = 0.053)
+2 * (1 - pt(abs(-1.5038), 101))
+mean(durationsOnt$DurationPrefixPlosive)
+shapiro.test(durationsOnt$DurationPrefixPlosive)
+wilcox.test(durationsOnt$DurationPrefixPlosive, mu = 0.044)
+
+
+--------------------------------------------------
+Tests for two independent vectors 4.2
+--------------------------------------------------
+
+--------------------------------------------------
+Are the distributions the same? 4.2.1
+--------------------------------------------------
+
+ver.transp = ver[ver$SemanticClass == "transparent",]$Frequency
+ver.opaque = ver[ver$SemanticClass == "opaque", ]$Frequency
+ver.transp.d = density(ver.transp)
+ver.opaque.d = density(ver.opaque)
+xlimit = range(ver.transp.d$x, ver.opaque.d$x)
+ylimit = range(ver.transp.d$y, ver.opaque.d$y)
+plot(ver.transp.d, lty = 1, col = "black", 
+xlab = "frequency", ylab = "density", 
+xlim = xlimit, ylim = ylimit, main = "")
+lines(ver.opaque.d, col = "darkgrey")
+ks.test(jitter(ver.transp), jitter(ver.opaque))
+
+
+--------------------------------------------------
+Are the means the same? 4.2.2
+--------------------------------------------------
+
+bwplot(Frequency ~ Class | Complex, data = ratings)
+simplex = ratings[ratings$Complex == "simplex", ]
+freqAnimals = simplex[simplex$Class == "animal", ]$Frequency
+freqPlants = simplex[simplex$Class == "plant", ]$Frequency
+t.test(freqAnimals, freqPlants)
+t.test(simplex[simplex$Class == "animal", ]$Frequency,
+simplex[simplex$Class == "plant", ]$Frequency, 
+conf.level = 0.99)
+wilcox.test(ver.opaque, ver.transp)
+tapply(verbs$LengthOfTheme, verbs$AnimacyOfRec, mean)
+t.test(LengthOfTheme ~ AnimacyOfRec, data = verbs)
+
+
+--------------------------------------------------
+Are the variances the same? 4.2.3
+--------------------------------------------------
+
+x <- rnorm(50, mean = 0, sd = 2)
+y <- rnorm(30, mean = 1, sd = 1)
+var.test(x, y)
+var(x)/var(y)
+2 * (1 - pf(var(x)/var(y), 49, 29))
+
+
+--------------------------------------------------
+Paired vectors 4.3
+--------------------------------------------------
+
+--------------------------------------------------
+Are the means the same? 4.3.1
+--------------------------------------------------
+
+t.test(ratings$meanWeightRating, ratings$meanSizeRating)
+t.test(ratings$meanWeightRating, ratings$meanSizeRating, paired = T)
+t.test(ratings$meanWeightRating - ratings$meanSizeRating)
+sum(ratings$meanWeightRating - ratings$meanSizeRating < 0)
+
+par(mfrow=c(1,2))
+boxplot(ratings$meanWeightRating, ratings$meanSizeRating, 
+names=c("weight", "size"), ylab = "mean rating")
+boxplot(ratings$meanWeightRating - ratings$meanSizeRating,
+names="difference", ylab = "mean rating difference")
+par(mfrow=c(1,1))
+
+shapiro.test(ratings$meanWeightRating-ratings$meanSizeRating)
+wilcox.test(ratings$meanWeightRating, ratings$meanSizeRating,paired = T)
+
+--------------------------------------------------
+Functional relations: linear regression 4.3.2
+--------------------------------------------------
+
+plot(ratings$meanWeightRating, ratings$meanSizeRating,
+xlab = "mean weight rating", ylab = "mean size rating")
+
+--------------------------------------------------
+Slope and intercept 4.3.2
+--------------------------------------------------
+
+plot(c(-4, 4), c(-4, 4), xlab = "x", ylab = "y", type = "n") 
+abline(2, -2, lty = 2)                       # add the lines
+abline(-2, 1, lty = 3) 
+abline(h = 0)                             # and add the axes
+abline(v = 0)
+abline(h = -2, col = "grey")   # and ancillary lines in grey
+abline(h = 2, col = "grey")
+abline(v = 1, col = "grey", lty = 2)
+abline(v = 2, col = "grey", lty = 2)
+
+plot(ratings$meanWeightRating, ratings$meanSizeRating,
+xlab = "mean weight rating", ylab = "mean size rating",
+col = "darkgrey")
+abline(0.527, 0.926)
+
+
+--------------------------------------------------
+Estimating slope and intercept 4.3.2
+--------------------------------------------------
+
+ratings.lm = lm(meanSizeRating ~ meanWeightRating, data = ratings)
+ratings.lm
+coef(ratings.lm)
+abline(ratings.lm)
+
+
+--------------------------------------------------
+Correlation 4.3.2
+--------------------------------------------------
+
+mvrnormplot.fnc(r = 0.9)
+
+--------------------------------------------------
+Summarizing a linear model object 4.3.2
+--------------------------------------------------
+
+summary(ratings.lm)
+summary(ratings.lm)$coef
+summary(ratings.lm)$coef[ ,3]
+summary(ratings.lm)$coef[ ,1]
+data.frame(summary(ratings.lm)$coef)$Estimate
+cor(ratings$meanSizeRating, ratings$meanWeightRating)
+cor.test(ratings$meanSizeRating, ratings$meanWeightRating)
+cor.test(ratings$meanSizeRating, ratings$meanWeightRating, 
+method = "spearman")
+
+--------------------------------------------------
+Problems and pitfalls of linear regression 4.3.2
+--------------------------------------------------
+
+plot(ratings$FreqSingular, ratings$FreqPlural)
+abline(lm(FreqPlural ~ FreqSingular, data = ratings), lty = 1)
+abline(lm(FreqPlural ~ FreqSingular, 
+data = ratings[ratings$FreqSingular < 500, ]), lty = 2)
+library(MASS)
+abline(lmsreg(FreqPlural ~ FreqSingular, data = ratings), lty = 3)
+ratings.lm = lm(meanSizeRating ~ meanFamiliarity, data = ratings)
+round(summary(ratings.lm)$coef, 4)    
+
+plot(ratings$meanFamiliarity, ratings$meanSizeRating,       
+xlab = "mean familiarity", ylab = "mean size rating", 
+type = "n")
+plants = ratings[ratings$Class == "plant", ]    
+animals = ratings[ratings$Class == "animal", ]  
+points(plants$meanFamiliarity, plants$meanSizeRating, 
+pch = 'p', col = "darkgrey")
+lines(lowess(plants$meanFamiliarity, plants$meanSizeRating), 
+col = "darkgrey")
+points(animals$meanFamiliarity, animals$meanSizeRating, 
+pch = 'a') 
+lines(lowess(animals$meanFamiliarity, animals$meanSizeRating)) 
+plants.lm = lm(meanSizeRating ~ meanFamiliarity, plants)   
+abline(coef(plants.lm), col = "darkgrey", lty = 2)  
+animals.lm = lm(meanSizeRating ~ meanFamiliarity, animals)
+abline(coef(animals.lm), lty = 2)
+
+xvals = seq(-4, 4, 0.1)
+yvals1 = 0.5 + 0.25 * xvals + 0.6 * xvals^2
+yvals2 = 2.5 + 0.25 * xvals - 0.2 * xvals^2
+plot(xvals, yvals1, xlab = "x", ylab = "y", 
+ylim = range(yvals1, yvals2), type = "l")
+lines(xvals, yvals2, col = "darkgrey")
+
+plants.lm = lm(meanSizeRating ~ meanFamiliarity + 
+I(meanFamiliarity^2), data = plants)
+summary(plants.lm)$coef
+plot(ratings$meanFamiliarity, ratings$meanSizeRating, 
+xlab = "mean familiarity", ylab = "mean size rating", type = "n")
+points(plants$meanFamiliarity, plants$meanSizeRating, 
+pch = 'p', col = "darkgrey")
+plants$predict = predict(plants.lm)  
+plants = plants[order(plants$meanFamiliarity), ]
+lines(plants$meanFamiliarity, plants$predict, col = "darkgrey")
+
+
+--------------------------------------------------
+What does the joint density look like? 4.3.3
+--------------------------------------------------
+
+library(MASS)
+
+x = mvrnorm(n = 1000, mu = c(0, 0), 
+Sigma = cbind(c(1, 0.8), c(0.8, 1))) 
+head(x)
+cor(x[,1], x[,2])
+Sigma
+cor(x[, 1], x[, 2])
+cor(x[, 1], 100 * x[, 2])
+cor(0.001 * x[, 1], 100 * x[, 2])
+cov(x[, 1], x[, 2])
+cov(x[, 1], 100 * x[, 2])
+cov(0.003 * x[, 1], 100 * x[, 2])
+
+persp(kde2d(x[, 1], x[, 2], n = 50),  
+phi = 30, theta = 20,  # angles  defining  viewing  direction
+d = 10,                # strength of perspective
+col = "lightgrey",     # color for the surface
+shade = 0.75, ltheta = -100,  # shading for viewing direction 
+border = NA,           # we use shading, so we disable border
+expand = 0.5,          # shrink the vertical direction by 0.5
+xlab = "X", ylab = "Y", zlab = "density")        # add labels
+mtext("bivariate standard normal", 3, 1)      # and add title
+
+n = 1000                           # number of words
+lambdas = rlnorm(n, 1, 4)          # lognormal random numbers
+mat = matrix(nrow = n, ncol = 2)   # define matrix with zeros 
+for (i in 1:n) {                   # loop over each word index
+mat[i,] = rpois(2, lambdas[i]) # store Poisson frequencies
+}
+mat[1:10,]
+mat = log(mat+1)                   
+
+persp(kde2d(mat[, 1], mat[, 2], n = 50),  
+phi = 30, theta = 20, d = 10, col = "lightgrey",  
+shade = 0.75, box = T, border = NA, ltheta = -100, expand = 0.5,
+xlab = "log X", ylab = "log Y", zlab = "density")
+mtext("bivariate lognormal-Poisson", 3, 1)
+
+
+--------------------------------------------------
+A numerical vector and a factor: analysis of variance 4.4
+--------------------------------------------------
+
+ratings[1:5, c("Word", "meanFamiliarity", "Class")]      
+summary(lm(meanFamiliarity ~ Class, data = ratings))
+dummy = ratings[,c("Word", "meanFamiliarity", "Class")]
+dummy$Classplant = 1
+dummy[dummy$Class == "animal",]$Classplant = 0
+dummy[1:5, ]
+summary(lm(meanFamiliarity ~ Classplant, data = dummy))
+mean(ratings[ratings$Class == "animal",]$meanFamiliarity) 
+coef(ratings.lm)[1]
+t.test(animals$meanFamiliarity, plants$meanFamiliarity, 
+var.equal = TRUE)
+
+head(auxiliaries)
+auxiliaries.lm = lm(VerbalSynsets ~ Aux, data = auxiliaries)
+anova(auxiliaries.lm)
+summary(auxiliaries.lm)
+1 - pbinom(0, 3, 0.05)
+xtabs(~ auxiliaries$Aux)
+
+warpbreaks.lm = lm(breaks ~ tension, data = warpbreaks)
+anova(warpbreaks.lm)
+summary(warpbreaks.lm)
+warpbreaks.aov = aov(breaks ~ tension, data = warpbreaks)
+summary(warpbreaks.aov)
+TukeyHSD(warpbreaks.aov)
+plot(TukeyHSD(warpbreaks.aov))
+
+tapply(auxiliaries$VerbalSynsets, auxiliaries$Aux, var)
+kruskal.test(auxiliaries$VerbalSynsets, auxiliaries$Aux)
+
+
+--------------------------------------------------
+Two numerical vectors and a factor: analysis of covariance 4.4.1
+--------------------------------------------------
+
+ratings.lm = lm(meanSizeRating ~ meanFamiliarity * Class + 
+I(meanFamiliarity^2), data = ratings)
+summary(ratings.lm)
+ratings$fitted = fitted(ratings.lm)
+plot(ratings$meanFamiliarity, ratings$meanSizeRating,       
+xlab = "mean familiarity", ylab = "mean size rating", type = "n")
+text(ratings$meanFamiliarity, ratings$meanSizeRating, 
+substr(as.character(ratings$Class), 1, 1), col = 'darkgrey')
+
+plants = ratings[ratings$Class == "plant", ]    
+animals = ratings[ratings$Class == "animal", ]  
+plants = plants[order(plants$meanFamiliarity),]
+animals = animals[order(animals$meanFamiliarity),]
+lines(plants$meanFamiliarity, plants$fitted)
+lines(animals$meanFamiliarity, animals$fitted)
+
+
+--------------------------------------------------
+Two vectors with counts 4.5
+--------------------------------------------------
+
+xt = xtabs(~ Aux + Regularity, data = auxiliaries)
+xt
+prop.table(xt, 1)     # rows add up to 1
+prop.table(xt, 2)     # columns add up to 1
+xt/sum(xt)           
+mosaicplot(xt, col=TRUE)   
+
+x = data.frame(irregular = c(100, 8, 30), 
+regular = c(77, 6, 22))
+rownames(x) = c("hebben", "zijn", "zijnheb")
+x
+chisq.test(xt)
+summary(xt)
+chisq.test(x)
+fisher.test(xt)
+
+
+--------------------------------------------------
+A note on statistical significance 4.6
+--------------------------------------------------
+
+n = 100
+x = seq(1, 100, length = n)
+y = 0.3 * x + rnorm(n, 0, 80)
+model100 = lm(y ~ x)
+summary(model100)$coef
+n = 1000
+x = seq(1, 100, length = n)
+y = 0.3 * x + rnorm(n, 0, 80)
+model1000 = lm(y ~ x)
+summary(model1000)
+plot(x, y)
+abline(lm(y ~ x))
+confint(model100)
+confint(model1000)
+
+
+--------------------------------------------------
+Exercises 4.7
+--------------------------------------------------
+
+verbs.xtabs = xtabs( ~ AnimacyOfRec + RealizationOfRec, 
+data = verbs[verbs$AnimacyOfTheme != "animate", ])
+verbs.xtabs
+colnames(durationsGe, 3)
+
+--------------------------------------------------
+Clustering and classification 5
+--------------------------------------------------
+
+--------------------------------------------------
+Clustering 5.1
+--------------------------------------------------
+
+--------------------------------------------------
+Tables with measurements: Principal components analysis 5.1.1
+--------------------------------------------------
+
+affixProductivity[c("Mormon", "Austen", "Carroll", "Gao"), c(5:10, 29)]
+affixes.pr = prcomp(affixProductivity[, 1:(ncol(affixProductivity)-3)])
+names(affixes.pr)
+round(affixes.pr$sdev, 4)
+summary(affixes.pr)
+props = round((affixes.pr$sdev^2/sum(affixes.pr$sdev^2)), 3)
+props[1:6]
+
+barplot(props, col = as.numeric(props > 0.05), 
+xlab = "principal components",
+ylab = "proportion of variance explained")
+abline(h = 0.05)
+
+plot(affixes.pr)
+
+affixes.pr$x[c("Mormon", "Austen", "Carroll", "Gao"), 1:3]
+library(lattice)
+super.sym = trellis.par.get("superpose.symbol")
+splom(data.frame(affixes.pr[,1:3]), 
+groups = affixProductivity$Registers, 
+panel  = panel.superpose,
+key    = list(
+title  = "texts in productivity space",
+text   = list(c("Religious", "Children", 
+"Literary", "Other")),
+points = list(pch = super.sym$pch[1:4],
+col = super.sym$col[1:4])))
+dim(affixes.pr$rotation)
+affixes.pr$rotation[1:10, 1:3]  
+
+biplot(affixes.pr,  scale = 0, var.axes = F, 
+col = c("darkgrey", "black"),  cex = c(0.9, 1.2))
+
+affixes.pr = prcomp(affixProductivity[ ,1:27], scale = T, center = T)
+biplot(affixes.pr, var.axes = F, col = c("darkgrey", "black"),
+cex = c(0.6, 1), xlim = c(-0.42, 0.38))
+
+
+--------------------------------------------------
+Tables with measurements: Factor analysis 5.1.2
+--------------------------------------------------
+
+affixes.fac = factanal(affixProductivity[ ,1:27], factors = 3)
+affixes.fac                                     
+loadings = loadings(affixes.fac)
+
+plot(loadings, type = "n", xlim = c(-0.4, 1))
+text(loadings, rownames(loadings), cex = 0.8)
+
+affixes.fac2 = factanal(affixProductivity[ ,1:27], factors = 3, 
+rotation = "promax")
+loadings2 = loadings(affixes.fac2)
+
+plot(loadings2, type = "n", xlim = c(-0.4, 1))
+text(loadings2, rownames(loadings))
+abline(h = -0.1, col = "darkgrey")
+
+
+--------------------------------------------------
+Tables with counts: Correspondence Analysis 5.1.3
+--------------------------------------------------
+
+oldFrench[1:3, 1:4]
+oldFrenchMeta[1:3, ]
+oldFrench.ca = corres.fnc(oldFrench)
+summary(oldFrench.ca, head = TRUE)
+plot(oldFrench.ca)
+plot(oldFrench.ca, rlabels = oldFrenchMeta$Genre, 
+rcol = as.numeric(oldFrenchMeta$Genre), rcex = 0.5, 
+extreme = 0.1, ccol = "blue")
+
+prose = oldFrench[oldFrenchMeta$Genre == "prose" & 
+!is.na(oldFrenchMeta$Year),]
+proseinfo = oldFrenchMeta[oldFrenchMeta$Genre=="prose" & 
+!is.na(oldFrenchMeta$Year),]
+proseinfo$Period = as.factor(proseinfo$Year <= 1250)
+prose.ca = corres.fnc(prose)
+plot(prose.ca, addcol = F, rcol = as.numeric(proseinfo$Period) + 1, 
+rlabels = proseinfo$Year, rcex = 0.7)
+proseSup = oldFrench[oldFrenchMeta$Genre == "prose" & 
+is.na(oldFrenchMeta$Year),]
+corsup.fnc(prose.ca, bycol = F, supp = proseSup, font = 2, 
+cex = 0.8, labels = substr(rownames(proseSup), 1, 4)) 
+
+variationLijk[1:5, 1:4]
+colnames(variationLijk)
+chisq.test(variationLijk)
+variationLijk.ca = corres.fnc(variationLijk)
+plot(variationLijk.ca)
+
+
+--------------------------------------------------
+Tables with distances: Multi-dimensional scaling 5.1.4
+--------------------------------------------------
+
+dutchSpeakersDist.d = as.dist(dutchSpeakersDist)
+dutchSpeakersDist.mds = cmdscale(dutchSpeakersDist.d, k = 3)
+head(dutchSpeakersDist.mds)
+dat = data.frame(dutchSpeakersDist.mds, 
+Sex = dutchSpeakersDistMeta$Sex, 
+Year = dutchSpeakersDistMeta$AgeYear, 
+EduLevel = dutchSpeakersDistMeta$EduLevel)
+dat = dat[!is.na(dat$Year),]
+dat[1:2, ]
+
+par(mfrow=c(1,2))
+plot(dat$Year, dat$X1, xlab="year of birth", 
+ylab = "dimension 1", type = "p")
+lines(lowess(dat$Year, dat$X1))
+boxplot(dat$X3 ~ dat$Sex, ylab = "dimension 3")
+par(mfrow=c(1,1))
+
+cor.test(dat$X1, dat$Year, method="sp")
+t.test(dat$X3~dat$Sex)
+
+
+--------------------------------------------------
+Tables with distances: Hierarchical cluster analysis 5.1.5
+--------------------------------------------------
+
+lexicalMeasures[1:5, 1:6]
+lexicalMeasures.cor = cor(lexicalMeasures[, -1])
+lexicalMeasures.cor[1:5, 1:5]
+cor.test(lexicalMeasures$CelS, lexicalMeasures$Ient)
+(lexicalMeasures.cor^2)[1:5, 1:5]
+lexicalMeasures.cor = cor(lexicalMeasures[,-1], method="spearman")^2
+lexicalMeasures.cor[1:5, 1:5]
+lexicalMeasures.dist = dist(lexicalMeasures.cor)
+lexicalMeasures.clust = hclust(lexicalMeasures.dist)
+plclust(lexicalMeasures.clust)
+
+library(cluster)
+pltree(diana(lexicalMeasures.dist))
+cutree(diana(lexicalMeasures.dist), 5)
+x = data.frame(measure = rownames(lexicalMeasures.cor), 
+cluster = cutree(diana(lexicalMeasures.dist), 5),
+class = lexicalMeasuresClasses$Class)
+x = x[order(x$cluster), ]
+x
+
+phylogeny[1:5, 1:5]
+phylogeny.dist = dist(phylogeny[ ,3:ncol(phylogeny)], method="binary")
+plotnames = as.character(phylogeny$Language)
+plotnames[phylogeny$Family=="Papuan"] = 
+toupper(plotnames[phylogeny$Family=="Papuan"])
+
+library(cluster)
+plot(diana(dist(phylogeny[, 3:ncol(phylogeny)], 
+method = "binary")), labels = plotnames, cex = 0.8, 
+main = " ", xlab= " ", col = c("black", "white"), which.plot = 2)
+
+library(ape)
+phylogeny.dist.tr = nj(phylogeny.dist)
+families = as.character(
+phylogeny$Family[as.numeric(phylogeny.dist.tr$tip.label)])
+languages = as.character(
+phylogeny$Language[as.numeric(phylogeny.dist.tr$tip.label)])
+phylogeny.dist.tr$tip.label = languages
+plot(phylogeny.dist.tr, type="u", 
+font = as.numeric(as.factor(families))) 
+papuan = phylogeny[phylogeny$Family == "Papuan",]
+papuan$Language = as.factor(as.character(papuan$Language))
+papuan.meta = papuan[ ,1:2]
+papuan.mat = papuan[, 3:ncol(papuan)]
+papuan.meta$Geography = c(
+"Bougainville", "Bismarck Archipelago", "Bougainville", 
+"Bismarck Archipelago", "Bismarck Archipelago", "Central Solomons",
+"Bougainville", "Louisiade Archipelago", "Bougainville", 
+"Bismarck Archipelago", "Bismarck Archipelago", 
+"Bismarck Archipelago", "Central Solomons", "Central Solomons", 
+"Central Solomons")
+papuan.dist = dist(papuan.mat, method = "binary")
+papuan.dist.tr = nj(papuan.dist)
+fonts = as.character(papuan.meta$Geography[as.numeric(
+papuan.dist.tr$tip.label)])
+papuan.dist.tr$tip.label = 
+as.character(papuan.meta$Language[as.numeric(
+papuan.dist.tr$tip.label)])
+
+plot(papuan.dist.tr, type = "u", font = as.numeric(as.factor(fonts)))
+
+B = 200
+btr = list()
+length(btr) = B
+for (i in 1:B) {
+trB = nj(dist(papuan.mat[ ,sample(ncol(papuan.mat), replace = TRUE)], 
+method = "binary"))
+trB$tip.label = as.character(papuan.meta$Language[as.numeric(
+trB$tip.label)])
+btr[[i]] = trB
+}
+props = prop.clades(papuan.dist.tr, btr)/B
+props
+plot(papuan.dist.tr, type = "u", font = as.numeric(as.factor(fonts)))
+nodelabels(thermo = props, piecol = c("black", "grey"))
+btr.consensus = consensus(btr, p = 0.5)
+
+x = btr.consensus$tip.label
+x
+x = data.frame(Language = x, Node = 1:length(x))
+x = merge(x, papuan.meta, by.x = "Language", by.y = "Language")
+head(x)
+x = x[order(x$Node),]
+x$Geography = as.factor(x$Geography)
+plot(btr.consensus, type = "u", font = as.numeric(x$Geography))
+
+
+--------------------------------------------------
+Classification 5.2
+--------------------------------------------------
+
+
+
+--------------------------------------------------
+Classification trees 5.2.1
+--------------------------------------------------
+
+colnames(dative)
+library(rpart)
+dative.rp = rpart(RealizationOfRecipient ~ ., 
+data = dative[ ,-c(1, 3)]) # exclude the columns with subjects, verbs
+plot(dative.rp, compress = T, branch = 1, margin = 0.1)
+text(dative.rp, use.n = T, pretty = 0)
+
+plotcp(dative.rp)
+
+dative.rp1 = prune(dative.rp, cp = 0.041)
+plot(dative.rp1, compress = T, branch = 1, margin = 0.1)
+text(dative.rp1, use.n = T, pretty = 0)
+
+dative.rp1
+head(predict(dative.rp1))
+
+choiceIsNP = predict(dative.rp1)[,1] >= 0.5
+choiceIsNP[1:6]
+preds = data.frame(obs = dative$RealizationOfRecipient, choiceIsNP)
+head(preds)
+xtabs( ~ obs + choiceIsNP, data = preds)
+xtabs( ~ RealizationOfRecipient, dative)
+
+
+--------------------------------------------------
+Discriminant analysis 5.2.2
+--------------------------------------------------
+
+spanishMeta = spanishMeta[order(spanishMeta$TextName),]
+spanishMeta
+dim(spanish)
+spanish[1:5, 1:5]
+spanish.t = t(spanish)
+spanish.pca = prcomp(spanish.t, center = T, scale = T)
+spanish.x = data.frame(spanish.pca$x)
+spanish.x = spanish.x[order(rownames(spanish.x)), ]
+
+library(lattice)
+super.sym = trellis.par.get("superpose.symbol")
+splom(~spanish.x[ , 1:3], groups = spanishMeta$Author, 
+
+spanish.t = spanish.t[order(rownames(spanish.t)),]
+
+library(MASS)
+spanish.lda = lda(spanish.t, spanishMeta$Author)
+spanish.pca.lda = lda(spanish.x[ , 1:8], spanishMeta$Author)
+plot(spanish.pca.lda)
+
+round(predict(spanish.pca.lda, 
+spanish.x[ ,1:8])$posterior, 4)
+spanish.pca.lda
+
+spanish.manova = 
+manova(cbind(PC1, PC2, PC3, PC4, PC5, PC6, PC7, PC8) ~ Author,
+data = spanish.x) 
+
+spanish.t = spanish.t[order(rownames(spanish.t)), ]
+n = 8
+predictedClasses = rep("", 15)
+for (i in 1:15) {
+  training = spanish.t[-i,]                     
+  trainingAuthor = spanishMeta[-i,]$Author
+  training.pca = prcomp(training, center=T, scale=T)
+  training.x = data.frame(training.pca$x)
+  training.x = training.x[order(rownames(training.x)), ]
+  training.pca.lda = lda(training[ , 1:n], trainingAuthor)
+  predictedClasses[i] = 
+  as.character(predict(training.pca.lda, spanish.t[ , 1:n])$class[i])  
+}
+data.frame(obs = as.character(spanishMeta$Author), 
+pred = predictedClasses)
+sum(predictedClasses==as.character(spanishMeta$Author))
+sum(dbinom(9:15, 15, 1/3))
+
+--------------------------------------------------
+Support vector machines 5.2.3
+--------------------------------------------------
+
+library(e1071)
+genre.svm = svm(oldFrench, oldFrenchMeta$Genre)
+genre.svm
+plot(cmdscale(dist(oldFrench)),
+col = c("blue", "red")[as.integer(oldFrenchMeta$Genre)],
+pch = c("o", "+")[1:nrow(oldFrenchMeta) %in% genre.svm$index + 1])
+c("blue", "red")[c(1, 2, 1, 2, 2, 1)]
+
+genre.svm$index
+xtabs( ~ oldFrenchMeta$Genre + predict(genre.svm))
+genre.svm = svm(oldFrench, oldFrenchMeta$Genre, cross = 10)
+summary(genre.svm)
+
+region.svm = svm(oldFrench, oldFrenchMeta$Region, cross = 10)
+xtab = xtabs(~oldFrenchMeta$Region + predict(region.svm))
+xtab
+diag(xtab)
+sum(diag(xtab))/sum(xtab)
+summary(region.svm)
+
+max(xtabs( ~ oldFrenchMeta$Region))/nrow(oldFrench)
+cbind(c(153, 342-153), c(212, 342-212))
+chisq.test(cbind(c(153, 342-153), c(212, 342-212)))
+prop.test(c(153, 212), c(342, 342))
+
+
+--------------------------------------------------
+Exercises 5.3
+--------------------------------------------------
+
+regularity$AuxNum = as.numeric(regularity$Auxiliary)
+
+
+--------------------------------------------------
+Regression modeling 6
+--------------------------------------------------
+
+--------------------------------------------------
+Introduction 6.1
+--------------------------------------------------
+
+ratings.lm = lm(meanSizeRating ~ meanFamiliarity + 
+I(meanFamiliarity^2) + Class, data = ratings)
+summary(ratings.lm)
+
+ratings.lm = lm(meanSizeRating ~ meanFamiliarity * Class + 
+I(meanFamiliarity^2), data = ratings)
+summary(ratings.lm)
+anova(ratings.lm)
+
+ratings.lm1 = lm(meanSizeRating ~ meanFamiliarity, ratings)
+ratings.lm2 = lm(meanSizeRating ~ meanFamiliarity + Class, ratings)
+ratings.lm3 = lm(meanSizeRating ~ meanFamiliarity + Class +
+I(meanFamiliarity^2), ratings)
+ratings.lm4 = lm(meanSizeRating ~ meanFamiliarity * Class + 
+I(meanFamiliarity^2), ratings)
+anova(ratings.lm1, ratings.lm2, ratings.lm3, ratings.lm4)
+
+ratings.lm5 = lm(meanSizeRating ~ meanFamiliarity * Class + 
+I(meanFamiliarity^2) * Class, data = ratings)
+anova(ratings.lm5)
+
+ratings.lm6 = lm(meanSizeRating ~ meanFamiliarity * Class + 
+summary(ratings.lm6)
+
+
+--------------------------------------------------
+Ordinary least squares regression 6.2
+--------------------------------------------------
+
+xtabs(~english$WordCategory)
+xtabs(~english$AgeSubject)
+xtabs(~english$AgeSubject + english$WordCategory)
+
+pairs(english[,c("RTlexdec", "WrittenFrequency", "LengthInLetters")], 
+pch = ".")
+
+english.dd = datadist(english)
+options(datadist = "english.dd")
+english.ols = ols(RTlexdec~WrittenFrequency+LengthInLetters, english) 
+english.ols
+
+1 - pchisq(959.7, 2)
+
+x = data.frame(obs = english$RTlexdec,
+exp = fitted(english.ols), resid = resid(english.ols))
+x[1:5,]
+cor(x$obs, x$exp)^2
+sd(x$resid)
+quantile(x$resid)
+
+par(mfrow = c(1, 2))
+plot(density(x$resid), main = "")
+qqnorm(x$resid, pch = ".", main = "")
+qqline(x$resid)
+par(mfrow = c(1, 1))
+
+english.olsA = ols(RTlexdec ~ WrittenFrequency + AgeSubject + 
+LengthInLetters, data = english)
+english.olsA
+
+
+--------------------------------------------------
+Nonlinearities 6.2.1
+--------------------------------------------------
+
+english.lm = lm(RTlexdec ~ WrittenFrequency + I(WrittenFrequency^2) + 
+AgeSubject + LengthInLetters,  data = english)
+summary(english.lm)
+
+english.olsB = ols(RTlexdec ~ pol(WrittenFrequency, 2) + AgeSubject + 
+LengthInLetters,  data = english)
+english.olsB
+anova(english.olsB)
+
+par(mfrow = c(2, 2), cex = 0.6)
+plot(english.olsB)
+par(mfrow = c(1, 1), cex = 1.0)
+
+english.olsC = ols(RTlexdec ~ rcs(WrittenFrequency, 3) + AgeSubject + 
+LengthInLetters, data = english)
+english.olsC
+
+english.olsD = ols(RTlexdec ~ rcs(WrittenFrequency,7) + AgeSubject +
+LengthInLetters, data = english)
+english.olsD
+
+plot(english.olsC, WrittenFrequency=NA, ylim=c(6.5, 7.0), conf.int=F)
+plot(english.olsB, WrittenFrequency = NA, add = T, 
+lty = 2, conf.int = F)
+mtext("3 knots, undersmoothing", 3, 1, cex = 0.8)
+plot(english.olsD, WrittenFrequency=NA, ylim=c(6.5, 7.0), conf.int=F)
+plot(english.olsB, WrittenFrequency=NA, add=T, lty=2, conf.int=F)
+mtext("7 knots, oversmoothing", 3, 1, cex = 0.8)
+
+english.olsE = ols(RTlexdec ~ rcs(WrittenFrequency,5) + AgeSubject +
+LengthInLetters, english)
+plot(english.olsE, WrittenFrequency=NA, ylim=c(6.5, 7.0), conf.int=F)
+plot(english.olsB, WrittenFrequency=NA, add=T, lty=2, conf.int=F)
+mtext("5 knots", 3, 1, cex = 0.8)
+
+english.olsE = ols(RTlexdec ~ rcs(WrittenFrequency, 5) + AgeSubject + 
+LengthInLetters + rcs(WrittenFrequency,5) : AgeSubject,
+data = english)
+english.olsE
+anova(english.olsE)
+
+par(mfrow = c(2, 2), cex = 0.7)
+plot(english.olsE, WrittenFrequency = NA, ylim = c(6.2, 7.0))
+plot(english.olsE, WrittenFrequency = NA, AgeSubject = "young", 
+add = T, col = "darkgrey")
+plot(english.olsE, LengthInLetters = NA, ylim = c(6.2, 7.0))
+plot(english.olsE, AgeSubject = NA, ylim = c(6.2, 7.0))
+par(mfrow = c(1, 1), cex = 1)
+
+
+--------------------------------------------------
+Collinearity 6.2.2
+--------------------------------------------------
+
+collin.fnc(english[english$AgeSubject == "young",], 7:29)$cnumber
+plot(varclus(as.matrix(english[english$AgeSubject == "young", 7:29])))
+collin.fnc(english[english$AgeSubject == "young",], 18:27)$cnumber
+
+items = english[english$AgeSubject == "young",]
+items.pca = prcomp(items[ , c(18:27)], center = T, scale = T)
+summary(items.pca)
+sum((items.pca$sdev^2/sum(items.pca$sdev^2))[1:4])
+
+x = as.data.frame(items.pca$rotation[,1:4])
+x[order(x$PC4), ]
+collin.fnc(items.pca$x, 1:4)$cnumber
+items$PC1 =  items.pca$x[,1]
+items$PC2 =  items.pca$x[,2]
+items$PC3 =  items.pca$x[,3]
+items$PC4 =  items.pca$x[,4]
+items2 = english[english$AgeSubject != "young", ]
+items2$PC1 =  items.pca$x[,1]
+items2$PC2 =  items.pca$x[,2]
+items2$PC3 =  items.pca$x[,3]
+items2$PC4 =  items.pca$x[,4]
+english2 = rbind(items, items2) 
+english2$NVratio = 
+log(english2$NounFrequency+1) - log(english2$VerbFrequency+1)
+english3 = english2[,c("RTlexdec", "Word", "AgeSubject", 
+"WordCategory", "WrittenFrequency", 
+"WrittenSpokenFrequencyRatio", "FamilySize", 
+"InflectionalEntropy", "NumberSimplexSynsets",
+"NumberComplexSynsets", "LengthInLetters", "MeanBigramFrequency",
+"Ncount",  "NVratio", "PC1", "PC2", "PC3", "PC4", "Voice")]
+
+english3.dd = datadist(english3)
+options(datadist = "english3.dd")
+english3.ols = ols(RTlexdec ~ Voice + PC1 + PC2 + PC3 + PC4 + 
+LengthInLetters + MeanBigramFrequency + Ncount +
+rcs(WrittenFrequency, 5) + WrittenSpokenFrequencyRatio + 
+NVratio + WordCategory + AgeSubject +
+FamilySize + InflectionalEntropy + 
+NumberSimplexSynsets + NumberComplexSynsets +
+rcs(WrittenFrequency, 5) * AgeSubject, data = english3)
+
+fastbw(english3.ols)
+english3.olsA = ols(RTlexdec ~ Voice + PC1 + MeanBigramFrequency + 
+rcs(WrittenFrequency, 5) + rcs(WrittenSpokenFrequencyRatio, 3) + 
+NVratio + WordCategory + AgeSubject + rcs(FamilySize, 3) + 
+InflectionalEntropy + NumberComplexSynsets + 
+rcs(WrittenFrequency, 5):AgeSubject, data=english3, x=T, y=T)
+
+par(mfrow = c(4, 3), mar = c(4, 4, 1, 1), oma = rep(1, 4))
+plot(english3.olsA, adj.subtitle=F, ylim=c(6.4, 6.9), conf.int=F)
+par(mfrow = c(1, 1))
+
+
+--------------------------------------------------
+Model criticism 6.2.3
+--------------------------------------------------
+
+english3$rstand = as.vector(scale(resid(english3.olsA)))
+
+plot(density(english3$rstand), main=" ")
+qqnorm(english3$rstand, cex = 0.5, main = " ")
+qqline(english3$rstand)
+
+plot(english3$rstand ~ fitted(english3.olsA), pch=".")
+abline(h = c(-2.5, 2.5))
+
+dffits = abs(resid(english3.olsA, "dffits"))
+plot(dffits, type="h")
+
+w = which.influence(english3.olsA)
+w
+nam = names(w)
+for (i in 1:length(nam)) {
+cat("Influential observations for effect of", nam[i], "\n")
+print(english3[w[[i]], 1:3])
+}
+
+outliers=as.numeric(rownames(english3[abs(english3$rstand) > 2.5,])) 
+
+dfBetas=as.numeric(unique(unlist(as.vector(w))))
+outliers2=unique(c(dfBetas, outliers))
+length(outliers2)/nrow(english3)
+
+english4 = english3[-outliers2, ]
+english4.dd = datadist(english4)
+options(datadist = "english4.dd")
+english4.ols = ols(RTlexdec ~ Voice + PC1 + MeanBigramFrequency + 
+rcs(WrittenFrequency, 5) + rcs(WrittenSpokenFrequencyRatio, 3) + 
+NVratio + WordCategory + AgeSubject + rcs(FamilySize, 3) + 
+rcs(WrittenFrequency, 5):AgeSubject + InflectionalEntropy + 
+NumberComplexSynsets, data = english4, x = T, y = T)
+anova(english4.ols)
+
+
+--------------------------------------------------
+Validation 6.2.4
+--------------------------------------------------
+
+length(unique(sample(1:4492, replace=T)))
+length(unique(sample(1:4492, replace=T)))
+length(unique(sample(1:4492, replace=T)))
+
+validate(english4.ols, bw = T, B = 200)
+sum(resid(english4.ols)^2)/length(resid(english4.ols))
+coef(lm(english4$RTlexdec~fitted(english4.ols)))
+
+
+--------------------------------------------------
+Generalized linear models 6.3
+--------------------------------------------------
+
+--------------------------------------------------
+Logistic Regression 6.3.1
+--------------------------------------------------
+
+nCorrect = english2$CorrectLexdec[1:10]
+nCorrect
+proportions = nCorrect/30
+proportions
+logits = log(nCorrect/(30 - nCorrect))
+logits
+
+cbind(english$CorrectLexdec, 30 - english$CorrectLexdec) 
+
+english2.glm = 
+glm(cbind(english2$CorrectLexdec, 30 - english2$CorrectLexdec) ~
+Voice + PC1 + MeanBigramFrequency + LengthInLetters + Ncount +
+WordCategory + NVratio + poly(WrittenFrequency, 2) + 
+poly(WrittenSpokenFrequencyRatio, 2) + poly(FamilySize, 2) +
+InflectionalEntropy + NumberComplexSynsets + AgeSubject, english2,  
+family = "binomial")
+
+summary(english2.glm)
+2 * (1 - pnorm(4.235))
+1 - pchisq(24432 - 12730, 4567 - 4551)
+1 - pchisq(12730, 4551)
+anova(english2.glm, test = "Chisq")
+
+english2.glm = 
+glm(cbind(english2$CorrectLexdec, 30 - english2$CorrectLexdec) ~
+MeanBigramFrequency + LengthInLetters + WordCategory + NVratio +
+poly(WrittenFrequency, 2) + WrittenSpokenFrequencyRatio + 
+poly(FamilySize, 2) + InflectionalEntropy + NumberComplexSynsets + 
+AgeSubject + PC1 + Voice + Ncount, data=english2, family="binomial")
+anova(english2.glm, test = "Chisq")
+
+english2$predictCorrect = predict(english2.glm, type = "response")*30
+plot(english2$CorrectLexdec, english2$predictCorrect, cex = 0.5)
+abline(0,1)
+
+english2A = english2[abs(rstandard(english2.glm)) < 5, ]
+
+(nrow(english2) - nrow(english2A)) / nrow(english2)
+
+english2A.glm = 
+glm(cbind(english2A$CorrectLexdec, 30 - english2A$CorrectLexdec) ~
+MeanBigramFrequency + LengthInLetters + WordCategory + NVratio +
+poly(WrittenFrequency, 2) + WrittenSpokenFrequencyRatio + 
+poly(FamilySize, 2) + InflectionalEntropy + NumberComplexSynsets + 
+AgeSubject + Voice + PC1 + Ncount, english2A, family = "binomial")
+summary(english2A.glm)   
+
+plot(english2A$CorrectLexdec, 
+predict(english2A.glm, type = "response")*30, cex = 0.5)
+abline(0,1)
+
+regularity.dd = datadist(regularity)
+options(datadist = "regularity.dd")
+xtabs( ~ regularity$Regularity)
+regularity.lrm = lrm(Regularity ~ WrittenFrequency+rcs(FamilySize,3)+ 
+NcountStem + InflectionalEntropy + Auxiliary + Valency + NVratio + 
+WrittenSpokenRatio, data = regularity, x = T, y = T)
+anova(regularity.lrm)
+regularity.lrm
+2 * (0.843 - 0.5)
+
+validate(regularity.lrm, bw = T, B = 200)
+pentrace(regularity.lrm, seq(0, 0.8, by = 0.05))
+regularity.lrm.pen = update(regularity.lrm, penalty = 0.6)
+regularity.lrm.pen
+cbind(coef(regularity.lrm), coef(regularity.lrm.pen), 
+abs(coef(regularity.lrm) - coef(regularity.lrm.pen)))
+
+table(regularity$Auxiliary)
+par(mfrow = c(3, 3))
+plot(regularity.lrm.pen, fun = plogis, ylab = "Pr(regular)", 
+adj.subtitle = F, ylim = c(0, 1))
+par(mfrow = c(1, 1))
+
+--------------------------------------------------
+Ordinal logistic regression 6.3.2
+--------------------------------------------------
+
+colnames(etymology)
+etymology$EtymAge = ordered(etymology$EtymAge, levels = c("Dutch",
+"DutchGerman", "WestGermanic", "Germanic", "IndoEuropean")) 
+etymology$EtymAge
+
+etymology.dd = datadist(etymology)
+options(datadist = "etymology.dd")
+
+etymology.lrm = lrm(EtymAge ~ WrittenFrequency + NcountStem +
+MeanBigramFrequency + InflectionalEntropy + Auxiliary +
+Regularity + LengthInLetters + Denominative + FamilySize + Valency + 
+NVratio + WrittenSpokenRatio, data = etymology, x = T, y = T)
+anova(etymology.lrm)
+
+etymology.lrmA = lrm(EtymAge ~ NcountStem + Regularity + Denominative,
+data = etymology, x = T, y = T)
+etymology.lrmA
+
+tab = xtabs(~etymology$EtymAge)
+tab
+sum(tab)
+for (i in 0:3) {
+cat(sum(tab[(2 + i) : 5]), sum(tab[1 : (1 + i)]), 
+log(sum(tab[(2 + i) : 5]) / sum(tab[1 : (i + 1)])), "\n")
+}
+
+par(mfrow = c(2, 2))
+resid(etymology.lrmA, 'score.binary', pl = T)
+plot.xmean.ordinaly(EtymAge ~ NcountStem, data = etymology)
+par(mfrow = c(1, 1))
+
+validate(etymology.lrmA, bw=T, B=200)
+pentrace(etym.lrmA, seq(0, 0.8, by=0.05))
+plot(etymology.lrmA, fun = plogis, ylim = c(0.8, 1))
+
+
+--------------------------------------------------
+Regression with breakpoints 6.4
+--------------------------------------------------
+
+head(faz, 3)
+tail(faz, 3)
+faz$Distance = 1:nrow(faz)
+plot(log(faz$Distance), log(faz$Frequency + 1), 
+xlab = "log Distance", ylab = "log Frequency")
+faz$LogFrequency = log(faz$Frequency + 1)
+faz$LogDistance = log(faz$Distance)
+
+breakpoint = log(59)
+faz$ShiftedLogDistance = faz$LogDistance - breakpoint
+
+plot(faz$ShiftedLogDistance, faz$LogFrequency, 
+xlab = "log Shifted Distance", ylab = "log Frequency")
+
+faz.left = lm(LogFrequency ~ ShiftedLogDistance, 
+data = faz[faz$ShiftedLogDistance <= 0,])
+faz.right = lm(LogFrequency ~ ShiftedLogDistance, 
+data = faz[faz$ShiftedLogDistance >= 0,])
+abline(faz.left, lty = 1)
+abline(faz.right, lty = 2)
+faz$PastBreakPoint = as.factor(faz$ShiftedLogDistance > 0)
+
+faz.both = lm(LogFrequency ~ ShiftedLogDistance : PastBreakPoint,
+data=faz)
+summary(faz.both)
+anova(faz.both, lm(LogFrequency ~ ShiftedLogDistance, data = faz))
+sum((fitted(faz.both) - faz$LogFrequency)^2)
+deviance(faz.both)
+
+deviances = rep(0, nrow(faz)-1)
+for (pos in 1 : (nrow(faz)-1)) {
+  breakpoint = log(pos)
+  faz$ShiftedLogDistance = faz$LogDistance - breakpoint
+  faz$PastBreakPoint = as.factor(faz$ShiftedLogDistance > 0)
+  faz.both = lm(LogFrequency ~ ShiftedLogDistance:PastBreakPoint, 
+     data = faz)
+  deviances[pos] = deviance(faz.both)
+}
+best = which(deviances == min(deviances))
+best
+breakpoint = log(best)
+
+faz$ShiftedLogDistance = faz$LogDistance - breakpoint
+faz$PastBreakPoint = as.factor(faz$ShiftedLogDistance > 0)
+faz.both = lm(LogFrequency ~ ShiftedLogDistance:PastBreakPoint, 
+data = faz)
+
+plot(log(1:length(deviances)), deviances, type = "l", 
+xlab = "breakpoint", ylab = "deviance")
+plot(faz$LogDistance, faz$LogFrequency, 
+xlab = "log Distance", ylab = "log Frequency", col = "darkgrey")
+lines(faz$LogDistance, fitted(faz.both))
+
+head(periphrasticDo)
+table(periphrasticDo$type)
+periphrasticDo$year = periphrasticDo$begin + 
+(periphrasticDo$end-periphrasticDo$begin)/2        # midpoints
+
+periphrasticDo.glm = glm(cbind(do, other) ~ 
+(year + I(year^2) + I(year^3)) * type, 
+data = periphrasticDo, family = "binomial")
+summary(periphrasticDo.glm)
+anova(periphrasticDo.glm, test = "F")
+
+periphrasticDo$Indicator = rep(c(rep(0, 3), rep(1, 8)), 4)
+periphrasticDo.glmA = glm(cbind(do, other) ~ 
+(year + I(year^2) + I(year^3)) * type + 
+Indicator * type + Indicator * year, 
+data = periphrasticDo, family = "binomial")
+anova(periphrasticDo.glmA, test = "F")
+
+min(apply(periphrasticDo[, c("do", "other")], 2, sum))
+periphrasticDo$predict = predict(periphrasticDo.glm, type="response")
+periphrasticDo$predictA=predict(periphrasticDo.glmA, type="response")
+
+par(mfrow=c(2, 2))
+for (i in 1:nlevels(periphrasticDo$type)) {
+ subset = periphrasticDo[periphrasticDo$type == 
+ levels(periphrasticDo$type)[i], ]
+ plot(subset$year,
+ subset$do/(subset$do + subset$other), 
+ type = "p", ylab = "proportion", xlab = "year", 
+ ylim = c(0, 1), xlim = c(1400, 1700))
+ mtext(levels(periphrasticDo$type)[i], line = 2)
+ lines(subset$ar, subset$predict, lty = 3)
+ lines(subset$ar, subset$predictA, lty = 1)
+}
+
+
+--------------------------------------------------
+Models for lexical richness 6.5
+--------------------------------------------------
+
+alice[1:4]
+alice.growth = growth.fnc(text = alice, size = 648, nchunks = 40)
+head(alice.growth, 3)
+plot(alice.growth)
+
+aiw1 = alice[1:17000]
+aiw2 = alice[17001:25942]
+compare.richness.fnc(aiw1, aiw2)
+
+aiw1a = aiw1[1:length(aiw2)]
+compare.richness.fnc(aiw1a, aiw2)
+
+alice.g = alice.growth@data$data
+head(alice.g, 3)
+plot(log(alice.g$Tokens), log(alice.g$Types))
+
+alice.g.lm = lm(log(alice.g$Types)~log(alice.g$Tokens))
+abline(alice.g.lm, col="darkgrey")
+summary(alice.g.lm)
+
+plot(log(alice.g$Tokens), resid(alice.g.lm))
+abline(h=0)
+
+z = zipf.fnc(alice, plot = T)
+head(z, n = 3)
+tail(z, n = 3)
+plot(log(z$rank), log(z$frequency), type = "S")
+
+z.lm = lm(log(z$frequency) ~ log(z$rank))
+abline(z.lm, col = "darkgrey")
+
+plot(log(z$rank), resid(z.lm))
+abline(h=0)
+
+young = english[english$AgeSubject == "young",]
+young = young[sample(1:nrow(young)), ]
+samplesizes = seq(57, 2284, by = 57)
+coefs  = rep(0, 40)
+stderr = rep(0, 40)
+lower  = rep(0, 40)
+for (i in 1:length(samplesizes)) {
+	  young.s    =  young[1:samplesizes[i], ]
+	  young.s.lm =  lm(RTlexdec ~ WrittenFrequency, data = young.s)
+	  coefs[i]   =  coef(young.s.lm)[2]
+	  stderr[i]  =  summary(young.s.lm)$coef[2, 2]
+	  lower[i]   =  qt(0.025, young.s.lm$df.residual) * stderr[i]
+}
+plot(samplesizes, coefs, ylim = c(-0.028, -0.044), type = "l",
+xlab = "sample size", ylab = "coefficient for frequency")
+points(samplesizes, coefs)
+lines(samplesizes, coefs - lower, col = "darkgrey")
+lines(samplesizes, coefs + lower, col = "darkgrey")
+
+alice.table = table(table(alice))
+head(alice.table)
+tail(alice.table)
+tail(sort(table(alice)))
+
+alice.spc = spc(m = as.numeric(names(alice.table)), 
+Vm = as.numeric(alice.table))
+alice.spc
+sum(alice.spc$Vm)                  # types
+sum(alice.spc$m * alice.spc$Vm)    # tokens
+
+twente.spc = spc(m=twente$m, Vm = twente$Vm)
+N(twente.spc)    # ask for number of tokens
+V(twente.spc)    # ask for number of types
+
+alice.lnre.gigp = lnre("gigp", alice.spc)
+alice.lnre.gigp
+plot(alice.spc, lnre.spc(alice.lnre.fzm, 25942))
+
+twente.lnre.fzm = lnre("fzm", twente.spc)
+twente.lnre.fzm
+plot(twente.spc, lnre.spc(twente.lnre.fzm, N(twente.spc)))
+
+alice.ext.gigp = lnre.vgc(alice.lnre.gigp, 
+seq(N(alice.lnre.gigp), N(alice.lnre.gigp)*2, length = 20), m.max = 3)
+alice.int.gigp = lnre.vgc(alice.lnre.gigp, 
+seq(0, N(alice.lnre.gigp), length=20), m.max=3)
+alice.vgc = growth2vgc.fnc(alice.growth)
+plot(alice.int.gigp,alice.ext.gigp,alice.vgc,add.m = 1:3,main = " ")
+mtext("Vocabulary Growth: Alice in Wonderland", cex = 0.8, side = 3, 
+line=2)
+
+
+--------------------------------------------------
+General considerations 6.6
+--------------------------------------------------
+
+--------------------------------------------------
+Exercises 6.7
+--------------------------------------------------
+
+etymology$EtymAge = ordered(etymology$EtymAge, levels=c("Dutch",
+"DutchGerman", "WestGermanic", "Germanic", "IndoEuropean"))
+
+library(Design)
+etym.dd = datadist(etym)
+options(datadist='etym.dd')
+
+etymology.lrm = lrm(Regularity ~ rcs(WrittenFrequency,3) + 
+rcs(FamilySize,3) + NcountStem + InflectionalEntropy + 
+Auxiliary + Valency + NVratio + WrittenSpokenRatio + EtymAge, 
+data=etymology, x=T, y=T)
+options(contrasts = c("contr.treatment", "contr.treatment"))
+
+faz.bothA = lm(LogFrequency ~ ShiftedLogDistance + 
+ShiftedLogDistance : PastBreakPoint, data = faz)
+faz.bothA = lm(LogFrequency ~ ShiftedLogDistance * PastBreakPoint, 
+data = faz)
+
+
+--------------------------------------------------
+Mixed Models 7
+--------------------------------------------------
+
+--------------------------------------------------
+Modeling data with fixed and random effects 7.1
+--------------------------------------------------
+
+qqmath(~RT|Subject, data = lexdec)
+old.prompt = grid::grid.prompt(TRUE)
+qqmath(~RT|Word, data = lexdec, layout = c(5,5,4))
+grid::grid.prompt(old.prompt)
+
+qqmath(~RT|Subject, data = lexdec[lexdec$RT<7,])
+
+lexdec2 = lexdec[lexdec$RT < 7, ]
+nrow(lexdec) - nrow(lexdec2)
+(nrow(lexdec) - nrow(lexdec2)) / nrow(lexdec)
+lexdec3 = lexdec2[lexdec2$Correct == "correct", ]
+
+xylowess.fnc(RT ~ Trial | Subject, data = lexdec3, ylab = "log RT")
+
+lexdec3.lmer = lmer(RT ~ Trial + (1|Subject) + (1|Word), lexdec3)
+lexdec3.lmer
+print(lexdec3.lmer, corr=FALSE)
+
+ranef(lexdec3.lmer)$Word
+var(ranef(lexdec3.lmer)$Word)
+fitted(lexdec3.lmer)[1:4]
+
+6.394 + ranef(lexdec3.lmer)$Word["owl",] + 
+ranef(lexdec3.lmer)$Subject["A1",] -1.835e-04*23
+
+2 * (1 - pt(abs(-2.24), 1557 - 2))
+
+pvals.fnc(lexdec3.lmer)$fixed
+
+lexdec3.lmerA = lmer(RT ~ Trial + (1+Trial|Subject) + (1|Word), 
+data = lexdec3)
+print(lexdec3.lmerA, corr = FALSE)
+
+xyplot(RT ~ Trial | Subject, data = lexdec3, 
+ panel = function(x, y, subscripts) {
+ panel.xyplot(x, y)                              # the scatterplot
+ subject = as.character(lexdec3[subscripts[1], "Subject"])
+ coefs = as.numeric(unlist(coef(lexdec3.lmer)$Subject[subject,]))
+ panel.abline(coefs, col = "black", lty = 2)      # add first line
+ coefs = as.numeric(unlist(coef(lexdec3.lmerA)$Subject[subject,]))
+ panel.abline(coefs, col = "black", lty = 1)     # add second line
+})
+
+lexdec3.lmerB = lmer(RT ~ Trial + NativeLanguage + 
+(1+Trial|Subject) + (1|Word), lexdec3)
+lexdec3.lmerB
+
+lexdec3.lmerC = lmer(RT ~ Trial + Frequency*NativeLanguage + 
+(1+Trial|Subject) + (1|Word), lexdec3)
+lexdec3.lmerC 
+
+lexdec3.lmerD = lmer(RT ~ Trial + Length*NativeLanguage  + 
+NativeLanguage*Frequency + (1+Trial|Subject) + (1|Word), lexdec3)
+lexdec3.lmerD
+
+lexdec3.lmerD
+ranefs = ranef(lexdec3.lmerD)$Subject
+head(ranefs)
+plot(ranefs)
+abline(h = 0, col = "grey")
+abline(v = 0, col = "grey")
+coefs = coef(lexdec3.lmerD)$Subject
+round(head(coefs),4)
+plot(coefs[,1:2])
+
+lexdec3.lmerD1 = lmer(RT ~ Trial + Length * NativeLanguage + 
+NativeLanguage * Frequency + (1|Subject) + (1|Word),  data = lexdec3)
+anova(lexdec3.lmerD, lexdec3.lmerD1)
+lexdec3.lmerD2 = lmer(RT ~ Trial + Length * NativeLanguage + 
+NativeLanguage * Frequency + (1|Subject),  data = lexdec3)
+anova(lexdec3.lmerD1, lexdec3.lmerD2)
+
+lexdec3$cTrial = lexdec3$Trial - mean(lexdec3$Trial)
+lexdec3.lmerD3 = lmer(RT ~ cTrial + Length*NativeLanguage  + 
+NativeLanguage*Frequency + (1+cTrial|Subject) + (1|Word), lexdec3)
+lexdec3.lmerD3
+lexdec3.lmerD3a = lmer(RT ~ cTrial + Length*NativeLanguage  + 
+NativeLanguage*Frequency + (1|Subject)+(0+cTrial|Subject)+(1|Word), 
+lexdec3)
+anova(lexdec3.lmerD3a,lexdec3.lmerD3)
+
+lexdec3.lmerE = lmer(RT ~ cTrial + Frequency + 
+NativeLanguage * Length + meanWeight + 
+(1|Subject) + (0+cTrial|Subject) + (1|Word), lexdec3)
+lexdec3.lmerE
+
+lexdec3.lmerEtrimmed = 
+lmer(RT ~ cTrial + Frequency + meanWeight + NativeLanguage * Length + 
+(1|Subject) + (0+cTrial|Subject) + (1|Word), 
+data = lexdec3, subset = abs(scale(resid(lexdec3.lmerE))) < 2.5)
+nrow(lexdec3)-nrow(lexdec3[abs(scale(resid(lexdec3.lmerE))) < 2.5,])
+
+par(mfrow=c(2,2))
+plot(fitted(lexdec3.lmerE), residuals(lexdec3.lmerE))
+qqnorm(residuals(lexdec3.lmerE), main=" ")
+qqline(residuals(lexdec3.lmerE))
+plot(fitted(lexdec3.lmerEtrimmed), residuals(lexdec3.lmerEtrimmed))
+qqnorm(residuals(lexdec3.lmerEtrimmed), main=" ")
+qqline(residuals(lexdec3.lmerEtrimmed))
+par(mfrow=c(1,1))
+
+x = pvals.fnc(lexdec3.lmerEtrimmed)
+x$fixed 
+x$random
+
+lexdec3.lmerEtrimmed
+
+cor(fitted(lexdec3.lmerE), lexdec3$RT)^2
+lexdec3.lmer00 = lmer(RT ~ Trial +
+(1|Subject) + (0+Trial|Subject), data = lexdec3)
+cor(fitted(lexdec3.lmer00), lexdec3$RT)^2
+lexdec3.lmer0 = lmer(RT ~ 1+(1|Subject)+(0+Trial|Subject)+(1|Word), 
+data = lexdec3)
+cor(fitted(lexdec3.lmer0), lexdec3$RT)^2
+lexdec3.lmer0
+lexdec3.lmerE
+
+
+--------------------------------------------------
+A comparison with traditional analyses 7.2
+--------------------------------------------------
+
+--------------------------------------------------
+Mixed-effect models and Quasi-F 7.2.1
+--------------------------------------------------
+
+splitplot[1:4,]
+table(splitplot$SOA)
+table(splitplot$Subject, splitplot$Item)
+table(splitplot$Subject, splitplot$SOA)
+table(splitplot$Item, splitplot$SOA)
+
+splitplot.lmer = lmer(RT ~ SOA + (1+SOA|Subject) + (1|Item), 
+data = splitplot)
+splitplot.lmer
+
+splitplot.lmerA = lmer(RT ~ SOA + (1|Subject) + (1|Item), 
+data = splitplot)
+anova(splitplot.lmer, splitplot.lmerA)
+
+pvals.fnc(splitplot.lmer, nsim = 50000)$fixed 
+
+splitplot.lm = lm(RT ~ SOA + Item + Subject + SOA:Subject + 
+Item:Subject, data = splitplot)
+anova(splitplot.lm)
+length(coef(splitplot.lm))
+nrow(splitplot)
+sum(is.na(coef(splitplot.lm)))
+
+x = anova(dat.lm) 
+quasiF.fnc(x["SOA","Mean Sq"], x["Item:Subject", "Mean Sq"],
+x["SOA:Subject", "Mean Sq"], x["Item", "Mean Sq"],
+x["SOA","Df"], x["Item:Subject", "Df"],
+x["SOA:Subject", "Df"], x["Item", "Df"])
+
+subjects = aggregate(splitplot$RT, list(splitplot$Subject, 
+splitplot$SOA),mean)
+subjects
+colnames(subjects) = c("Subject", "SOA", "MeanRT")
+summary(aov(MeanRT ~ SOA + Error(Subject), data = subjects))
+
+items = aggregate(splitplot$RT, list(splitplot$Item, splitplot$SOA), 
+mean)
+items
+colnames(items) = c("Item", "SOA", "MeanRT")
+summary(aov(MeanRT ~ SOA, items))
+
+# WARNING: THESE SIMULATIONS TAKE A LOT OF TIME
+y3 = simulateSplitPlot.fnc(splitplot, nruns=1000, with=FALSE) 
+y3$alpha05
+y3$alpha01
+x3 = simulateSplitPlot.fnc(splitplot, nruns=1000, with=TRUE) 
+x3$alpha05
+x3$alpha01
+y4 = simulateSplitPlot.fnc(splitplot, nruns=1000, nsub=20, nitem=40, 
+with = F)
+y4$alpha05
+y4$alpha01
+x4 = simulateSplitPlot.fnc(splitplot, nruns=1000, nsub=20, nitem=40)
+x4$alpha05
+x4$alpha01
+
+
+--------------------------------------------------
+Mixed-effect models and Latin Square designs 7.2.2
+--------------------------------------------------
+
+latinsquare[1:4, ]
+table(latinsquare$Group, 
+as.factor(paste(latinsquare$List, latinsquare$SOA)))
+latinsquare.lmer = lmer(RT ~ SOA + (1|Word) + (1|Subject), 
+data = latinsquare)
+x = pvals.fnc(latinsquare.lmer, nsim=10000, withMCMC=TRUE)
+names(x)
+x$fixed
+
+latinsquare.aov = aovlmer.fnc(latinsquare.lmer, x$mcmc, 
+c("SOAmedium", "SOAshort"))
+latinsquare.aov
+
+subjects = aggregate(latinsquare$RT, list(latinsquare$Subject, 
+latinsquare$Group, latinsquare$SOA, latinsquare$List), mean)
+colnames(subjects) = c("Subject", "Group", "SOA", "List", "MeanRT")
+subjects[1:12,]
+subjects.lm = lm(MeanRT ~ Group/Subject + SOA*List, data = subjects)
+anova(subjects.lm)[,1:3]
+1 - pf(23/20, 2, 2)
+
+# WARNING: THESE SIMULATIONS TAKE A LOT OF TIME
+latinsqY = simulateLatinsquare.fnc(latinsquare, nruns=1000, with=F)
+latinsqY$alpha05
+latinsqY$alpha01
+latinsqX = simulateLatinsquare.fnc(latinsquare, nruns=1000, with=T)
+latinsqX$alpha05
+latinsqX$alpha01
+
+
+--------------------------------------------------
+Regression with subjects and items 7.2.3
+--------------------------------------------------
+
+simdat = make.reg.fnc() 
+simdat[1:4, ]
+400*1 + 2*1 + 6*8 + 4*7 - 81.56308 + 137.1683 + 16.22481
+simdat.lmer = lmer(RT ~ X+Y+Z+(1|Item)+(1|Subject), data=simdat)
+simdat.lmer
+
+items = aggregate(simdat$RT, list(simdat$Item), mean)
+colnames(items) = c("Item", "Means")
+items = merge(items, unique(simdat[,c("Item", "X", "Y", "Z")]), 
+by.x = "Item", by.y = "Item")
+items.lm = lm(Means ~ X + Y + Z, data = items)
+summary(items.lm)
+
+pvals.fnc(simdat.lmer)$fixed
+
+simdat.lmList = lmList(RT ~ X + Y + Z | Subject, simdat)
+coef(simdat.lmList)
+apply(coef(simdat.lmList), 2, t.test)
+
+simdat.lmerS = lmer(RT ~ X+Y+Z + (1|Subject), data=simdat)
+pvals.fnc(simdat.lmerS)$fixed
+simdat.lmerS           
+
+table(simdat$Subject, simdat$Item)[1:4, 1:4]
+simdat$Item2 = factor(paste(simdat$Subject, simdat$Item, sep = "."))
+table(simdat$Subject, simdat$Item2)[1:10, 1:4]
+s = simulateRegression.fnc(beta = c(400, 2, 6, 0), nruns = 1000)
+s$ranef
+
+
+--------------------------------------------------
+Shrinkage in mixed-effect models 7.3
+--------------------------------------------------
+
+shrinkage.lmer = lmer(RT ~ frequency + (1|subject), data = shrinkage)
+shrinkage.lmer
+shrinkage.lmList = lmList(RT ~ frequency | subject, data = shrinkage)
+coef(shrinkage.lmList)
+t.test(coef(shrinkage.lmList)$frequency)
+coef(shrinkage.lmList)      
+coef(shrinkage.lmer)$subject
+
+
+--------------------------------------------------
+Generalized linear mixed models 7.4
+--------------------------------------------------
+
+library(Design)
+dative.dd = datadist(dative)
+options(datadist = 'dative.dd')
+
+dative.lrm = lrm(RealizationOfRecipient ~ 
+AccessOfTheme + AccessOfRec + LengthOfRecipient + AnimacyOfRec +
+AnimacyOfTheme + PronomOfTheme + DefinOfTheme + LengthOfTheme+
+SemanticClass + Modality,
+data = dative)
+anova(dative.lrm)
+
+rev(sort(table(dative$Verb)))
+
+library(lme4, keep.source=F)
+dative.glmm = lmer(RealizationOfRecipient ~ AccessOfTheme + 
+AccessOfRec + LengthOfRecipient + AnimacyOfRec + AnimacyOfTheme + 
+PronomOfTheme + DefinOfTheme + LengthOfTheme + SemanticClass + 
+Modality + (1|Verb), data = dative, family = "binomial")
+print(dative.glmm, corr = FALSE)
+
+cor.test(coef(dative.lrm), fixef(dative.glmm))
+
+probs = 1/(1+exp(-fitted(dative.glmm)))
+probs = binomial()$linkinv(fitted(dative.glmm))
+somers2(probs, as.numeric(dative$RealizationOfRec)-1)
+
+par(mfrow=c(1,2))
+plot.logistic.fit.fnc (dative.lrm, dative)
+mtext("lrm", 3, 0.5)
+plot.logistic.fit.fnc (dative.glmm, dative)
+mtext("lmer", 3, 0.5)
+par(mfrow=c(1,1))
+
+spoken = dative[dative$Modality != "written",]
+spoken$Speaker = spoken$Speaker[drop=TRUE]
+range(table(spoken$Speaker))
+spoken.glmm = lmer(RealizationOfRecipient ~ 
+AccessOfTheme + AccessOfRec + LengthOfRecipient + AnimacyOfRec +
+AnimacyOfTheme + PronomOfTheme + DefinOfTheme + LengthOfTheme +
+SemanticClass + (1|Verb) + (1|Speaker), 
+data = spoken, family = "binomial")
+print(spoken.glmm, corr=FALSE)
+
+speakers = levels(spoken$Speaker)
+nruns = 100 # number of bootstrap runs
+for (run in 1:nruns) {
+ # sample with replacement from the speakers
+ mysampleofspeakers = sample(speakers, replace = TRUE)
+ # select rows from data frame for the sampled speakers
+ mysample = spoken[is.element(spoken$Speaker, mysampleofspeakers),]
+ # fit a mixed effects model
+ mysample.lmer = lmer(RealizationOfRecipient ~ SemanticClass + 
+ AccessOfRec + AccessOfTheme + PronomOfRec + PronomOfTheme + 
+ DefinOfRec + DefinOfTheme + AnimacyOfRec + LengthOfTheme + 
+ LengthOfRecipient + (1|Verb), family="binomial", data=mysample)
+ # extract fixed effects from the model
+ fixedEffects = fixef(mysample.lmer)
+ # and save them for later inspection
+ if (run == 1) res = fixedEffects
+ else res = rbind(res, fixedEffects)
+ # this takes time, so output dots to indicate progress
+ cat(".")  
+}
+cat("\n")  # add newline to console
+# assign sensible rownames
+rownames(res) = 1:nruns
+# and convert into data frame
+res = data.frame(res)
+res[1:4, c("AccessOfThemegiven", "AccessOfThemenew")]
+quantile(res$AccessOfThemegiven, c(0.025, 0.5, 0.975))
+t(apply(res, 2, quantile, c(0.025, 0.5, 0.975)))       
+
+
+--------------------------------------------------
+Case studies 7.5
+--------------------------------------------------
+
+
+
+--------------------------------------------------
+Primed lexical decision latencies for Dutch neologisms 7.5.1
+--------------------------------------------------
+
+primingHeid.lmer0 = lmer(RT ~ Condition +
+(1|Subject) + (1|Word), data = primingHeid)
+print(primingHeid.lmer0, corr = FALSE)
+
+qqnorm(residuals(primingHeid.lmer0), 
+main = "residuals primingHeid.lmer0")
+qqline(residuals(primingHeid.lmer0))
+plot(sort(primingHeid$RT), main = "primingHeid.lmer0")
+
+primingHeid2 = primingHeid[primingHeid$RT < 7.1,]
+nrow(primingHeid)-nrow(primingHeid2)
+45/nrow(primingHeid)
+
+primingHeid2.lmer0 = lmer(RT~Condition+
+(1|Subject)+(1|Word), data = primingHeid2)
+primingHeid2.lmer0
+
+primingHeid2.lmer1 = lmer(RT ~ RTtoPrime*ResponseToPrime+Condition+
+(1|Subject) + (1|Word), data = primingHeid2)
+pvals.fnc(primingHeid2.lmer1, nsim=10000)$fixed
+
+qqnorm(residuals(primingHeid2.lmer1), 
+main="residuals primingHeid2.lmer1")
+qqline(residuals(primingHeid2.lmer1))
+
+
+--------------------------------------------------
+Self-paced reading latencies for Dutch neologisms 7.5.2
+--------------------------------------------------
+
+selfPacedReadingHeid=selfPacedReadingHeid[selfPacedReadingHeid$RT>5 & 
+selfPacedReadingHeid$RT < 7.2,]
+
+selfPacedReadingHeid.lmer = lmer(RT ~ Condition + 
+(1|Subject) + (1|Word), data = selfPacedReadingHeid)
+selfPacedReadingHeid.lmer
+
+selfPacedReadingHeid.lmer = lmer(RT ~ RTtoPrime + Condition + 
+(1|Subject) + (1|Word),  data = selfPacedReadingHeid)
+selfPacedReadingHeid.lmer
+
+round(cor(selfPacedReadingHeid[,c(3, 12:15)]),3)
+
+x = selfPacedReadingHeid[,12:15]
+x.pr = prcomp(x, center = T, scale = T)
+selfPacedReadingHeid$PC1 = x.pr$x[,1]
+selfPacedReadingHeid$PC2 = x.pr$x[,2]
+selfPacedReadingHeid$PC3 = x.pr$x[,3]
+
+selfPacedReadingHeid.lmer = lmer(RT ~ RTtoPrime + PC1 + PC2 + PC3 + 
+Condition + (1|Subject) + (1|Word), data = selfPacedReadingHeid)
+selfPacedReadingHeid.lmer
+
+selfPacedReadingHeid.lmer = lmer(RT ~ (RTtoPrime + Condition)*PC1 + 
+(1|Subject) + (1|Word), data = selfPacedReadingHeid)
+pvals.fnc(selfPacedReadingHeid.lmer, nsim=10000)$fixed
+
+cor(selfPacedReadingHeid[,c(19,12:15)])[,"PC1"]
+
+selfPacedReadingHeid.lmer = lmer(RT ~ RTtoPrime + 
+PC1 * Condition + (1|Subject) + (1|Word), 
+data = selfPacedReadingHeid)  
+selfPacedReadingHeid.lmerA = lmer(RT ~ RTtoPrime + 
+PC1 * Condition + (1|Subject) + (1|Word), data = 
+selfPacedReadingHeid[abs(scale(residuals(selfPacedReadingHeid.lmer))) 
+< 2.5, ])
+pvals.fnc(selfPacedReadingHeid.lmerA,nsim=10000)$fixed
+
+
+--------------------------------------------------
+Visual lexical decision latencies of Dutch eight-year olds 7.5.3
+--------------------------------------------------
+
+colnames(beginningReaders)
+
+beginningReaders$OrthLength = scale(beginningReaders$OrthLength, 
+scale=FALSE)
+beginningReaders$LogFrequency = scale(beginningReaders$LogFrequency, 
+scale=FALSE)
+
+beginningReaders.lmer = lmer(LogRT ~ PC1+PC2+PC3 + ReadingScore +
+OrthLength + I(OrthLength^2) + LogFrequency + LogFamilySize +
+(1|Word) + (1 |Subject), data = beginningReaders)
+pvals.fnc(beginningReaders.lmer, nsim = 1000)$fixed
+
+beginningReaders.lmer1 = lmer(LogRT ~ PC1+PC2+PC3 + ReadingScore +
+OrthLength + I(OrthLength^2) + LogFrequency + LogFamilySize +
+(1|Word) + (1|Subject)+(0+OrthLength|Subject),  beginningReaders)
+anova(beginningReaders.lmer1, beginningReaders.lmer)
+
+beginningReaders.lmer2 = lmer(LogRT ~ PC1+PC2+PC3 + ReadingScore +
+OrthLength + I(OrthLength^2) + LogFrequency + LogFamilySize +
+(1|Word) + (1|Subject)+(1+OrthLength|Subject),  beginningReaders)
+anova(beginningReaders.lmer1, beginningReaders.lmer2)
+
+beginningReaders.lmer3 = lmer(LogRT ~ PC1+PC2+PC3 + ReadingScore +
+OrthLength + I(OrthLength^2) + LogFrequency + LogFamilySize +
+(1|Word) + (1|Subject)+(0+OrthLength|Subject) +
+(1+LogFrequency|Subject), data = beginningReaders)
+anova(beginningReaders.lmer1, beginningReaders.lmer3)
+
+beginningReaders.lmer4 = lmer(LogRT ~ PC1+PC2+PC3 + ReadingScore +
+OrthLength + I(OrthLength^2) + LogFrequency + LogFamilySize +
+(1|Word) + (1|Subject)+(0+OrthLength|Subject) +
+(0+LogFrequency|Subject), data = beginningReaders)
+anova(beginningReaders.lmer4, beginningReaders.lmer3)
+anova(beginningReaders.lmer4, beginningReaders.lmer1)
+
+beginningReaders.lmer4a = lmer(LogRT ~ PC1+PC2+PC3 + ReadingScore +
+OrthLength + I(OrthLength^2) + LogFrequency + LogFamilySize +
+(1|Word) + (1|Subject)+(0+OrthLength|Subject) +
+(0+LogFrequency|Subject), data = beginningReaders,
+subset=abs(scale(resid(beginningReaders.lmer4)))<2.5)
+x = pvals.fnc(beginningReaders.lmer4a, nsim=10000)
+x$random
+x = pvals.fnc(beginningReaders.lmer4a, nsim = 10000, withMCMC=TRUE)
+x$fixed
+
+coefs = fixef(beginningReaders.lmer4a)
+coefs
+attach(beginningReaders)
+pc1     = seq(min(PC1), max(PC1), length = 40)
+pc2     = seq(min(PC2), max(PC2), length = 40)
+pc3     = seq(min(PC3), max(PC3), length = 40)
+score   = seq(min(ReadingScore), max(ReadingScore), length = 40)
+freq    = seq(min(LogFrequency), max(LogFrequency), length = 40)
+olength = sort(unique(OrthLength))
+famsize = seq(min(LogFamilySize), max(LogFamilySize), length = 40)
+
+plot(freq, coefs["(Intercept)"] + coefs["LogFrequency"] * freq)  
+
+adjustments = c(coefs["PC1"] * median(PC1),
+coefs["PC2"] * median(PC2),
+coefs["PC3"] * median(PC3),
+coefs["ReadingScore"] * median(ReadingScore),
+coefs["OrthLength"] * median(OrthLength) + 
+coefs["I(OrthLength^2)"] * median(OrthLength)^2,
+coefs["LogFrequency"] * median(LogFrequency),
+coefs["LogFamilySize"] * median(LogFamilySize))
+
+adjustments
+sum(adjustments[-6])
+
+dfr = data.frame(
+x =
+c(pc1, pc2, pc3, score, olength, freq, famsize),
+y = 
+c(coefs["(Intercept)"] + coefs["PC1"] * pc1 + sum(adjustments[-1]),
+coefs["(Intercept)"] + coefs["PC2"] * pc2 + sum(adjustments[-2]),
+coefs["(Intercept)"] + coefs["PC3"] * pc3 + sum(adjustments[-3]),
+coefs["(Intercept)"] + coefs["ReadingScore"] * score + 
+sum(adjustments[-4]),
+coefs["(Intercept)"] + coefs["OrthLength"] * olength + 
+coefs["I(OrthLength^2)"] * olength^2 + sum(adjustments[-5]),
+coefs["(Intercept)"] + coefs["LogFrequency"] * freq + 
+sum(adjustments[-6]), 
+coefs["(Intercept)"] + coefs["LogFamilySize"]*famsize + 
+sum(adjustments[-7])),
+which = 
+c(rep("PC1", length(pc1)), rep("PC2", length(pc2)), 
+rep("PC3", length(pc3)), rep("Reading Score", length(score)), 
+rep("Length in Letters", length(olength)), 
+rep("Log Frequency", length(freq)), rep("Log Family Size", 
+length(famsize))))
+
+xyplot(y~x|which, data=dfr, ylim=c(6.5,8.0), scales="free", 
+as.table = TRUE, xlab=" ", ylab="Log RT",
+panel = function(x, y) panel.lines(x,y))
+
+
+--------------------------------------------------
+Mixed-effect models in corpus linguistics 7.5.4
+--------------------------------------------------
+
+writtenVariationLijk[1:4,]
+
+writtenVariationLijk.lmer = lmer(Count ~ Country*Register + (1|Word), 
+data = writtenVariationLijk, family = "poisson")
+writtenVariationLijk.lmer1 = lmer(Count ~ Country * Register + 
+(1+Country|Word), data = writtenVariationLijk, 
+family = "poisson")
+anova(writtenVariationLijk.lmer, writtenVariationLijk.lmer1)              
+
+print(writtenVariationLijk.lmer1, corr=FALSE)
+
+writtenVariationLijk.lmer1A = lmer(Count ~ Country * Register + 
+(1|Word) + (1+Country|Word), data = writtenVariationLijk, 
+family = quasi(link = "log", variance = mu^2))
+pvals.fnc(writtenVariationLijk.lmer1A)
+writtenVariationLijk.lmer1B = lmer(sqrt(Count) ~ Country * Register + 
+(1+Country|Word), data = writtenVariationLijk)
+pvals.fnc(writtenVariationLijk.lmer1B)$fixed
+
+writtenVariationLijk$fitted = exp(fitted(writtenVariationLijk.lmer1))
+cor(writtenVariationLijk$fitted,  writtenVariationLijk$Count)^2
+
+ranefs = ranef(writtenVariationLijk.lmer1)$Word
+plot(ranefs$"(Intercept)", ranefs$CountryNetherlands, type="n")
+text(ranefs$"(Intercept)", ranefs$CountryNetherlands, 
+rownames(ranefs), cex = 0.8)            
+
+
+writtenVariationLijk.lmer2 = lmer(Count ~ Country * Register + 
+(1|Word)+(1|Country:Word), writtenVariationLijk, family="poisson")
+writtenVariationLijk.lmer2
+
+words = ranef(writtenVariationLijk.lmer2)[[2]] 
+head(words, 3)
+
+countries = ranef(writtenVariationLijk.lmer2)[[1]] 
+head(countries,3)
+tail(countries, 3)
+
+countries$which = factor(substr(rownames(countries),1,4))
+countries$words = rep(rownames(words),2)
+countries$intWords = rep(words[,1], 2)
+countries$ranef = countries$"(Intercept)" + countries$intWords
+vl = countries[countries$which=="Flan",]
+nl = countries[countries$which!="Flan",]
+plot(nl$ranef, vl$ranef, type="n")
+text(nl$ranef, vl$ranef, nl$words, cex=0.7)
+abline(0, 1, col="grey")
+
+--------------------------------------------------
+Exercises 7.6
+--------------------------------------------------
+
+beginningReaders.lmer4 = lmer(LogRT ~  PC1 + PC2 + PC3  + 
+ReadingScore + OrthLength + I(OrthLength^2) + LogFrequency + 
+LogFamilySize + (1|Word) + (1|Subject)+(0+LogFrequency|Subject) + 
+(0+OrthLength|Subject), data = beginningReaders)
+
+selfPacedReadingHeid = 
+selfPacedReadingHeid[selfPacedReadingHeid$RT > 5 & 
+selfPacedReadingHeid$RT < 7.2,]
+
+x = selfPacedReadingHeid[,12:15]
+x.pr = prcomp(x, center = T, scale = T)
+selfPacedReadingHeid$PC1 = x.pr$x[,1]
+selfPacedReadingHeid$PC2 = x.pr$x[,2]
+selfPacedReadingHeid$PC3 = x.pr$x[,3]
+
+selfPacedReadingHeid.lmer = lmer(RT ~ RTtoPrime + 
+LengthInLetters + PC1 * Condition + (1|Subject) + (1|Word), 
+data = selfPacedReadingHeid)  
+
+--------------------------------------------------
+Solutions to the exercises A
+--------------------------------------------------
+
+1.1
+
+spanishMeta
+colnames(spanishMeta)
+nrow(spanishMeta)
+
+1.2
+
+xtabs(~ Author, data=spanishMeta)
+aggregate(spanishMeta$PubDate, list(spanishMeta$Author), mean)
+tapply(spanishMeta$PubDate, list(spanishMeta$Author), mean)
+
+1.3
+
+spanishMeta[order(spanishMeta$YearOfBirth, spanishMeta$Nwords),]
+
+1.4
+
+v = spanishMeta$PubDate
+sort(v)
+?sort
+sort(v, decreasing=T)
+sort(rownames(spanishMeta))
+
+1.5
+
+spanishMeta[spanishMeta$PubDate < 1980, ]
+
+1.6 
+
+mean(spanishMeta$PubDate)
+sum(spanishMeta$PubDate)/length(spanishMeta$PubDate)
+
+1.7
+
+spanishMeta = merge(spanishMeta, composer, by.x="FullName", 
+by.y="Author")
+
+2.1
+
+warlpiri.xtabs= xtabs( ~ CaseMarking + AnimacyOfSubject + AgeGroup + 
+WordOrder, data = warlpiri)
+mosaicplot(warlpiri.xtabs)
+
+2.2
+
+par(mfrow = c(1, 2))  
+plot(exp(heid2$BaseFrequency), exp(heid2$MeanRT))
+plot(heid2$BaseFrequency, heid2$MeanRT)
+par(mfrow=c(1, 1))
+
+2.3
+
+plot(log(ranks), log(moby.table), 
+xlab = "log rank", ylab = "log frequency")
+
+2.4
+
+xylowess.fnc(RT ~ Trial | Subject, data = lexdec, ylab="log RT")
+
+2.5
+
+library(MASS)
+par(mfrow = c(1, 2))
+truehist(english$RTnaming)
+plot(density(english$RTnaming))
+par(mfrow = c(1, 1))
+
+library(lattice)
+bwplot(RTnaming ~ Voice | AgeSubject, data = english)
+
+3.1
+
+wonderland$hare = wonderland$word=="hare"   #March Hare
+countOfHare = tapply(wonderland$hare, wonderland$chunk, sum) 
+countOfHare.tab = xtabs(~hare)
+wonderland$very = wonderland$word=="very" 
+countOfVery = tapply(wonderland$very, wonderland$chunk, sum) 
+countOfVery.tab = xtabs(~very)
+
+3.2
+
+plot(1:40, countOfAlice, type = "h")
+plot(1:40, countOfVery,  type = "h")
+plot(1:40, countOfHare,  type = "h")
+
+3.3
+
+plot(as.numeric(names(countOfAlice.tab)), countOfAlice.tab/
+sum(countOfAlice.tab), type = "h", xlim = c(0,15), ylim = c(0,0.9))
+plot(as.numeric(names(countOfVery.tab)), countOfVery.tab/
+sum(countOfVery.tab), type = "h", xlim = c(0,15), ylim = c(0,0.4))
+plot(as.numeric(names(countOfHare.tab)), countOfHare.tab/
+sum(countOfHare.tab), type = "h", xlim = c(0,15), ylim = c(0,0.9))
+
+3.4
+
+plot(0:15, dpois(0:15, mean(countOfAlice)), type = "h", 
+xlim = c(0, 15), ylim = c(0, 0.9))
+plot(0:15, dpois(0:15, mean(countOfVery)), type = "h", 
+xlim = c(0, 15), ylim = c(0, 0.4))
+plot(0:15, dpois(0:15, mean(countOfHare)), type = "h", 
+xlim = c(0, 15), ylim = c(0, 0.9))
+
+3.5
+
+plot(qpois(1:20 / 20, mean(countOfAlice)), quantile(countOfAlice, 
+1:20 / 20), xlab="theoretical quantiles", ylab = "sample quantiles")
+plot(qpois(1:20 / 20, mean(countOfVery)), quantile(countOfVery, 
+1:20 / 20), xlab="theoretical quantiles", ylab = "sample quantiles")
+plot(qpois(1:20 / 20, mean(countOfHare)), quantile(countOfHare, 
+1:20 / 20), xlab="theoretical quantiles", ylab = "sample quantiles")
+
+3.6
+
+1 - ppois(10, 5)
+1 - ppois(10, 9.425)
+quantile(countOfAlice, 0.6545719)
+
+4.1
+
+chisq.test(verbs.xtabs)
+
+4.2
+
+lambda = mean(havelaar$Frequency)               
+ks.test(havelaar$Frequency, "ppois", lambda)
+ks.test(jitter(havelaar$Frequency), "ppois", lambda)
+
+4.3
+
+par(mfrow = c(1, 3), pty = "s")
+plot(density(durationsGe$DurationOfPrefix), main="duration")
+plot(density(durationsGe$Frequency), main = "frequency")
+plot(density(log(durationsGe$Frequency)), main = "log frequency")
+par(mfrow = c(1, 1), pty = "m")
+
+shapiro.test(durationsGe$DurationOfPrefix)
+shapiro.test(log(ge$Frequency))
+ge.lm = lm(DurationOfPrefix ~ log(Frequency + 1), data = durationsGe)
+summary(ge.lm)
+
+4.4
+
+ratings.lm = lm(meanSizeRating ~ meanFamiliarity * Class + 
+I(meanFamiliarity^2)*Class, data = ratings)
+summary(ratings.lm)
+
+4.5
+
+ks.test(countOfAlice, ppois, mean(countOfAlice))
+ks.test(countOfVery, ppois, mean(countOfVery))
+ks.test(countOfHare, ppois, mean(countOfHare))
+
+4.6
+
+english.lm = lm(RTlexdec ~ AgeSubject, data = english)
+summary(english.lm)$coef
+summary(aov(RTnaming ~ AgeSubject, data = english))
+6.493500 - 0.341989
+
+4.7
+
+summary(lm(DurationPrefixNasal ~ PlosivePresent + Frequency, 
+data = durationsOnt, subset = DurationPrefixNasal > 0))
+
+5.1
+
+dat = affixProductivity[affixProductivity$Registers == "L", ]
+dat.pr = prcomp(dat[ , 1:27], center = T, scale = T)
+summary(dat.pr)
+pairscor.fnc(data.frame(dat.pr$x[,1:4], birth = dat$Birth))
+dat2 = dat[-c(21, 18),]
+dat2.pr = prcomp(dat2[ , 1:27], center = T, scale = T)
+cor.test(dat2.pr$x[,2], dat2$Birth)
+biplot(dat2.pr, var.axes = F)
+
+5.2
+
+lexicalMeasures.cor = cor(lexicalMeasures[, -1], method = "spearman")^2
+lexicalMeasures.scale = cmdscale(dist(lexicalMeasures.cor), k = 2)
+semanticvars = c("Vf", "Dent", "NsyC", "NsyS", "CelS", "Fdif", 
+"NVratio", "Ient")
+plot(lexicalMeasures.scale[,c(1,2)],type="n")
+text(lexicalMeasures.scale[,c(1,2)], rownames(lexicalMeasures.scale), 
+col=c("red","blue")[(rownames(lexicalMeasures.scale) %in% semanticvars)+1])
+
+5.3 
+
+finalDevoicing[1:3,]
+finalDevoicing.rp = rpart(Voice ~ ., data = finalDevoicing[ , -1])
+plotcp(finalDevoicing.rp)
+finalDevoicing.rp1 = prune(finalDevoicing.rp, cp = 0.021)
+plot(finalDevoicing.rp1, margin = 0.1, compress = T)
+text(finalDevoicing.rp1, use.n = T, pretty = 0)
+xtab = xtabs(~ finalDevoicing$Voice + 
+predict(finalDevoicing.rp1, finalDevoicing, type="class"))
+xtab
+xtabs(~finalDevoicing$Voice)
+prop.test(c(387+1001, 1105), rep(nrow(finalDevoicing), 2))
+
+5.4
+
+spanishFunctionWords.t = t(spanishFunctionWords)
+spanishFunctionWords.t = 
+spanishFunctionWords.t[order(rownames(spanishFunctionWords.t)), ]
+spanishFunctionWords.pca = 
+prcomp(spanishFunctionWords.t, center = T, scale = T)
+sdevs = spanishFunctionWords.pca$sdev^2
+n = sum(sdevs/sum(sdevs)> 0.05) 
+n
+predictedClasses = rep("", 15)
+for (i in 1:15) {
+training = spanishFunctionWords.t[-i,]                   
+trainingAuthor = spanishMeta[-i,]$Author
+training.pca = prcomp(training, center = T, scale = T)
+training.x = data.frame(training.pca$x)
+training.x = training.x[order(rownames(training.x)), ]
+training.pca.lda = lda(training[ , 1:n], trainingAuthor)
+cl=predict(training.pca.lda,spanishFunctionWords.t[,1:n])$class[i]
+predictedClasses[i] = as.character(cl)
+}
+sum(predictedClasses==spanishMeta$Author)
+sum(dbinom(8:15, 15, 1/3))
+
+sp.lda = lda(spanishMeta$Author~spanishFunctionWords.pca$x[,1:n], CV=TRUE)
+dfr = data.frame(obs = as.character(spanishMeta$Author),
+pred = as.character(sp.lda$class))
+dfr
+s = sum(dfr$obs==dfr$pred)
+s
+sum(dbinom(s:15, 15, 1/3))
+
+5.5
+
+regularity.svm = svm(regularity[, -c(1, 8, 10)], 
+regularity$Regularity, cross=10)
+summary(regularity.svm)
+round(0.81857*nrow(regularity),1)
+xtabs(~regularity$Regularity)
+prop.test(c(541, 573), rep(nrow(regularity),2))
+
+6.1
+
+example(english)
+naming.ols = ols(RTnaming ~ AgeSubject + rcs(WrittenFrequency, 3) + 
+rcs(WrittenFrequency,3) :  AgeSubject + PC1, 
+data = english, x = T, y = T)
+naming.ols
+naming.ols = ols(RTnaming ~ AgeSubject + rcs(WrittenFrequency, 3) + 
+rcs(WrittenFrequency, 3) :  AgeSubject + rcs(PC1, 3), 
+data = english, x = T, y = T)
+naming.ols
+plot(naming.ols, PC1 = NA)
+
+6.2
+
+finalDevoicing.dd = datadist(finalDevoicing)
+options(datadist = "finalDevoicing.dd")
+finalDevoicing.lrm = lrm(Voice ~ VowelType+ConsonantType+ 
+Obstruent+Nsyll+Stress+Onset1Type+Onset2Type, data=finalDevoicing)
+anova(finalDevoicing.lrm)
+fastbw(finalDevoicing.lrm)
+finalDevoicing.lrm = lrm(Voice ~ VowelType + ConsonantType + 
+Obstruent + Nsyll, data = finalDevoicing, x = T, y = T)
+anova(finalDevoicing.lrm)
+plot(finalDevoicing.lrm, fun = plogis, ylim = c(0, 1), 
+ylab = "p(voiceless)")
+validate(finalDevoicing.lrm, B = 200)
+
+6.3
+
+validate(dutch.lrm.pen, B = 200)
+
+6.4
+
+etym.lrm = lrm(formula = Regularity ~ rcs(WrittenFrequency, 3) + 
+rcs(FamilySize, 3) + NcountStem + InflectionalEntropy + Auxiliary + 
+Valency + NVratio + WrittenSpokenRatio + EtymAge, data = etym, 
+x = T, y = T)
+anova(etym.lrm)
+validate(etym.lrm, bw = T, B = 200)
+pentrace(etym.lrm, seq(0, 0.8, by = 0.05))
+etym.lrm2 = update(etym.lrm, penalty = 0.65, x = T, y = T)
+anova(etym.lrm2)
+plot(etym.lrm2, EtymAge = NA, fun = plogis, ylab = "p(regular)", 
+ylim = c(0,1))
+
+6.5
+
+faz.both  = lm(LogFrequency ~ ShiftedLogDistance : PastBreakPoint, 
+data = faz)
+faz.bothB = lm(LogFrequency ~ ShiftedLogDistance * PastBreakPoint, 
+data = faz)
+anova(faz.both, faz.bothB)
+
+6.6
+
+alice = tolower(alice)
+through = tolower(through)
+oz = tolower(oz)
+moby = tolower(moby)
+compare.richness.fnc(alice, through[1:25942])
+compare.richness.fnc(alice, oz[1:25942])
+compare.richness.fnc(alice, moby[1:25942])
+
+6.7
+
+nesscg.spc = spc(m = nesscg$m, Vm = nesscg$Vm)             
+nessw.spc = spc(m = nessw$m, Vm = nessw$Vm)             
+nessdemog.spc = spc(m = nessdemog$m, Vm = nessdemog$Vm)             
+nesscg.fzm = lnre("fzm", nesscg.spc)
+nesscg.fzm
+nessdemog.fzm = lnre("fzm", nessdemog.spc)
+nessdemog.fzm
+nessw.fzm = lnre("fzm", nessw.spc)
+nessw.fzm
+nessw.gigp = lnre("gigp", nessw.spc)
+nessw.gigp
+nessw.vgc = lnre.vgc(nessw.gigp, seq(0, N(nessw.spc), length = 40))
+nessdemog.vgc = lnre.vgc(nessdemog.fzm, seq(0, N(nessw.spc), 
+length = 40))
+nesscg.vgc = lnre.vgc(nesscg.fzm, seq(0, N(nessw.spc), length = 40))
+plot(nessw.vgc, nessdemog.vgc, nesscg.vgc, lwd = rep(1, 3), 
+legend=c("written", "spoken:demographic", "spoken:context-governed"))
+abline(h = 839, col = "red")
+abline(h = 810, col = "green")
+nessw.lnre.spc = lnre.spc(nessw.gigp, N(nessw.spc), m.max = 1)
+Vm(nessw.lnre.spc, 1)/N(nessw.lnre.spc)
+nessdemog.lnre.spc = lnre.spc(nessdemog.fzm, N(nessw.spc), 
+m.max = 1)
+Vm(nessdemog.lnre.spc, 1)/N(nessdemog.lnre.spc)
+nesscg.lnre.spc = lnre.spc(nesscg.fzm, N(nessw.spc),m.max=1)
+Vm(nesscg.lnre.spc, 1)/N(nesscg.lnre.spc)
+nessw.lnre.spc = lnre.spc(nessw.gigp, N(nessdemog.spc), m.max = 1)
+Vm(nessw.lnre.spc, 1)/N(nessw.lnre.spc)
+nessdemog.lnre.spc = lnre.spc(nessdemog.fzm, N(nessdemog.spc), m.max = 1)
+Vm(nessdemog.lnre.spc, 1)/N(nessdemog.lnre.spc)
+nesscg.lnre.spc = lnre.spc(nesscg.fzm, N(nessdemog.spc),m.max=1)
+Vm(nesscg.lnre.spc, 1)/N(nesscg.lnre.spc)
+
+6.8
+
+imaging.lm = lm(FilteredSignal~BehavioralScore*Condition, data=imaging)
+summary(imaging.lm)
+par(mfrow=c(2,3))
+plot(imaging.lm, which = 1:6)
+par(mfrow=c(1,1))
+imaging.lm = lm(FilteredSignal ~ BehavioralScore * Condition, 
+data = imaging[-c(1,19), ])
+summary(imaging.lm)
+
+7.1
+
+lexdec2 = lexdec[lexdec$RT < 7 , ]
+lexdec3 = lexdec2[lexdec2$Correct == "correct", ]
+lexdec3$cTrial = lexdec3$Trial - mean(lexdec3$Trial)
+lexdec3$cLength = lexdec3$Length - mean(lexdec3$Length)
+
+lexdec3.lmerE = lmer(RT ~ cTrial + Frequency + 
+NativeLanguage * cLength + meanWeight + 
+(1|Subject) + (0+cTrial|Subject) + (1|Word), lexdec3)
+lexdec3.lmerE1 = lmer(RT ~ cTrial + Frequency + meanWeight +
+NativeLanguage*cLength + (1|Word) + (1|Subject) +
+(0+cTrial|Subject) + (0+cLength|Subject), data = lexdec3)
+lexdec3.lmerE2 = lmer(RT ~ cTrial + Frequency + meanWeight +
+NativeLanguage*cLength + (1|Word) + (1+cLength|Subject) +
+(0+cTrial|Subject), data = lexdec3)
+anova(lexdec3.lmerE, lexdec3.lmerE1)
+anova(lexdec3.lmerE1, lexdec3.lmerE2)
+
+pvals.fnc(lexdec3.lmerE2, nsim=10000)$fixed
+
+7.2
+
+beginningReaders.lmer4 = lmer(LogRT ~ PC1+PC2+PC3 + ReadingScore +
+OrthLength + I(OrthLength^2) + LogFrequency + LogFamilySize +
+(1|Word) + (1|Subject)+(0+OrthLength|Subject) +
+(0+LogFrequency|Subject), data = beginningReaders)
+
+beginningReaders.lmer4w = lmer(LogRT ~ PC1+PC2+PC3 + ReadingScore +
+OrthLength + I(OrthLength^2) + LogFrequency + LogFamilySize +
+(1|Subject)+(0+OrthLength|Subject) + (0+LogFrequency|Subject), 
+data = beginningReaders)
+
+anova(beginningReaders.lmer4, beginningReaders.lmer4w)
+
+beginningReaders.lmer4pc1 = lmer(LogRT ~ PC1+PC2+PC3 + ReadingScore +
+OrthLength + I(OrthLength^2) + LogFrequency + LogFamilySize +
+(1|Word) +  (1|Subject) + (0+LogFrequency|Subject) + 
+(0+OrthLength|Subject) + (0+PC1|Subject), data = beginningReaders)
+
+anova(beginningReaders.lmer4, beginningReaders.lmer4pc1)
+
+x = pvals.fnc(beginningReaders.lmer4pc1, nsim=10000)
+x$random
+
+7.3
+
+reading.lmer = lmer(RT ~ RTtoPrime + PC1 * Condition + 
+Rating + LengthInLetters + NumberOfSynsets +
+(1|Subject) + (1|Word), data = selfPacedReadingHeid)
+pvals.fnc(reading.lmer, nsim=10000)$fixed
+
+7.4
+
+writtenVariationLijk.lmer = lmer(log(Count) ~ Country * Register + 
+(Country|Word), data = writtenVariationLijk)
+aovlmer.fnc(writtenVariationLijk.lmer, noMCMC=TRUE)
+qqnorm(resid(writtenVariationLijk.lmer))
+
+writtenVariationLijk.lmerA = lmer(log(Count) ~ Country * Register + 
+(Country|Word), data = writtenVariationLijk,
+subset = resid(writtenVariationLijk.lmer) > -0.5)
+aovlmer.fnc(writtenVariationLijk.lmerA, noMCMC=TRUE)
+
+7.5
+
+warlpiri.lmer = lmer(CaseMarking ~ WordOrder + AgeGroup + 
+AnimacyOfSubject + OvertnessOfObject + AnimacyOfObject +
+(1|Text) + (1|Speaker), family = "binomial", data = warlpiri) 
+warnings()
+warlpiri.lmer = lmer(CaseMarking ~ WordOrder * AgeGroup + 
+AnimacyOfSubject + (1|Text) + (1|Speaker), 
+family = "binomial", data = warlpiri)
+warlpiri.lmer
+
+7.6
+
+size.lmer = lmer(Rating ~ Class * Naive + MeanFamiliarity * 
+Language + I(MeanFamiliarity^2) * Language + (1|Subject) + 
+(1|Word), data = sizeRatings)
+pvals.fnc(size.lmer, nsim = 10000)$fixed     
+size.lmer = lmer(Rating ~ Class * Naive + MeanFamiliarity * 
+Language + (1|Subject) + (1|Word), data = sizeRatings)
+pvals.fnc(size.lmer, nsim = 10000)$fixed
+
