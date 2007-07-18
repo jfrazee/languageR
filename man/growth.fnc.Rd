@@ -48,7 +48,6 @@ growth.fnc(text = alice, size = 646, nchunks = 40, chunks = 0)
     \item{\code{Guiraud}}{a numeric vector with Guiraud's \code{R}.}
     \item{\code{Sichel}}{a numeric vector with Sichel's \code{S}.}
     \item{\code{Lognormal}}{a numeric vector with mean log frequency.}
-  }
 }
 \references{
    R. H. Baayen (2001) \emph{Word Frequency Distributions},

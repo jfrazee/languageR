@@ -7,7 +7,7 @@
   a straight line.
 }
 \usage{
-plot.logistic.fit.fnc(x = dative.glmm, data = dative, ...)
+plot.logistic.fit.fnc(x, data, ...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -28,7 +28,7 @@ dative.glmm = lmer(RealizationOfRecipient ~ AccessOfTheme +
    AccessOfRec + LengthOfRecipient + AnimacyOfRec +
    AnimacyOfTheme + PronomOfTheme + DefinOfTheme + LengthOfTheme +
    SemanticClass + Modality + (1|Verb), 
-   data = dative, family = "binomial", method = "PQL")
+   data = dative, family = "binomial")
 
 plot.logistic.fit.fnc (dative.glmm, dative)
 }}

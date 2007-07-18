@@ -27,10 +27,10 @@ dative alternation, in Bouma, G. and Kraemer, I. and Zwarts, J.  (eds.),
 \emph{Cognitive Foundations of Interpretation}, Royal Netherlands Academy
 of Sciences, 33 pages, in press.
 }
-\examples{\dontrun{
+\examples{
 data(verbs)
 head(verbs)
 xtabs( ~ RealizationOfRec + AnimacyOfRec, data = verbs)
 barplot(xtabs( ~ RealizationOfRec + AnimacyOfRec, data = verbs),beside=TRUE)
-}}
+}
 \keyword{datasets}

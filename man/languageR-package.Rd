@@ -19,23 +19,30 @@ License: \tab GNU public license \cr
 }
 The main function of this package is to make available the data sets
 discussed and analyzed in 'Analyzing Linguistic Data:
-A practical introduction to statistics'.  The following packages should be
-installed:
+A practical introduction to statistics using R', to appear with 
+Cambridge University Press.  The following packages should be
+installed, as ancillary functions in this package depend on them.
+\describe{
+    \item{\code{zipfR}}{for word frequency distributions}
+    \item{\code{lme4}}{for mixed-effects models}
+    \item{\code{coda}}{for Markov-Chain Monte Carlo estimation}
+    \item{\code{lattice}}{for trellis graphics}
+    \item{\code{Matrix}}{for mixed-effects modeling}
+}
+The following packages need to be installed for working through specific 
+examples.
 \describe{
     \item{\code{Design}}{for regression modeling}
     \item{\code{rpart}}{for CART trees}
     \item{\code{e1071}}{for support vector machines}
-    \item{\code{lme4}}{for mixed-effects models}
-    \item{\code{coda}}{for Markov-Chain Monte Carlo estimation}
     \item{\code{MASS}}{for many useful functions}
-    \item{\code{zipfR}}{for word frequency distributions}
     \item{\code{ape}}{for phylogenetic clustering}
 }
 
 The main convenience functions in this library are, by category:
 
 \describe{
-    \item{correspondence analysis}{(extending code by Murtagh)}
+    \item{correspondence analysis}{(extending code by Murtagh, 2005)}
        \describe{
           \item{\code{corres.fnc}}{correspondence analysis}
           \item{\code{corsup.fnc}}{supplementary data}
@@ -58,7 +65,7 @@ The main convenience functions in this library are, by category:
     \item{simulation functions}{(for comparing mixed models with traditional techniques including F1, F2, and F1+F2)}
        \describe{
            \item{\code{simulateRegression.fnc}}{simulate simple regression design}
-           \item{\code{simulateSplitPlot.fnc}}{simulate simple split-plot design}
+           \item{\code{simulateQuasif.fnc}}{simulate data for Quasi-F ratios}
            \item{\code{simulateLatinsquare.fnc}}{simulating simple Latin-square design} 
        }
     \item{miscellaneous}{(convenience functions)}
@@ -69,22 +76,22 @@ The main convenience functions in this library are, by category:
           \item{\code{plot.logistic.fit.fnc}}{diagnostic visualization for logistic models}
           \item{\code{xylowess.fnc}}{trellis scatterplots with smoother}
           \item{\code{mvrnormplot.fnc}}{scatterplot for bivariate standard normal random numbers with regression line}
+					\item{\code{lmerPlotInt.fnc}}{offers choice of four ways to visualize an interaction between two numeric predictors in an lmer model}
        }
 }
 }
 \author{
 R. H. Baayen
 
-Radboud University Nijmegen and Max Planck Institute for Psycholinguistics
-Nijmegen, The Netherlands
+University of Alberta, Edmonton, Canada
 
-\email{baayen@mpi.nl}
+\email{harald.baayen@gmail.com}
 
-Maintainer:  baayen@mpi.nl
+Maintainer:  harald.baayen@gmail.com 
 }
 \references{
 R. H. Baayen (2007) \emph{Analyzing Linguistic Data: A practical introduction
-to statistics}, Cambridge: Cambridge University Press. 
+to statistics using R}, Cambridge: Cambridge University Press. 
 }
 \keyword{package}
 %\seealso{

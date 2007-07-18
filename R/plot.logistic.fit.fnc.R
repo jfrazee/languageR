@@ -1,5 +1,5 @@
 `plot.logistic.fit.fnc` <-
-function(x = dative.glmm, data = dative, ...) {
+function(x, data, ...) {
   require(lme4, quietly = TRUE)
   require(Design, quietly = TRUE)
   if (class(x)[1]=="glmer") {

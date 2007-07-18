@@ -2,7 +2,7 @@
 \alias{quasiF.fnc}
 \title{Quasi-F test}
 \description{
-  The textbook Quasi-F test for a split-plot design with subjects, items,
+  The textbook Quasi-F test for a design with subjects, items,
   and a single factorial predictor.  Included for educational purposes
   for this specific design only. 
 }
@@ -28,27 +28,27 @@ quasiF.fnc(ms1, ms2, ms3, ms4, df1, df2, df3, df4)
   \item{p}{p-value.}
 }
 \author{R. H. Baayen}
-\seealso{ ~~objects to See Also as \code{\link{quasiF.split.plot.fnc}}.}
-\examples{\dontrun{
-  data(splitplot)
+\seealso{ ~~objects to See Also as \code{\link{quasiFsim.fnc}}.}
+\examples{
+  data(quasif)
 
-  splitplot.lm = lm(RT ~ SOA + Item + Subject + 
-     SOA:Subject + Item:Subject, data = splitplot)
-  splitplot.aov = anova(splitplot.lm)
+  quasif.lm = lm(RT ~ SOA + Item + Subject + 
+     SOA:Subject + Item:Subject, data = quasif)
+  quasif.aov = anova(quasif.lm)
 
-  quasiF.fnc(splitplot.aov["SOA","Mean Sq"], 
-     splitplot.aov["Item:Subject", "Mean Sq"],
-     splitplot.aov["SOA:Subject", "Mean Sq"], 
-     splitplot.aov["Item", "Mean Sq"],
-     splitplot.aov["SOA","Df"], 
-     splitplot.aov["Item:Subject", "Df"],
-     splitplot.aov["SOA:Subject", "Df"], 
-     splitplot.aov["Item", "Df"])
+  quasiF.fnc(quasif.aov["SOA","Mean Sq"], 
+     quasif.aov["Item:Subject", "Mean Sq"],
+     quasif.aov["SOA:Subject", "Mean Sq"], 
+     quasif.aov["Item", "Mean Sq"],
+     quasif.aov["SOA","Df"], 
+     quasif.aov["Item:Subject", "Df"],
+     quasif.aov["SOA:Subject", "Df"], 
+     quasif.aov["Item", "Df"])
 
   # much simpler is
-  quasiF.split.plot.fnc(splitplot)$quasiF
+  quasiFsim.fnc(quasif)$quasiF
 
-}}
+}
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
 \keyword{ regression }

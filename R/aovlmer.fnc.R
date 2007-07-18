@@ -1,6 +1,8 @@
 aovlmer.fnc <- function(object, mcmc, which, noMCMC = FALSE, ...) {
 
-  if (!is(object, "lmer")) stop("first argument should be an lmer model object")
+  if (!(is(object, "lmer")))
+		stop("first argument should be an lmer model object")
+
 
   sumry = summary(object)
   nobs  = nrow(object@frame)

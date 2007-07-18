@@ -1,4 +1,4 @@
-`subjects.split.plot.fnc` <-
+`subjects.quasif.fnc` <-
 function(dat) {
   subjects = unique(dat[ , c("Subject", "SOA")])
   subjects = subjects[order(subjects$Subject, subjects$SOA), ]

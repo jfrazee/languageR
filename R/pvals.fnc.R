@@ -23,7 +23,7 @@ pvals.fnc <- function(object, nsim=10000, ndigits = 4, withMCMC = FALSE, ...) {
       HPD95lower = round(hpd[1:ncoef,1], ndigits),
       HPD95upper = round(hpd[1:ncoef,2], ndigits),
       pMCMC      = round(ans, ndigits), 
-      pT         = round(2*(1-pt(abs(coefs[,3]),nrow(object@frame)-2)), ndigits),
+      pT         = round(2*(1-pt(abs(coefs[,3]),nrow(object@frame)-ncoef)), ndigits),
       row.names=names(coefs[,1])
     )
     colnames(fixed)[ncol(fixed)] = "Pr(>|t|)"
@@ -60,7 +60,7 @@ pvals.fnc <- function(object, nsim=10000, ndigits = 4, withMCMC = FALSE, ...) {
   } else {
     fixed = data.frame(
       Estimate   = as.numeric(coefs[,1]), 
-      pT         = round(2*(1-pt(abs(coefs[,3]),nrow(object@frame)-2)), ndigits),
+      pT         = round(2*(1-pt(abs(coefs[,3]),nrow(object@frame)-ncoef)), ndigits),
       row.names=names(coefs[,1])
     )
     colnames(fixed)[ncol(fixed)] = "Pr(>|t|)"

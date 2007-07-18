@@ -2,8 +2,9 @@
 \alias{simulateLatinsquare.fnc}
 \title{Simulate simple Latin Square data and compare models}
 \description{
-  This function creates a user-specified number of simulated split-plot 
-  datasets, and compares mixed-effects models with the by-subject anova.
+  This function creates a user-specified number of simulated  
+  datasets with a Latin Square design, and compares mixed-effects 
+	models with the by-subject anova.
 }
 \usage{
 simulateLatinsquare.fnc(dat, with = TRUE, trial = 0, nruns = 100, 

@@ -5,7 +5,7 @@
   Convenience function for trellis scatterplots with smoothers added.
 }
 \usage{
-xylowess.fnc(fmla = Rating ~ Frequency | Subject, data = weight, 
+xylowess.fnc(fmla, data, 
   span = 2/3, symbolcolor = "darkgrey", 
   linecolor = "blue", xlabel = "", ylabel = "")
 }

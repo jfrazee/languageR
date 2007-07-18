@@ -1,4 +1,4 @@
-`simulateSplitPlot.fnc` <-
+`simulateQuasif.fnc` <-
 function(dat,  with = TRUE, nruns = 100, nsub = NA, nitem = NA, ...) {
   require("MASS", quietly = TRUE, character = TRUE)
   require("lme4", keep.source = F, quietly = TRUE, character = TRUE)
@@ -59,9 +59,9 @@ function(dat,  with = TRUE, nruns = 100, nsub = NA, nitem = NA, ...) {
                     data = simdat)
     pvalues = pvals.fnc(sim.lmer, nsim = 10000)$fixed
     res[run, 1] = as.numeric(pvalues["SOAshort",6])
-    res[run, 2] = quasiF.split.plot.fnc(simdat)$p
-    res[run, 3] = subjects.split.plot.fnc(simdat)$p
-    res[run, 4] = items.split.plot.fnc(simdat)$p
+    res[run, 2] = quasiFsim.fnc(simdat)$p
+    res[run, 3] = subjects.quasif.fnc(simdat)$p
+    res[run, 4] = items.quasif.fnc(simdat)$p
     res[run, 5] = as.numeric(pvalues["SOAshort", 5])
     cat(".")  # prints dot on command line - a simple progress report
   }

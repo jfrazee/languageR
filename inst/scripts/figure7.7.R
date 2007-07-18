@@ -4,6 +4,7 @@ data(shrinkage)
 
 dat.lmer = lmer(RT ~ frequency + (1|subject), data = shrinkage)
 dat.lmList = lmList(RT ~ frequency | subject, data = shrinkage)
+dat = shrinkage
 
 mixed = coef(dat.lmer)$subject
 random = coef(dat.lmList)

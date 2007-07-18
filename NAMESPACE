@@ -1,0 +1,47 @@
+import("methods", "lme4", "coda", "Matrix")
+importFrom("lattice", xyplot)
+
+
+export(
+       "aovlmer.fnc",
+       "collin.fnc",
+       "compare.richness.fnc",
+       "corres.fnc",
+       "corsup.fnc",
+       "growth2vgc.fnc",
+       "growth.fnc",
+       "herdan.fnc",
+       "item.fnc",
+       "items.quasif.fnc",
+			 "lmerPlotInt.fnc",
+       "make.reg.fnc",
+       "mvrnormplot.fnc",
+       "pairscor.fnc",
+       "plot.logistic.fit.fnc",
+       "pvals.fnc",
+       "quasiF.fnc",
+       "quasiFsim.fnc",
+       "shadenormal.fnc",
+       "simulateLatinsquare.fnc",
+       "simulateRegression.fnc",
+       "simulateQuasif.fnc",
+       "spectrum.fnc",
+       "subjects.latinsquare.fnc",
+       "subjects.quasif.fnc",
+       "text2spc.fnc",
+       "xylowess.fnc",
+       "yule.fnc",
+       "zipf.fnc"
+       )
+
+S3method(print, corres)
+S3method(plot, corres)
+S3method(summary, corres)
+S3method(print, growth)
+S3method(plot, growth)
+S3method(summary, growth)
+
+exportClasses(
+              "corres",
+							"growth"
+							)

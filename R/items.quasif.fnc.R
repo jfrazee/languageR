@@ -1,4 +1,4 @@
-`items.split.plot.fnc` <-
+`items.quasif.fnc` <-
 function(dat) {
   items = unique(dat[ , c("Item", "SOA")])
   items = items[order(items$Item, items$SOA), ]

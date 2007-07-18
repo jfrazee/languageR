@@ -31,7 +31,7 @@
 \references{
 O'Shannessy, C. (2006) \emph{Language contact and child bilingual acquisition:
 Learning a mixed language and Warlpiri in northern Australia}, PhD Thesis,
-University of Sydney, Australia.}
+University of Sydney, Australia.
 }
 \examples{\dontrun{
 data(warlpiri)

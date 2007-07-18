@@ -1,15 +1,15 @@
-\name{quasiF.split.plot.fnc}
-\alias{quasiF.split.plot.fnc}
+\name{quasiFsim.fnc}
+\alias{quasiFsim.fnc}
 %- Also NEED an '\alias' for EACH other topic documented here.
-\title{Quasi-F test for simple split-plot design}
+\title{Quasi-F test for specific simple design}
 \description{
-  This function carries out a Quasi-F test for a simple split-plot
-  design for data with columns labelled SOA, Subject, Item.  
-  This function is called by simulate.split.plot.fnc, and is
+  This function carries out a Quasi-F test for data with columns 
+	labelled SOA, Subject, Item.  
+  This function is called by simulate.quasif.fnc, and is
   not intended for general use.
 }
 \usage{
-quasiF.split.plot.fnc(dat)
+quasiFsim.fnc(dat)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -26,8 +26,8 @@ quasiF.split.plot.fnc(dat)
 \author{R. H. Baayen}
 \seealso{See Also \code{\link{quasiF.fnc}}.}
 \examples{
-    data(splitplot)
-    quasiF.split.plot.fnc(splitplot)$quasiF
+    data(quasif)
+    quasiFsim.fnc(quasif)$quasiF
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

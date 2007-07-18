@@ -1,9 +1,9 @@
 `xylowess.fnc` <-
-function(fmla=Rating ~ Frequency | Subject, 
-                     data=weight, span=2/3,
-										 symbolcolor = "darkgrey", linecolor="blue",
-                     xlabel="", 
-                     ylabel="") {
+function(fmla, 
+    data=weight, span=2/3,
+	  symbolcolor = "darkgrey", linecolor="blue",
+    xlabel="", 
+    ylabel="") {
 
     # get sensible default labels from the formula
     y = strsplit(as.character(fmla), "[|]")

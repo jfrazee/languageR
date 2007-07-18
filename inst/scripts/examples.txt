@@ -54,6 +54,7 @@ verbs[ , ]          # this will display all 903 rows of verbs!
 verbs[ , 5]                    # show the elements of column 5
 verbs$LengthOfTheme                        # same as verbs[, 5]
 verbs[1, ]                         # show the elements of row 1
+row1 = verbs[1, ]
 col5 = verbs[ , 5]
 head(col5, n = 5)
 row1[1]
@@ -1892,28 +1893,28 @@ A comparison with traditional analyses 7.2
 Mixed-effect models and Quasi-F 7.2.1
 --------------------------------------------------
 
-splitplot[1:4,]
-table(splitplot$SOA)
-table(splitplot$Subject, splitplot$Item)
-table(splitplot$Subject, splitplot$SOA)
-table(splitplot$Item, splitplot$SOA)
+quasif[1:4,]
+table(quasif$SOA)
+table(quasif$Subject, quasif$Item)
+table(quasif$Subject, quasif$SOA)
+table(quasif$Item, quasif$SOA)
 
-splitplot.lmer = lmer(RT ~ SOA + (1+SOA|Subject) + (1|Item), 
-data = splitplot)
-splitplot.lmer
+quasif.lmer = lmer(RT ~ SOA + (1+SOA|Subject) + (1|Item), 
+data = quasif)
+quasif.lmer
 
-splitplot.lmerA = lmer(RT ~ SOA + (1|Subject) + (1|Item), 
-data = splitplot)
-anova(splitplot.lmer, splitplot.lmerA)
+quasif.lmerA = lmer(RT ~ SOA + (1|Subject) + (1|Item), 
+data = quasif)
+anova(quasif.lmer, quasif.lmerA)
 
-pvals.fnc(splitplot.lmer, nsim = 50000)$fixed 
+pvals.fnc(quasif.lmer, nsim = 50000)$fixed 
 
-splitplot.lm = lm(RT ~ SOA + Item + Subject + SOA:Subject + 
-Item:Subject, data = splitplot)
-anova(splitplot.lm)
-length(coef(splitplot.lm))
-nrow(splitplot)
-sum(is.na(coef(splitplot.lm)))
+quasif.lm = lm(RT ~ SOA + Item + Subject + SOA:Subject + 
+Item:Subject, data = quasif)
+anova(quasif.lm)
+length(coef(quasif.lm))
+nrow(quasif)
+sum(is.na(coef(quasif.lm)))
 
 x = anova(dat.lm) 
 quasiF.fnc(x["SOA","Mean Sq"], x["Item:Subject", "Mean Sq"],
@@ -1921,30 +1922,30 @@ x["SOA:Subject", "Mean Sq"], x["Item", "Mean Sq"],
 x["SOA","Df"], x["Item:Subject", "Df"],
 x["SOA:Subject", "Df"], x["Item", "Df"])
 
-subjects = aggregate(splitplot$RT, list(splitplot$Subject, 
-splitplot$SOA),mean)
+subjects = aggregate(quasif$RT, list(quasif$Subject, 
+quasif$SOA),mean)
 subjects
 colnames(subjects) = c("Subject", "SOA", "MeanRT")
 summary(aov(MeanRT ~ SOA + Error(Subject), data = subjects))
 
-items = aggregate(splitplot$RT, list(splitplot$Item, splitplot$SOA), 
+items = aggregate(quasif$RT, list(quasif$Item, quasif$SOA), 
 mean)
 items
 colnames(items) = c("Item", "SOA", "MeanRT")
 summary(aov(MeanRT ~ SOA, items))
 
 # WARNING: THESE SIMULATIONS TAKE A LOT OF TIME
-y3 = simulateSplitPlot.fnc(splitplot, nruns=1000, with=FALSE) 
+y3 = simulateQuasif.fnc(quasif, nruns=1000, with=FALSE) 
 y3$alpha05
 y3$alpha01
-x3 = simulateSplitPlot.fnc(splitplot, nruns=1000, with=TRUE) 
+x3 = simulateQuasif.fnc(quasif, nruns=1000, with=TRUE) 
 x3$alpha05
 x3$alpha01
-y4 = simulateSplitPlot.fnc(splitplot, nruns=1000, nsub=20, nitem=40, 
+y4 = simulateQuasif.fnc(quasif, nruns=1000, nsub=20, nitem=40, 
 with = F)
 y4$alpha05
 y4$alpha01
-x4 = simulateSplitPlot.fnc(splitplot, nruns=1000, nsub=20, nitem=40)
+x4 = simulateQuasif.fnc(quasif, nruns=1000, nsub=20, nitem=40)
 x4$alpha05
 x4$alpha01
 
@@ -2690,10 +2691,11 @@ nessw.vgc = lnre.vgc(nessw.gigp, seq(0, N(nessw.spc), length = 40))
 nessdemog.vgc = lnre.vgc(nessdemog.fzm, seq(0, N(nessw.spc), 
 length = 40))
 nesscg.vgc = lnre.vgc(nesscg.fzm, seq(0, N(nessw.spc), length = 40))
-plot(nessw.vgc, nessdemog.vgc, nesscg.vgc, lwd = rep(1, 3), 
+plot(nessw.vgc, nessdemog.vgc, nesscg.vgc, lwd = rep(1, 3), lty=c(1,1,2), 
+col=c("black", "grey", "black"),
 legend=c("written", "spoken:demographic", "spoken:context-governed"))
-abline(h = 839, col = "red")
-abline(h = 810, col = "green")
+abline(h = 839, col = "grey")
+abline(h = 810, col = "black")
 nessw.lnre.spc = lnre.spc(nessw.gigp, N(nessw.spc), m.max = 1)
 Vm(nessw.lnre.spc, 1)/N(nessw.lnre.spc)
 nessdemog.lnre.spc = lnre.spc(nessdemog.fzm, N(nessw.spc), 
