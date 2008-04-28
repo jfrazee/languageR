@@ -13,7 +13,7 @@ aovlmer.fnc(object, mcmc, which, noMCMC, ...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
-  \item{object}{An lmer model for a continuous response variable 
+  \item{object}{An lmer or glmer model for a response variable 
      fitted with \code{lmer}.}
   \item{mcmc}{A Markov chain Monte Carlo sample obtained with \code{mcmcsamp} 
 	   for the lmer model.}

@@ -1,9 +1,9 @@
 `xylowess.fnc` <-
 function(fmla, 
-    data=weight, span=2/3,
+    data, span=2/3,
 	  symbolcolor = "darkgrey", linecolor="blue",
     xlabel="", 
-    ylabel="") {
+    ylabel="",...) {
 
     # get sensible default labels from the formula
     y = strsplit(as.character(fmla), "[|]")
@@ -16,7 +16,7 @@ function(fmla,
     # examples in the on-line help for xyplot
     xyplot(fmla, 
         data = data,
-        xlab = xlabel, ylab = ylabel,
+        xlab = xlabel, ylab = ylabel, ...,
         panel = function(x, y) {
             panel.grid(h = -1, v = -1)  
             # only clearly visible on the screen, not on paper

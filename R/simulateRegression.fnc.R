@@ -8,7 +8,7 @@ function(
 {
 
   require("lme4", quietly = TRUE)
-  require("coda", quietly = TRUE)
+  # require("coda", quietly = TRUE)
 
   # some matrices for storing results
   pLmer = matrix(0, nruns, 4)         # p's for lmer correct

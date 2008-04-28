@@ -8,18 +8,23 @@
 	the upper bound for the degrees of freedom are added.
 }
 \usage{
-pvals.fnc(object, nsim = 10000, ndigits = 4, withMCMC = FALSE, ...)
+pvals.fnc(object, nsim = 10000, ndigits = 4, withMCMC = FALSE, addPlot=TRUE, ...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
-  \item{object}{An lmer model for a continuous response variable 
-     fitted with \code{lmer}.}
+  \item{object}{An lmer or glmer model object 
+     fitted with \code{lmer}.  Currently, MCMC sampling for glmer may 
+     not work off the shelf when there is more than one random intercept
+     in the model.}
   \item{nsim}{An integer denoting the required number of 
      Markov chain Monte Carlo samples. }
   \item{ndigits}{An integer denoting the number of 
      decimal digits in the output. }
   \item{withMCMC}{A logical indicating whether the output of \code{mcmcsamp}
      should be returned.}
+  \item{addPlot}{If TRUE (default), a trellis graph for the posterior 
+     distributions of the parameters is shown on the current
+     graphics device.}
 	\item{...}{Optional arguments that can be passed down.}
 }
 \value{
@@ -32,12 +37,17 @@ pvals.fnc(object, nsim = 10000, ndigits = 4, withMCMC = FALSE, ...)
 		 for small data sets.
     }
   \item{random}{A table with the MCMC means and HPD 95% confidence intervals
-	   for the standard deviations and correlations of the random effects.}
+	   for the standard deviations and correlations of the random effects.
+     The HPD intervals are based on the untransformed values (log for standard
+     deviations, atanhs for correlations), the endpoints of the HPD interval are
+     back-transformed to the scale of the input data frame for ease of interpretation.
+    }
   \item{mcmc}{The output of \code{mcmcsamp}.}
 }
 \author{R. H. Baayen}
 \seealso{See also lmer, mcmcsamp, and HPDinterval.}
 \examples{
+  \dontrun{
   data(primingHeid) 
   library(lme4, keep.source=FALSE)
 
@@ -49,10 +59,11 @@ pvals.fnc(object, nsim = 10000, ndigits = 4, withMCMC = FALSE, ...)
   primingHeid.lmer = lmer(RT ~ RTtoPrime * ResponseToPrime + 
     Condition + (1|Subject) + (1|Word), data = primingHeid)
 
-  primingHeid.pvals = pvals.fnc(primingHeid.lmer)
+  mcmc = pvals.fnc(primingHeid.lmer, nsim=10000, withMCMC=TRUE)
 
-  primingHeid.pvals$fixed
-  primingHeid.pvals$random
+  mcmc$fixed
+  mcmc$random
+  }
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

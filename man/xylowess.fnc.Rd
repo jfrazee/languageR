@@ -7,7 +7,7 @@
 \usage{
 xylowess.fnc(fmla, data, 
   span = 2/3, symbolcolor = "darkgrey", 
-  linecolor = "blue", xlabel = "", ylabel = "")
+  linecolor = "blue", xlabel = "", ylabel = "", ...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -18,6 +18,7 @@ xylowess.fnc(fmla, data,
   \item{linecolor}{Color for smoother.}
   \item{xlabel}{Label for horizontal axis.}
   \item{ylabel}{Label for vertical axis.}
+  \item{...}{Arguments to be passed to methods.}
 }
 \value{
   A trellis scatterplot matrix with smoothers is shown on the graphics device.

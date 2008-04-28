@@ -4,7 +4,8 @@ qntls=seq(0,1,by=0.1), view = 30, addStdError = FALSE, ndigits=2,
 
   require("lme4", quietly = TRUE, character = TRUE)
 
-  if (!inherits(lmermodel, "lmer")) stop("model object must be fitted with lmer")
+  if (!(is(lmermodel, "lmer") | is(lmermodel, "mer") | is(lmermodel, "glmer")))
+    stop("model object must be fitted with lmer")
   f <- function(x,y) {return(intercept + slopeX*x + slopeY*y + interactionxy*x*y)}
 
   coefs = fixef(lmermodel)

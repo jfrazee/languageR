@@ -7,13 +7,19 @@
   a straight line.
 }
 \usage{
-plot.logistic.fit.fnc(x, data, ...)
+plot.logistic.fit.fnc(x, data, method, where, ...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{x}{A logistic regression model fitted with \code{lmer} or
   \code{lrm}.}
   \item{data}{The data set to which the model was fitted.}
+  \item{method}{Either "cut", in which case the vector of cut-off points
+  supplied by the "where" argument will be used to partition the fitted 
+  probabilities, or "shingle", in which a shingle (using \code{equal.count} 
+  and its defaults) will be used.}
+  \item{where}{A vector of cut-off points for partitioning the vector of
+  fitted probabilities, by default \code{seq(0, 1, by=0.1)}}.
 	\item{...}{other parameters to be passed through to plotting functions.}
 }
 \value{

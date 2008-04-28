@@ -8,13 +8,13 @@ punctuation marks removed.
 }
 \usage{data(alice)}
 \format{
-  A character vector with 25942 words.
+  A character vector with 27269 words.
 }
 \source{
   The project Gutenberg at \url{http://www.gutenberg.org/wiki/Main_Page}
 }
 \examples{
   data(alice)
-  alice[1:4]
+  alice[1:5]
 }
 \keyword{datasets}

@@ -32,7 +32,8 @@
     \item{\code{NumberComplexSynsets}}{numeric vector with the log-transformed count of
           synonym sets in WordNet in which the word is listed as part of a compound.} 
     \item{\code{LengthInLetters}}{numeric vector with length of the word in letters.} 
-    \item{\code{Ncount}}{numeric vector with orthographic neighborhood density.} 
+    \item{\code{Ncount}}{numeric vector with orthographic neighborhood density, defined as the number of lemmas in CELEX with the same length (in letters) 
+    at Hamming distance 1.} 
     \item{\code{MeanBigramFrequency}}{numeric vector with mean log bigram frequency.} 
     \item{\code{FrequencyInitialDiphone}}{numeric vector with log frequency of initial diphone.} 
     \item{\code{ConspelV}}{numeric vector with type count of orthographic neighbors.} 

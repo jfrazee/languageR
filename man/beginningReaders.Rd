@@ -45,7 +45,7 @@ data(beginningReaders)
 library(lme4, keep.source = FALSE)
 beginningReaders.lmer = lmer(LogRT ~  PC1 + PC2 + PC3  + ReadingScore +
   OrthLength + I(OrthLength^2) + LogFrequency + LogFamilySize +
-  (1|Word) + (1+LogFrequency|Subject) + (OrthLength|Subject) + (PC1|Subject), 
+  (1|Word) + (1|Subject) + (0+LogFrequency|Subject) + (0+OrthLength|Subject) + (0+PC1|Subject), 
   data = beginningReaders)
 }
 }

@@ -13,7 +13,7 @@ function(dat, with = TRUE, trial = 0, nruns = 100, nsub = NA, nitem = NA, ...) {
   #       if set by hand, should be a multiple of 3
   
   require("lme4", quietly = TRUE)
-  require("coda", quietly = TRUE)
+  # require("coda", quietly = TRUE)
 
 
   if (with) {

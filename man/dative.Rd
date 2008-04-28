@@ -91,13 +91,15 @@ par(mfrow = c(1,1))
 
 # ---- mixed-effects logistic regression with the lme4 package
 
-library(lme4, keep.source = FALSE)
-dative.lmer = lmer(RealizationOfRecipient ~ 
-  AccessOfTheme + AccessOfRec + LengthOfRecipient + AnimacyOfRec +
-  AnimacyOfTheme + PronomOfTheme + DefinOfTheme + LengthOfTheme +
-  SemanticClass + Modality + (1|Verb), 
-  data = dative, family = "binomial")
-dative.lmer
-}
-}
+library(lme4) 
+
+dative.lmer = lmer(RealizationOfRecipient ~ AccessOfTheme +
+AccessOfRec + LengthOfRecipient + AnimacyOfRec + 
+AnimacyOfTheme + PronomOfTheme + DefinOfTheme + LengthOfTheme + 
+SemanticClass + Modality + (1|Verb), 
+data = dative, family = "binomial") 
+
+print(dative.lmer, corr=FALSE) 
+
+} }
 \keyword{datasets}

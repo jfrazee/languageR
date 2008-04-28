@@ -1,6 +1,4 @@
-import("methods", "lme4", "coda", "Matrix")
-importFrom("lattice", xyplot)
-
+import("methods", "coda", "Matrix")
 
 export(
        "aovlmer.fnc",
@@ -31,7 +29,11 @@ export(
        "text2spc.fnc",
        "xylowess.fnc",
        "yule.fnc",
-       "zipf.fnc"
+       "zipf.fnc",
+       "head.growth",
+       "tail.growth",
+       "plotLMER.fnc",
+       "makeSplineData.fnc"
        )
 
 S3method(print, corres)

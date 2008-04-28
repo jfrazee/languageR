@@ -8,7 +8,7 @@ punctuation marks removed.
 }
 \usage{data(alice)}
 \format{
-  A character vector with 38177 words.
+  A character vector with 39513 words.
 }
 \source{
   The project Gutenberg at \url{http://www.gutenberg.org/wiki/Main_Page}
