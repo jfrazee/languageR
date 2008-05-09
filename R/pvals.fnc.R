@@ -20,13 +20,13 @@ pvals.fnc <- function(object, nsim=10000, ndigits = 4, withMCMC = FALSE, addPlot
           #   Error in .local(object, n, verbose, ...) : Update not yet written
         }
 
-        mcmc = try(mcmcsamp(object, n=nsim),silent=TRUE)
+        mcmc = try(lme4::mcmcsamp(object, n=nsim),silent=TRUE)
         if (is(mcmc, "try-error")) {
-          stop("MCMC sampling is not yet implemented in lme4_0.999375-20\n  for models with random correlation parameters\n")
+          stop("MCMC sampling is not yet implemented in lme4_0.999375\n  for models with random correlation parameters\n")
           # stop("cannot carry out MCMC sampling:\nCode for non-trivial theta_T not yet written\n")
         }
 
-        hpd = HPDinterval(mcmc)
+        hpd = lme4::HPDinterval(mcmc)
 
         # the table for the fixed effects
 
@@ -70,7 +70,7 @@ pvals.fnc <- function(object, nsim=10000, ndigits = 4, withMCMC = FALSE, addPlot
           dfr$Std.Dev.[i] = round(object@ST[[i]]*sgma, ndigits)
           dfr$MCMCmedian[i] = round(median(mcmc@ST[i,]*mcmc@sigma), ndigits)
           dfr$MCMCmean[i] = round(mean(mcmc@ST[i,]*mcmc@sigma), ndigits)
-          hpdint = as.numeric(HPDinterval(mcmc@ST[i,]*mcmc@sigma))
+          hpdint = as.numeric(lme4::HPDinterval(mcmc@ST[i,]*mcmc@sigma))
           dfr$HPD95lower[i] = round(hpdint[1], ndigits)
           dfr$HPD95upper[i] = round(hpdint[2], ndigits)
         }
@@ -79,7 +79,7 @@ pvals.fnc <- function(object, nsim=10000, ndigits = 4, withMCMC = FALSE, addPlot
         dfr[n,3] = round(sgma, ndigits)
         dfr[n,4] = round(median(mcmc@sigma), ndigits)
         dfr[n,5] = round(mean(mcmc@sigma), ndigits)
-        hpdint = as.numeric(HPDinterval(mcmc@sigma))
+        hpdint = as.numeric(lme4::HPDinterval(mcmc@sigma))
         dfr[n,6] = round(hpdint[1], ndigits)
         dfr[n,7] = round(hpdint[2], ndigits)
 
@@ -99,17 +99,14 @@ pvals.fnc <- function(object, nsim=10000, ndigits = 4, withMCMC = FALSE, addPlot
           }
           print(densityplot(~Value|Predictor, data=m, scales=list(relation="free"),
           par.strip.text = list(cex = 0.75), xlab="Posterior Values", ylab = "Density", pch="."))
+        }
 
-          if (withMCMC) {
-            return(list(fixed = format(fixed, digits=ndigits, sci=FALSE), 
-            random = dfr, mcmc=as.data.frame(mcmcM)))
-          } else {
-            return(list(fixed = format(fixed, digits=ndigits, sci=FALSE), 
-            random = dfr))
-          }
+        if (withMCMC) {
+          return(list(fixed = format(fixed, digits=ndigits, sci=FALSE), 
+          random = dfr, mcmc=as.data.frame(mcmcM)))
         } else {
           return(list(fixed = format(fixed, digits=ndigits, sci=FALSE), 
-            random = dfr))
+          random = dfr))
         }
 
       } else {

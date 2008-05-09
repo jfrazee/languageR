@@ -6,7 +6,9 @@
   create the actual plots
 }
 \usage{
-plotAll.fnc(reslist, sameYrange = TRUE, ylabel, xlabel = NA, intrName = NA, pos = "end", ylimit = NA, addlines=FALSE, cexsize = 0.6, conditioningVals=NA, conditioningColors=1, conditioningLines=1)
+plotAll.fnc(reslist, sameYrange = TRUE, ylabel, xlabel = NA, intrName = NA, 
+  pos = "end", ylimit = NA, addlines=FALSE, cexsize = 0.6, conditioningVals=NA,
+  conditioningColors=1, conditioningLines=1, ...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -29,6 +31,7 @@ plotAll.fnc(reslist, sameYrange = TRUE, ylabel, xlabel = NA, intrName = NA, pos 
   \item{conditioningLines}{ vector of names of the line types to be used
     for the levels of the conditioning factor in the interaction (the 
     factor with different lines in the plot), by default solid lines }
+  \item{...}{ further graphical parameters to be passed down, none are currently implemented}
 }
 \details{
   Note that \code{reslist} may contain as elements lists of data frames, these then specify the separate points or lines to be plotted for a given interaction

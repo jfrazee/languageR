@@ -1,6 +1,7 @@
 `plotLMER.fnc` <-
 function(model, 
    xlabel = NA,     # label for X axis, if other than column name
+   xlabs = NA,      # vector of xlabels for multipanel plot
    ylabel=NA,       # label for Y axis, if other than dependent variable name
    ylimit=NA,       # ylimit to be set for plot or all subplots
    fun=NA,          # transform predicted values using function fun; if specified, 
@@ -35,7 +36,7 @@ function(model,
    if (!is(model, "mer")) {
      stop("argument should be a mer model object")
    }
-   if (!is.na(xlabel)) {
+   if (!is.na(xlabel[1])) {
      if (!is.character(xlabel)) 
        stop("xlabel should be a string\n")
    }
@@ -133,6 +134,12 @@ function(model,
      predictors = pred
    }
 
+   if (!is.na(xlabs[1])) {
+     if (length(xlabs) != length(predictors)) {
+       stop("number of labels in xlabs is not the same as the number of predictors\n")
+     }
+   }
+
 
    ###############################################################################
    # we now loop over the predictors and make the (sub)plot(s)
@@ -144,10 +151,16 @@ function(model,
 
      cat("preparing panel for", predictors[i], "\n")
      if (length(predictors) == 1) xlabelShow = xlabel
-     else xlabelShow = NA
+     else {
+       if (!is.na(xlabs[1])) {
+         xlabelShow = xlabs
+       } else {
+         xlabelShow = NA
+       }
+     }
      # prepare label for X-axis if not specified by the user; for
      # multiple subplots take name of predictor 
-     if (is.na(xlabel) | length(predictors)>1) {
+     if (is.na(xlabel[1]) | length(predictors)>1) {
        xlabel = predictors[i]
      }
      
@@ -218,7 +231,7 @@ function(model,
 
    plotAll.fnc(plots, sameYrange=lockYlim, ylabel, xlabel = xlabelShow, intrName=conditioningPred, 
    pos=conditioningPos, ylimit=ylimit, addlines=addlines, cexsize = cexsize, 
-   conditioningVals=conditioningVals, conditioningColors = colors, conditioningLines=lineTypes)
+   conditioningVals=conditioningVals, conditioningColors = colors, conditioningLines=lineTypes, ...)
 
    if (withList) return(plots)
 

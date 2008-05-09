@@ -7,16 +7,19 @@
   intervals can be added.
 }
 \usage{
-plotLMER.fnc(model, xlabel = NA, ylabel = NA, ylimit = NA, fun = NA, 
-   pred = NA, n = 100, intr = NA, mcmcMat = NA, lockYlim = TRUE, 
+plotLMER.fnc(model, xlabel = NA, xlabs = NA, ylabel = NA, ylimit = NA, 
+   fun = NA, pred = NA, n = 100, intr = NA, mcmcMat = NA, lockYlim = TRUE, 
    addlines = FALSE, withList = FALSE, cexsize = 0.5, ...)
 }
 \arguments{
   \item{model}{ a \code{mer} model object }
   \item{xlabel}{ label for X-axis (if other than the variable name in the
     original model formula)}
-  \item{ylabel}{ label for Y-axis (if other than the variable name of the dependent variable 
-    in the original model formula) }
+  \item{xlabs}{ character vector with labels for X-axes in multipanel plot (if 
+  other than the variable names in the original model formula); if used, 
+  \code{xlabel} should not be specified}
+  \item{ylabel}{ label for Y-axis (if other than the variable name of 
+    the dependent variable in the original model formula) }
   \item{ylimit}{ range for vertical axis; if not specified, this range will 
     be chosen such that all data points across all subplots, including HPD intervals, will be accommodated }
   \item{fun}{ a function to be applied for transforming the dependent variable, 
@@ -49,7 +52,9 @@ plotLMER.fnc(model, xlabel = NA, ylabel = NA, ylimit = NA, fun = NA,
   frames for the subplots}
   \item{cexsize}{ character expansion size (cex) for additional information in
   the plot for interactions}
-  \item{\dots}{ further graphical parameters to be passed down, none are currently implemented}
+  \item{...}{ further graphical parameters to be passed down; warning: \code{col}, 
+  \code{pch}, \code{lty} and \code{cex} will often generate an error as they are 
+  internally already fully specified for specialized subplots}
 }
 \details{
 
@@ -236,6 +241,11 @@ data = dative, family = "binomial")
 
 par(mfrow=c(3,4),mar=c(5,5,1,1))
 plotLMER.fnc(dative.lmer, fun=plogis, addlines=TRUE)
+
+# with user-specified labels for the x-axis
+par(mfrow=c(3,4),mar=c(5,5,1,1))
+plotLMER.fnc(dative.lmer, fun=plogis, addlines=TRUE,
+xlabs=unlist(strsplit("abcdefghij","")))
 
 par(pars)
 
