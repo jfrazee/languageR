@@ -93,7 +93,9 @@ Frequency + NativeLanguage * Length +
 data = lexdec[abs(scale(resid(lexdec.lmerB)))<2,])
 
 qqnorm(resid(lexdec.lmerC))
-pvals.fnc(lexdec.lmerC)$summary
+# for models with random correlation parameters, pvals.fnc does not work 
+# as mcmcsamp() (now in lme4) is currently under reconstruction 
+# pvals.fnc(lexdec.lmerC)$summary    (currently broken)
 
 }}
 \keyword{datasets}

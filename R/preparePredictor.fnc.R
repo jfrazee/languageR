@@ -76,6 +76,7 @@ function(pred, model, m, ylabel, fun, val, xlabel, mcmc, ...) {
         stop(paste(pred, " is not plotted (not a fixed effect predictor)\n"))
       }
     } else {
+      if (is.logical(model@frame[,pred])) model@frame[,pred] = factor(model@frame[,pred])
       if (is.factor(model@frame[,pred])) {
         #-------------------------------------------------------------------
         # so now we are dealing with a factor as predictor, and we need

@@ -14,9 +14,12 @@ addPlot=TRUE, ...)
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{object}{An lmer or glmer model object 
-     fitted with \code{lmer}.  Currently, MCMC sampling for glmer may 
-     not work off the shelf when there is more than one random intercept
-     in the model.}
+     fitted with \code{lmer}.  Currently, MCMC sampling for generalized 
+     linear mixed models may not work off the shelf when there is more 
+     than one random intercept in the model.  The code for random effects
+     structure with correlation parameters is not yet implemented in 
+     \code{mcmcsamp}, this currently blocks calculation of the fixed and
+     random subtables. }
   \item{nsim}{An integer denoting the required number of 
      Markov chain Monte Carlo samples. }
   \item{ndigits}{An integer denoting the number of 

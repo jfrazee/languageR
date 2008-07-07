@@ -1,7 +1,9 @@
 aovlmer.fnc <- function(object, mcmc, which, noMCMC = FALSE, ...) {
 
-  if (!(is(object, "lmer")) & !(is(object, "glmer"))) 
-		stop("first argument should be an lmer or glmer model object")
+  require("lme4", quietly = TRUE, character = TRUE)
+
+  if (!(is(object, "mer"))) 
+		stop("first argument should be a mer model object")
 
 
   sumry = summary(object)
@@ -16,8 +18,7 @@ aovlmer.fnc <- function(object, mcmc, which, noMCMC = FALSE, ...) {
 	if (noMCMC) {
 		return(anov)
 	} else {
-    if (!is(mcmc, "mcmc")) stop("second argument should be an mcmc object")
-
+    if (!is(mcmc, "data.frame")) stop("second argument should be a data frame")
     mcmc = mcmc[, which]      # next lines by Douglas Bates
     std <- backsolve(chol(var(mcmc)),
                      cbind(0, t(mcmc)) - colMeans(mcmc),

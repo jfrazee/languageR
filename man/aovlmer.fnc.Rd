@@ -15,12 +15,12 @@ aovlmer.fnc(object, mcmc, which, noMCMC, ...)
 \arguments{
   \item{object}{An lmer or glmer model for a response variable 
      fitted with \code{lmer}.}
-  \item{mcmc}{A Markov chain Monte Carlo sample obtained with \code{mcmcsamp} 
-	   for the lmer model.}
+  \item{mcmc}{A Markov chain Monte Carlo sample obtained with 
+     \code{pvals.fnc(..., withMCMC=TRUE)$mcmc} for the lmer model.}
   \item{which}{A vector of integers or strings denoting the rows in the
 	   table of coefficients that specify the coefficients for the factor.}
 	\item{noMCMC}{A logical indicating whether MCMC sampling should be skipped,
-	   in which case a data frame with a standard ANOVA table is returned.}
+	   in which case a data frame with a traditional ANOVA table is returned.}
   \item{\dots}{Other optional arguments.}
 }
 %\details{
@@ -44,8 +44,8 @@ aovlmer.fnc(object, mcmc, which, noMCMC, ...)
 	library(coda)
 	data(latinsquare)
 	l.lmer = lmer(RT~SOA+(1|Word)+(1|Subject), data=latinsquare)
-	mcmc = mcmcsamp(l.lmer, n=10000)
-	aovlmer.fnc(l.lmer, mcmc, c("SOAmedium", "SOAshort"))
+  mcmc = pvals.fnc(l.lmer, nsim=10000, withMCMC=TRUE)
+  aovlmer.fnc(l.lmer, mcmc$mcmc, c("SOAmedium", "SOAshort"))
 	}
 }
 \keyword{ regression }

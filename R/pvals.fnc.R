@@ -20,10 +20,15 @@ pvals.fnc <- function(object, nsim=10000, ndigits = 4, withMCMC = FALSE, addPlot
           #   Error in .local(object, n, verbose, ...) : Update not yet written
         }
 
-        mcmc = mcmcsamp(object, n = nsim)
+        mcmc = try(mcmcsamp(object, n=nsim),silent=TRUE)
+        if (is(mcmc, "try-error")) {
+          stop("MCMC sampling is not yet implemented in lme4_0.999375-20\n  for models with random correlation parameters\n")
+          # stop("cannot carry out MCMC sampling:\nCode for non-trivial theta_T not yet written\n")
+        }
+
         hpd = HPDinterval(mcmc)
 
-        # here we make a table for the fixed effects
+        # the table for the fixed effects
 
         mcmcfixef = t(mcmc@fixef)
         nr <- nrow(mcmcfixef)
@@ -41,86 +46,55 @@ pvals.fnc <- function(object, nsim=10000, ndigits = 4, withMCMC = FALSE, addPlot
         )
         colnames(fixed)[ncol(fixed)] = "Pr(>|t|)"
 
-        
-        # For the random effects table, we have to figure out the names. 
-        # I assume that the order in which we have the random effects parameters
-        # in mcmc$ST follows the order in the lmer model object@ST. 
-        # We work through the successive list components, and for each list component,
-        # we work through the matrix column by column, skipping the zero entries above
-        # the main diagonal.
+        # the table for the random effects
 
-        isStdev = vector()
-        # a boolean vector to distinguish between random intercepts and random slopes/contrasts
-        # the names for the random effects are going to live in the vector nms
-        theValues = vector()
-        names(object@ST) = names(object@flist)
+        ranefNames = names(object@flist)
+        assigned = attr(object@flist, "assign")
+        n = length(assigned)+1
+
+        dfr = data.frame(
+          Groups   = rep("", n),    
+          Name     = rep("", n),
+          Std.Dev. = rep(0, n),
+          MCMCmedian   = rep(0, n),
+          MCMCmean     = rep(0, n),
+          HPD95lower    = rep(0, n),
+          HPD95upper    = rep(0, n)
+        )
+        dfr$Groups = as.character(dfr$Groups)
+        dfr$Name = as.character(dfr$Name)
+
         for (i in 1:length(object@ST)) {
-          m = object@ST[[i]]
-          if (i == 1) {
-            nms = rownames(m)
-            nms = paste(rep(names(object@ST)[i], length(nms)), nms, sep=" ")
-            for (j in 1:nrow(m)) {
-              isStdev = c(isStdev, TRUE)
-              theValues = c(theValues, m[j,1])
-            }
-          } else {
-            tmp = rownames(m)
-            tmp = paste(rep(names(object@ST)[i], length(tmp)), tmp, sep=" ")
-            nms = c(nms, tmp)
-            for (j in 1:nrow(m)) {
-              isStdev = c(isStdev, TRUE)
-              theValues = c(theValues, m[j,1])
-            }
-          }
-          if (nrow(m) > 1) {
-            for (j in 2:ncol(m)) {
-              for (k in 1:nrow(m)) {
-                if (m[k,j] != 0) {
-                  nms = c(nms, paste(names(object@ST)[i], colnames(m)[j-1], rownames(m)[k], sep=" "))
-                  isStdev = c(isStdev, FALSE)
-                  theValues = c(theValues, m[k,j])
-                }
-              }
-            }
-          }
+          dfr$Groups[i] = ranefNames[assigned[i]]
+          dfr$Name[i] = colnames(object@ST[[i]])
+          dfr$Std.Dev.[i] = round(object@ST[[i]]*sgma, ndigits)
+          dfr$MCMCmedian[i] = round(median(mcmc@ST[i,]*mcmc@sigma), ndigits)
+          dfr$MCMCmean[i] = round(mean(mcmc@ST[i,]*mcmc@sigma), ndigits)
+          hpdint = as.numeric(HPDinterval(mcmc@ST[i,]*mcmc@sigma))
+          dfr$HPD95lower[i] = round(hpdint[1], ndigits)
+          dfr$HPD95upper[i] = round(hpdint[2], ndigits)
         }
-        
-
-        # we now combine the mean of the sampled values for sigma with the HPDs
-        rowSigma = round(c(mean(mcmc@sigma), median(mcmc@sigma), as.vector(hpd$sigma)), ndigits)
-
-        # backtransform to original scale (to be implemented)
-        #for (i in 1:nrow(mcmc@ST)) 
-        #  if (isStdev[i]) 
-        #    mcmc@ST[i,] = mcmc@ST[i,]*mcmc@sigma
-
-        mcmcHPD = as.data.frame(HPDinterval(mcmc)$ST)
-        rownames(mcmcHPD) = nms
-        means = apply(mcmc@ST,1,mean)
-        medians = apply(mcmc@ST,1,median)
-
-        # we can now combine means, medians and HPDs for the random effects on the original scales
-        rowsST = round(cbind(means, medians, mcmcHPD), ndigits)
-        rownames(rowsST) = nms
-        random = data.frame(rbind(rowsST,rowSigma)) 
-        rownames(random)[nrow(random)] = "Sigma"
-        colnames(random) = c("MCMCmean", "MCMCmedian", "HPD95lower", "HPD95upper")
-        #random$Estimate = c(theValues, sgma)
-        #random = random[,c(5,1:4)]
+        dfr[n,1] = "Residual"
+        dfr[n,2] = " "
+        dfr[n,3] = round(sgma, ndigits)
+        dfr[n,4] = round(median(mcmc@sigma), ndigits)
+        dfr[n,5] = round(mean(mcmc@sigma), ndigits)
+        hpdint = as.numeric(HPDinterval(mcmc@sigma))
+        dfr[n,6] = round(hpdint[1], ndigits)
+        dfr[n,7] = round(hpdint[2], ndigits)
 
         mcmcM = as.matrix(mcmc)
+        k = 0
+        for (j in (ncol(mcmcM)-n+1):(ncol(mcmcM)-1)) {
+          k = k + 1
+          mcmcM[,j] = mcmcM[,j]*mcmcM[,"sigma"]
+          colnames(mcmcM)[j] = paste(dfr$Group[k], dfr$Name[k], sep=" ")
+        }
 
         if (addPlot) {
-          beg = ncol(mcmcM)-length(nms)
-          end = ncol(mcmcM)
-          colnames(mcmcM)[beg:end] = c(nms, "sigma")
           m = data.frame(Value = mcmcM[,1], Predictor = rep(colnames(mcmcM)[1], nrow(mcmcM)))
           for (i in 2:ncol(mcmcM)) {
             mtmp = data.frame(Value = mcmcM[,i], Predictor = rep(colnames(mcmcM)[i], nrow(mcmcM)))
-            #if (logScale) 
-            #  if (i %in% (beg:end)) 
-            #    if ((i == end) | (isStdev[i-beg+1])) 
-            #      mtmp = data.frame(Value = 2*log(mcmcM[,i]), Predictor = rep(colnames(mcmcM)[i], nrow(mcmcM)))
             m = rbind(m, mtmp)
           }
           print(densityplot(~Value|Predictor, data=m, scales=list(relation="free"),
@@ -128,14 +102,14 @@ pvals.fnc <- function(object, nsim=10000, ndigits = 4, withMCMC = FALSE, addPlot
 
           if (withMCMC) {
             return(list(fixed = format(fixed, digits=ndigits, sci=FALSE), 
-            random = format(random, digits=ndigits, sci=FALSE), mcmc=as.data.frame(mcmcM)))
+            random = dfr, mcmc=as.data.frame(mcmcM)))
           } else {
             return(list(fixed = format(fixed, digits=ndigits, sci=FALSE), 
-            random = format(random, digits=ndigits, sci=FALSE)))
+            random = dfr))
           }
         } else {
           return(list(fixed = format(fixed, digits=ndigits, sci=FALSE), 
-            random = format(random, digits=ndigits, sci=FALSE)))
+            random = dfr))
         }
 
       } else {
@@ -154,7 +128,7 @@ pvals.fnc <- function(object, nsim=10000, ndigits = 4, withMCMC = FALSE, addPlot
 
   } else {
 
-      cat("the input model is not an lmer, glmer or mer object\n")
+      cat("the input model is not a mer object\n")
       return()
 
   }
