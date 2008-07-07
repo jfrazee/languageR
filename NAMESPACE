@@ -1,4 +1,4 @@
-import("methods", "coda", "Matrix")
+import("methods", "Matrix")
 
 export(
        "aovlmer.fnc",

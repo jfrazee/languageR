@@ -2,7 +2,6 @@
 function(dat,  with = TRUE, nruns = 100, nsub = NA, nitem = NA, ...) {
   require("MASS", quietly = TRUE, character = TRUE)
   require("lme4", keep.source = F, quietly = TRUE, character = TRUE)
-  # require("coda", quietly = TRUE, character = TRUE)
 
   if (with) {
      model.lmer = lmer(RT ~ SOA + (1 + SOA|Subject) + (1|Item), 

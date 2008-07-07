@@ -1,5 +1,5 @@
 `plotAll.fnc` <-
-function(reslist, sameYrange=TRUE, ylabel, intrName=NA, pos="end", ylimit=NA,
+function(reslist, sameYrange=TRUE, ylabel, xlabel=NA, intrName=NA, pos="end", ylimit=NA,
  addlines=FALSE, cexsize = 0.6, conditioningVals=NA, conditioningColors=1, conditioningLines=1) {
 
    if (length(conditioningColors)==1) conditioningColors = rep(1, 1000)   # 1000 should be more than enough
@@ -32,10 +32,15 @@ function(reslist, sameYrange=TRUE, ylabel, intrName=NA, pos="end", ylimit=NA,
        isfactor = FALSE
      }
      if (lst$Type[1]==FALSE) {
+       if (is.na(xlabel)) {
+         xlabl = as.character(lst$Predictor[1])
+       } else {
+         xlabl = xlabel
+       }
        plot(lst$X, lst$Y, ylim=ylimit, type="l", 
          col = conditioningColors[1],
          lty = conditioningLines[1],
-         xlab=as.character(lst$Predictor[1]), ylab=ylabel)
+         xlab=xlabl, ylab=ylabel)
        if ("lower" %in% colnames(lst)) {
          lines(lst$X, lst$lower, lty=2, col = conditioningColors[1])
          lines(lst$X, lst$upper, lty=2, col = conditioningColors[1])
@@ -52,16 +57,23 @@ function(reslist, sameYrange=TRUE, ylabel, intrName=NA, pos="end", ylimit=NA,
      } else {  # a factor
        d = max(lst$X)-min(lst$X)
        xlimit = c(min(lst$X)-0.1*d, max(lst$X)+0.1*d)
+
+       if (is.na(xlabel)) {
+         xlabl = as.character(lst$Predictor[1])
+       } else {
+         xlabl = xlabel
+       }
+
        if (addlines) {
          plot(lst$X, lst$Y, ylim=ylimit, type="b", pch=21, xlim=xlimit,
-         xlab=as.character(lst$Predictor[1]), ylab=ylabel, xaxt="n")
+         xlab=xlabl, ylab=ylabel, xaxt="n", col=conditioningColors[1])
        } else {
          plot(lst$X, lst$Y, ylim=ylimit, type="p", pch=21, xlim=xlimit,
-         xlab=as.character(lst$Predictor[1]), ylab=ylabel, xaxt="n")
+         xlab=xlabl, ylab=ylabel, xaxt="n")
        }
        mtext(lst$Levels, at=lst$X, side=1, line=1, cex=cexsize)
        if (n > 1) {
-         if (!is.na(pos) & !is.na(conditioningVals)) {
+         if (!is.na(pos) & !is.na(conditioningVals[1][1])) {
            ps = getPos.fnc(lst$Y, pos)
            epsilon = (max(ylimit)-min(ylimit))/40
            text(lst$X[ps], lst$Y[ps]+epsilon, 
@@ -70,8 +82,8 @@ function(reslist, sameYrange=TRUE, ylabel, intrName=NA, pos="end", ylimit=NA,
        }
 
        if ("lower" %in% colnames(lst)) {
-         points(lst$X, lst$lower, lty=2,  pch="-")
-         points(lst$X, lst$upper, lty=2,  pch="-")
+         points(lst$X, lst$lower, lty=2,  pch="-", col=conditioningColors[1])
+         points(lst$X, lst$upper, lty=2,  pch="-", col=conditioningColors[1])
        }
      }
      if (n > 1) {
@@ -84,31 +96,39 @@ function(reslist, sameYrange=TRUE, ylabel, intrName=NA, pos="end", ylimit=NA,
              lines(lst$X, lst$lower, lty=2, col = conditioningColors[j])
              lines(lst$X, lst$upper, lty=2, col = conditioningColors[j])
            }
-           if (!is.na(pos[1]) & !is.na(conditioningVals[1])) {
+           if (!is.na(pos[1]) & !is.na(conditioningVals[1][1])) {
              ps = getPos.fnc(lst$Y, pos)
              epsilon = (max(ylimit)-min(ylimit))/40
              text(lst$X[ps], lst$Y[ps]+epsilon, 
                labels=as.character(lst$Interaction[1]), cex=cexsize, pos=pstn)  
            }
          } else {
+
+
+           if (is.na(xlabel)) {
+             xlabl = as.character(lst$Predictor[1])
+           } else {
+             xlabl = xlabel
+           }
+
            if (addlines) {
              lines(lst$X, lst$Y, ylim=ylimit, type="b", pch=21, 
                col=conditioningColors[j], lty=conditioningLines[j], 
-               xlab=as.character(lst$Predictor[1]), ylab=ylabel)
+               xlab=xlabl, ylab=ylabel)
            } else {
              points(lst$X, lst$Y, ylim=ylimit, type="p", pch=21, 
-             xlab=as.character(lst$Predictor[1]), ylab=ylabel)
+             xlab=xlabl, ylab=ylabel, col=conditioningColors[j])
            }
            mtext(intrName, side=4, line=1, cex=cexsize, adj=0)
-           if (!is.na(pos) & !is.na(conditioningVals)) {
+           if (!is.na(pos) & !is.na(conditioningVals[1][1])) {
              ps = getPos.fnc(lst$Y, pos)
              epsilon = (max(ylimit)-min(ylimit))/40
              text(lst$X[ps], lst$Y[ps]+epsilon, 
                labels=as.character(conditioningVals[j]), cex=cexsize, pos=pstn)  
            }
            if ("lower" %in% colnames(lst)) {
-             points(lst$X, lst$lower, lty=2,  pch="-")
-             points(lst$X, lst$upper, lty=2,  pch="-")
+             points(lst$X, lst$lower, lty=2,  pch="-", col=conditioningColors[j])
+             points(lst$X, lst$upper, lty=2,  pch="-", col=conditioningColors[j])
            }
          }
        }

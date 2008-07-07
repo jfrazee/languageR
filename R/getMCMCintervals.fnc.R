@@ -6,10 +6,7 @@ function(fixf, mcmcMatrix, m) {
   for (i in 1:nsamples) {
     mat[,i] = m %*% as.numeric(mcmcMatrix[i,1:nfixed])
   }
-  # require("coda", quietly=TRUE)
-  hpd = as.data.frame(HPDinterval(as.mcmc(t(mat))))
-  # for lme4 1.0 probably:
-  # hpd = as.data.frame(HPDinterval(t(mat)))
+  hpd = as.data.frame(HPDinterval(t(mat)))
   return(hpd)
 }
 

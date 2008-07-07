@@ -5,7 +5,7 @@ function(model,
    ylimit=NA,       # ylimit to be set for plot or all subplots
    fun=NA,          # transform predicted values using function fun; if specified, 
                     # fun should be a function object, not the name (string) for the function
-                    # for glmer models, fun is taken to be plogis by default
+                    # for binomial models, fun is taken to be plogis by default
    pred=NA,         # if not NA, single plot will be produced for pred
    n=100,           # number of points on X-axis for numerical predictors
    intr=NA,         # a list specifying an interaction, with as
@@ -32,8 +32,8 @@ function(model,
    ###############################################################################
    # validate the input
    ###############################################################################
-   if (!(is(model, "lmer") | is(model, "glmer") | is(model, "mer"))) {
-     stop("argument should be an lmer, glmer or mer model object")
+   if (!is(model, "mer")) {
+     stop("argument should be a mer model object")
    }
    if (!is.na(xlabel)) {
      if (!is.character(xlabel)) 
@@ -47,9 +47,9 @@ function(model,
      if ((!is.numeric(ylimit)) | (length(ylimit)!=2)) 
        stop("ylimit should be a two-element numeric vector\n")
    }
-   if (!is.na(mcmcMat[1])) {
-     if (!is.matrix(mcmcMat))
-       stop("mcmcMat should be a matrix\n")
+   if (!is.na(mcmcMat[[1]][1])) {
+     if (!is.data.frame(mcmcMat))
+       stop("mcmcMat should be a data frame\n")
    }
    if (!is.na(intr[1])) {
      if (!is.list(intr))
@@ -66,12 +66,15 @@ function(model,
      if (!is.na(fun)) {
        stop("fun should be a function (not the name of a function)\n")
      }
-   } else {
-     if (is(model, "glmer")) fun = plogis
+   } 
+   if ((length(grep("^glmer", as.character(model@call))) == 1) &
+         (length(grep("binomial", as.character(model@call))) == 1)) {
+       if (!is.function(fun)) {
+         fun = plogis
+         cat("log odds are back-transformed to probabilities\n")
+       }
    }
 
-   ## if (!is(model, "mer"))
-   # require(coda, quietly=TRUE)
 
    ###############################################################################
    # define variables for displaying interactions
@@ -140,9 +143,13 @@ function(model,
    for (i in 1:length(predictors)) {
 
      cat("preparing panel for", predictors[i], "\n")
+     if (length(predictors) == 1) xlabelShow = xlabel
+     else xlabelShow = NA
      # prepare label for X-axis if not specified by the user; for
      # multiple subplots take name of predictor 
-     if (is.na(xlabel) | length(predictors)>1) xlabel = predictors[i]
+     if (is.na(xlabel) | length(predictors)>1) {
+       xlabel = predictors[i]
+     }
      
      # we now destinguish between plot with interaction (if) and simple (sub)plot (else)
      if ((length(predictors)==1) & (!is.null(conditioningVals))) {
@@ -209,7 +216,7 @@ function(model,
    }
    names(plots) = predictors
 
-   plotAll.fnc(plots, sameYrange=lockYlim, ylabel, intrName=conditioningPred, 
+   plotAll.fnc(plots, sameYrange=lockYlim, ylabel, xlabel = xlabelShow, intrName=conditioningPred, 
    pos=conditioningPos, ylimit=ylimit, addlines=addlines, cexsize = cexsize, 
    conditioningVals=conditioningVals, conditioningColors = colors, conditioningLines=lineTypes)
 

@@ -1,6 +1,6 @@
 `addMCMCci.fnc` <-
 function(mcmcM, model, m, fun, pred, predname=NA, factor=FALSE) {
-  if (is.matrix(mcmcM)) {
+  if (is.data.frame(mcmcM)) {
     # get mcmc-derived confidence intervals
     confints = getMCMCintervals.fnc(fixf=fixef(model), 
       mcmcMatrix=mcmcM, m=m)
@@ -16,7 +16,7 @@ function(mcmcM, model, m, fun, pred, predname=NA, factor=FALSE) {
           upper = transforming.fnc(confints[,2], fun))
     return(dfr)
   } else {
-    if (!is.na(mcmcM[1]))
+    if (!is.na(mcmcM[1,1]))
       stop("warning: mcmcM argument to addMCMCci.fnc is not a matrix\n")
   }
 }

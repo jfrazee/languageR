@@ -8,7 +8,8 @@
 	the upper bound for the degrees of freedom are added.
 }
 \usage{
-pvals.fnc(object, nsim = 10000, ndigits = 4, withMCMC = FALSE, addPlot=TRUE, ...)
+pvals.fnc(object, nsim = 10000, ndigits = 4, withMCMC = FALSE, 
+addPlot=TRUE, ...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{

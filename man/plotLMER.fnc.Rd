@@ -1,10 +1,10 @@
 \name{plotLMER.fnc}
 \alias{plotLMER.fnc}
-\title{plot lmer or glmer object}
+\title{plot a mer object}
 \description{
   Plot partial effects of a (generalized) linear mixed-effects model fit with
-  \code{lmer}.  For gaussian models, 95% highest posterior density credible intervals
-  can be added.
+  \code{lmer}.  For gaussian models, 95\% highest posterior density credible 
+  intervals can be added.
 }
 \usage{
 plotLMER.fnc(model, xlabel = NA, ylabel = NA, ylimit = NA, fun = NA, 
@@ -12,17 +12,22 @@ plotLMER.fnc(model, xlabel = NA, ylabel = NA, ylimit = NA, fun = NA,
    addlines = FALSE, withList = FALSE, cexsize = 0.5, ...)
 }
 \arguments{
-  \item{model}{ a \code{lmer} or \code{glmer} model object }
+  \item{model}{ a \code{mer} model object }
   \item{xlabel}{ label for X-axis (if other than the variable name in the
     original model formula)}
-  \item{ylabel}{ label for Y-axis (if other than the variable name of the dependent variable in the original model formula) }
-  \item{ylimit}{ range for vertical axis; if not specified, this range will be chosen such that all data points across all subplots, including HPD intervals, will be accommodated }
-  \item{fun}{ a function to be applied for transforming the dependent variable, if \code{NA}, no transformation is applied; for \code{glmer} models, fun is set to \code{plogis} by default}
+  \item{ylabel}{ label for Y-axis (if other than the variable name of the dependent variable 
+    in the original model formula) }
+  \item{ylimit}{ range for vertical axis; if not specified, this range will 
+    be chosen such that all data points across all subplots, including HPD intervals, will be accommodated }
+  \item{fun}{ a function to be applied for transforming the dependent variable, 
+    if \code{NA}, no transformation is applied; for models with \code{family = "binomial"}, 
+      fun is set to \code{plogis} by default; this can be disabled by setting
+      \code{fun=function(x)return(x)}.}
   \item{pred}{ character string with name of predictor; 
     if specified, a single plot will produced for the partial effect of this
     specific predictor}
   \item{n}{ integer denoting number of points for the plot, chosen at equally
-  spaced intervals across the empirical range of the predictor variable }
+    spaced intervals across the empirical range of the predictor variable }
   \item{intr}{ a list specifying an interaction to be graphed; obligatory
   arguments are (1) the name of the interaction variable, followed by (2) 
   a vector of values for that variable, followed by (3) the position for 
@@ -34,7 +39,7 @@ plotLMER.fnc(model, xlabel = NA, ylabel = NA, ylimit = NA, fun = NA,
   \item{mcmcMat}{ an MCMC matrix as produced by \code{mcmcsamp} or 
   \code{pvals.fnc()$mcmc} for the input model; when this matrix is specified, 
   an attempt is made to add MCMC-based HPD intervals to the predicted values
-  in the plot.  Works only for R 2.6.2 or higher, and for lme4 1.0 or higher. }
+  in the plot.  Works only for R 2.6.2 or higher, and for lme4 0.999 or higher. }
   \item{lockYlim}{ logical specifying whether all subplots should have the same
   range of values for the vertical axis; if \code{TRUE}, this range will be
   chosen to accomodate all fitted values including HDP intervals for all
@@ -91,24 +96,24 @@ Evidence from Danish, Language and Cognitive Processes, in press.}
 
 #############################################################
 # fitting a cosine with a spline (simulated data)
-# this example illustrates how to work with splines, and does
-# not yet illustrate using plotLMER.fnc
 #############################################################
 
 require("Design", quietly=TRUE, character=TRUE)
 dfr = makeSplineData.fnc()
 table(dfr$Subject)
 xylowess.fnc(Y ~ X | Subject, data = dfr)
-# this doesn't recognize the cosine function implemented in makeSplineData.fnc()
-dev.off()   # need to turn off lattice graphics device
+# the smoother doesn't recognize the cosine function implemented in makeSplineData.fnc()
+dev.off()   
 
 dfr.lmer = lmer(Y ~ rcs(X, 5) + (1|Subject), data = dfr)
-dfr$fittedLMER = as.vector(dfr.lmer@X \%*\% fixef(dfr.lmer))
+plotLMER.fnc(dfr.lmer)
 
+# comparison with ols from Design package
 dfr.dd = datadist(dfr)
 options(datadist='dfr.dd')
 dfr.ols = ols(Y~Subject+rcs(X), data=dfr, x=T, y=T)
 dfr$fittedOLS = fitted(dfr.ols)
+dfr$fittedLMER = as.vector(dfr.lmer@X \%*\% fixef(dfr.lmer))
 
 # we plot the lmer() fit in blue, the ols() fit in red (both adjusted for
 # subject S1), and plot the underlying model in green
@@ -128,11 +133,12 @@ col=c("green", "blue", "red"))
 
 
 
+
+
 #############################################################
 # a model with a raw polynomial: the mcmc credible intervals
 # will be different each time this example is run; for large
-# numbers of samples, the plotting code will become sloooowww
-# (sorry)
+# numbers of samples, the plotting code will become quite slow
 #############################################################
 
 bg.lmer = lmer(LogRT ~ PC1+PC2+PC3 + ReadingScore +
@@ -203,6 +209,21 @@ ylimit=c(6.5,7.0), cexsize=1.0)
 mtext("males", line=0.5, cex=0.8)
 par(mfrow=c(1,1))
 
+
+#############################################################
+# plotting an interaction between two factors
+#############################################################
+
+danish$WordFreqFac = danish$LogWordFreq > median(danish$LogWordFreq)
+danish.lmer2 = lmer(LogRT ~ WordFreqFac*Sex +  
+(1|Subject) + (1|Word) + (1|Affix), data = danish)
+mcmc = pvals.fnc(danish.lmer2,nsim=1000,withMCMC=TRUE)
+
+plotLMER.fnc(danish.lmer2, pred = "Sex", 
+intr=list("WordFreqFac", c("TRUE", "FALSE"), "end", 
+list(c("red",  "blue"), rep(1,2))),
+ylimit=c(6.5,7.0), cexsize=1.0, addlines=TRUE, mcmcMat=mcmc$mcmc)
+
 #############################################################
 # a generalized linear mixed-effects model
 #############################################################
@@ -216,13 +237,7 @@ data = dative, family = "binomial")
 par(mfrow=c(3,4),mar=c(5,5,1,1))
 plotLMER.fnc(dative.lmer, fun=plogis, addlines=TRUE)
 
-
-
 par(pars)
-
-
-
-
 
 
   }

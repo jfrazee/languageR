@@ -2,6 +2,7 @@
 function(pred, model, m, ylabel, fun, val, xlabel, mcmc, ...) {
    
 
+
   ###############################################################################
   # we first figure out whether we are dealing with a polynomial predictor, or
   # perhaps a restricted cubic spline
@@ -58,7 +59,7 @@ function(pred, model, m, ylabel, fun, val, xlabel, mcmc, ...) {
         vals = m %*% as.numeric(fixef(model))
         # if necessary apply transformation to expected values
         vals = transforming.fnc(vals, fun)
-        if (!is.na(mcmc[1])) {
+        if (!is.na(mcmc[[1]][1])) {
           dfr = cbind(data.frame(X=m[,pred], Y = vals),
                     addMCMCci.fnc(mcmcM=mcmc, model, m, fun, pred))
         } else {
@@ -93,7 +94,7 @@ function(pred, model, m, ylabel, fun, val, xlabel, mcmc, ...) {
         # and transform expected values if so desired
         vals = transforming.fnc(vals,fun)
         x = 1:nrow(m)
-        if (!is.na(mcmc[1])) {
+        if (!is.na(mcmc[[1]][1])) {
           dfr = cbind(data.frame(X=x, Y = vals),
                 addMCMCci.fnc(mcmcM=mcmc, model, m, fun, pred=factnames[i],factor=TRUE))
         } else {
@@ -198,8 +199,10 @@ function(pred, model, m, ylabel, fun, val, xlabel, mcmc, ...) {
         }
         vec = rep(name1, knots-1)
         vec[2] = paste(vec[1], "'", sep="")
-        for (i in 3:(knots-1)) {
-          vec[i] = paste(vec[i-1], "'", sep="")
+        if (knots > 3) {
+          for (i in 3:(knots-1)) {
+            vec[i] = paste(vec[i-1], "'", sep="")
+          }
         }
         mtmp = unique(X[,vec])
         if (nrow(mtmp) <= nrow(m)) {
@@ -217,9 +220,9 @@ function(pred, model, m, ylabel, fun, val, xlabel, mcmc, ...) {
       vals = m %*% as.numeric(fixef(model))
       # and transform the expected values if necessary
       vals = transforming.fnc(vals, fun)
-      if (!is.na(mcmc[1])) {
+      if (!is.na(mcmc[[1]][1])) {
         dfr = cbind(data.frame(X=m[,vec[1]], Y = vals),
-                  addMCMCci.fnc(mcmcM=as.matrix(mcmc), model, m, fun, pred, predname=name1))
+                  addMCMCci.fnc(mcmcM=mcmc, model, m, fun, pred, predname=name1))
       } else {
         dfr = data.frame(X=m[,vec[1]], Y = vals)
       }
