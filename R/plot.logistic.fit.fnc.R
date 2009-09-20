@@ -18,6 +18,7 @@ function(x, data, method = "cut", where = seq(0, 1, by=0.1), scalesize=NA, ...) 
     classes = cut2(probs, where, levels.mean = TRUE)
     classCounts = table(classes)
     means = tapply(as.numeric(data[,depvar])-1, classes, mean)
+    means = means[!is.na(means)]
   } else {
     if (method == "shingle") {
       sh = equal.count(probs)

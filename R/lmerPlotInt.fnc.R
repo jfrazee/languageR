@@ -1,12 +1,22 @@
 lmerPlotInt.fnc = function(lmermodel, xname, yname, intxyname, 
 qntls=seq(0,1,by=0.1), view = 30, addStdError = FALSE, ndigits=2,
-  nlev=30, which="matplot", shadow = 0.5, colour = "lightblue"){
+  nlev=30, which="matplot", shadow = 0.5, colour = "lightblue", fun=NA, ylabel=NA, ...){
 
   require("lme4", quietly = TRUE, character = TRUE)
 
   if (!(is(lmermodel, "lmer") | is(lmermodel, "mer") | is(lmermodel, "glmer")))
     stop("model object must be fitted with lmer")
   f <- function(x,y) {return(intercept + slopeX*x + slopeY*y + interactionxy*x*y)}
+
+  if (!is.function(fun)) {
+     if (!is.na(fun)) {
+       stop("fun should be a function (not the name of a function)\n")
+     } else {
+       fun = function(v) return (v)
+     }
+  } 
+ 
+
 
   coefs = fixef(lmermodel)
   intercept = coefs["(Intercept)"]
@@ -48,12 +58,17 @@ qntls=seq(0,1,by=0.1), view = 30, addStdError = FALSE, ndigits=2,
   } 
   if ((which == "matplot") | (which == "all")) {
     offset = (max(x)-min(x))/5
-    matplot(x, z, xlab=xname,type="l",ylab=as.character(formula(lmermodel))[2],
-       xlim=c(min(x), max(x)+offset))
+    if (is.function(fun))  z = fun(z)
+      ylbl = as.character(formula(lmermodel))[2]
+      if (!is.na(ylabel)) ylbl = ylabel
+    matplot(x, z, xlab=xname,type="l",ylab=ylbl,
+       xlim=c(min(x), max(x)+offset),...)
     x1 = rep(x[length(x)],length(y))
     y1 = f(x1, y)
+    if (is.function(fun)) y1 = fun(y1)
     if (which == "all") text(x1+offset, y1, round(y,ndigits), adj=+0.8, cex=0.8) 
-    else  text(x1+offset, y1, round(y,ndigits), adj=+0.8, cex=0.7)
+    else text(x1+offset, y1, round(y,ndigits), adj=+0.8, cex=0.7)
+    mtext(yname,4, line=1,adj=0,cex=0.8)
   }
   if ((which == "image") | (which == "all")) {
     image(x, y, z, col = heat.colors(10))

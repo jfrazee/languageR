@@ -18,12 +18,12 @@ shadenormal.fnc(qnts = c(0.025, 0.975))
 	Type \code{shadenormal.fnc} to see the code.  The polygon() function used for
 	the shaded areas takes a sequence of X and Y coordinates, connects the
 	corresponding points, and fills the area(s) enclosed with a specified color.
-	To understand the use of {\tt polygon()}, one can best think of making a
+	To understand the use of polygon(), one can best think of making a
 	polygon with a set of pins, a thread, and a board.  Outline the polygon by
 	placing the pins on the board at the corners of the polygon. First fasten the
 	thread to one of the pins, then connect the thread to the second pin, from
 	there to the third pin, and so on, until the first pin has been reached.
-	What {\tt polygon()} requires as input is a vector of the X-coordinates of
+	What polygon() requires as input is a vector of the X-coordinates of
 	the pins, and a vector of their Y-coordinates.  These coordinates should be
 	in exactly the order in which the thread is to be connected from pin to pin.  
 

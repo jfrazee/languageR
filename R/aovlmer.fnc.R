@@ -10,10 +10,16 @@ aovlmer.fnc <- function(object, mcmc, which, noMCMC = FALSE, ...) {
   nobs  = nrow(object@frame)
   ncoef = nrow(sumry@coefs)
  
-  anov   = anova(object)
-  anov$F = anov[,"Mean Sq"]/attr(sumry,"sigma")^2
-  anov$Df2 = nobs-ncoef
-  anov$p = 1-pf(anov$F, anov$Df, anov$Df2)
+  options(show.error.messages=F)
+  anov = try(anova(object))
+  options(show.error.messages=T)
+  if (class(anov) != "try-error") {
+    anov$F = anov[,"Mean Sq"]/attr(sumry,"sigma")^2
+    anov$Df2 = nobs-ncoef
+    anov$p = 1-pf(anov$F, anov$Df, anov$Df2)
+  } else {
+    anov = "anova function failed"
+  }
 
 	if (noMCMC) {
 		return(anov)

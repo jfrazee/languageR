@@ -7,7 +7,7 @@ fitted with lmer}
  numeric predictors.
 }
 \usage{
-lmerPlotInt.fnc(lmermodel, xname, yname, intxyname, qntls = seq(0, 1, by = 0.1), view = 30, addStdError = FALSE, ndigits = 2, nlev = 30, which = "matplot", shadow = 0.5, colour = "lightblue")
+lmerPlotInt.fnc(lmermodel, xname, yname, intxyname, qntls = seq(0, 1, by = 0.1), view = 30, addStdError = FALSE, ndigits = 2, nlev = 30, which = "matplot", shadow = 0.5, colour = "lightblue", fun  = NA, ylabel = NA, ...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -24,6 +24,10 @@ lmerPlotInt.fnc(lmermodel, xname, yname, intxyname, qntls = seq(0, 1, by = 0.1),
 	 and "all", in which case a 2 by 2 panel is shown with all four plots}
   \item{shadow}{the amount of \code{shade} for the perspective plot}
   \item{colour}{the color used for the perspective plot, defaults to "lightblue"}
+  \item{fun}{for matplot displays, a function for transforming the predicted
+    response}
+  \item{ylabel}{string, to be added to the Y-axis as y label}
+  \item{...}{other arguments}
 }
 \value{
   A plot is shown on the graphics device.

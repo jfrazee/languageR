@@ -8,7 +8,7 @@
 \usage{
 plotAll.fnc(reslist, sameYrange = TRUE, ylabel, xlabel = NA, intrName = NA, 
   pos = "end", ylimit = NA, addlines=FALSE, cexsize = 0.6, conditioningVals=NA,
-  conditioningColors=1, conditioningLines=1, ...)
+  conditioningColors=1, conditioningLines=1, lineColor=1, ...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -31,6 +31,7 @@ plotAll.fnc(reslist, sameYrange = TRUE, ylabel, xlabel = NA, intrName = NA,
   \item{conditioningLines}{ vector of names of the line types to be used
     for the levels of the conditioning factor in the interaction (the 
     factor with different lines in the plot), by default solid lines }
+  \item{lineColor}{ name of color to be used for the lines in the plot}
   \item{...}{ further graphical parameters to be passed down, none are currently implemented}
 }
 \details{

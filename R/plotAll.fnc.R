@@ -1,9 +1,9 @@
 `plotAll.fnc` <-
 function(reslist, sameYrange=TRUE, ylabel, xlabel=NA, intrName=NA, pos="end", 
   ylimit=NA, addlines=FALSE, cexsize = 0.6, conditioningVals=NA, 
-  conditioningColors=1, conditioningLines=1, ...) {
+  conditioningColors=1, conditioningLines=1, lineColor=1, ...) {
 
-   if (length(conditioningColors)==1) conditioningColors = rep(1, 1000)   # 1000 should be more than enough
+   if (length(conditioningColors)==1) conditioningColors = rep(lineColor, 1000)  # 1000 should be more than enough
    if (length(conditioningLines)==1) conditioningLines = rep(1, 1000)   # 1000 should be more than enough
 
    if (sameYrange) {
@@ -70,7 +70,7 @@ function(reslist, sameYrange=TRUE, ylabel, xlabel=NA, intrName=NA, pos="end",
          xlab=xlabl, ylab=ylabel, xaxt="n", col=conditioningColors[1], ...)
        } else {
          plot(lst$X, lst$Y, ylim=ylimit, type="p", pch=21, xlim=xlimit,
-         xlab=xlabl, ylab=ylabel, xaxt="n", ...)
+         xlab=xlabl, ylab=ylabel, xaxt="n", col=lineColor, ...)
        }
        mtext(lst$Levels, at=lst$X, side=1, line=1, cex=cexsize, ...)
        if (n > 1) {

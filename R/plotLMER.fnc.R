@@ -1,9 +1,10 @@
 `plotLMER.fnc` <-
 function(model, 
    xlabel = NA,     # label for X axis, if other than column name
-   xlabs = NA,      # vector of xlabels for multipanel plot
-   ylabel=NA,       # label for Y axis, if other than dependent variable name
-   ylimit=NA,       # ylimit to be set for plot or all subplots
+   xlabs  = NA,     # vector of xlabels for multipanel plot
+   ylabel = NA,     # label for Y axis, if other than dependent variable name
+   ylimit = NA,     # ylimit to be set for plot or all subplots
+   ilabel = NA,     # if not NA, then this will be the label for the interaction on side=3
    fun=NA,          # transform predicted values using function fun; if specified, 
                     # fun should be a function object, not the name (string) for the function
                     # for binomial models, fun is taken to be plogis by default
@@ -25,6 +26,7 @@ function(model,
    addlines=FALSE,  # for interaction plots for two factors, add lines to plot
    withList=FALSE,  # if true, a list with data frames for the individual panels is produced
    cexsize=0.5,     # the character expansion for text in plots for interactions
+   linecolor=1,     # the color for the lines in the display, by default black
    ...) {           # further graphical parameters
 
 
@@ -149,7 +151,7 @@ function(model,
 
    for (i in 1:length(predictors)) {
 
-     cat("preparing panel for", predictors[i], "\n")
+     # cat("preparing panel for", predictors[i], "\n")
      if (length(predictors) == 1) xlabelShow = xlabel
      else {
        if (!is.na(xlabs[1])) {
@@ -229,9 +231,15 @@ function(model,
    }
    names(plots) = predictors
 
-   plotAll.fnc(plots, sameYrange=lockYlim, ylabel, xlabel = xlabelShow, intrName=conditioningPred, 
+   if (!is.na(ilabel)) {
+      intrName = ilabel
+   } else {
+      intrName = conditioningPred
+   }
+   plotAll.fnc(plots, sameYrange=lockYlim, ylabel, xlabel = xlabelShow, intrName=intrName, 
    pos=conditioningPos, ylimit=ylimit, addlines=addlines, cexsize = cexsize, 
-   conditioningVals=conditioningVals, conditioningColors = colors, conditioningLines=lineTypes, ...)
+   conditioningVals=conditioningVals, conditioningColors = colors, conditioningLines=lineTypes, 
+   lineColor=linecolor, ...)
 
    if (withList) return(plots)
 

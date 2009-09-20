@@ -33,9 +33,9 @@ common misconceptions and alternative solutions,
 data(latinsquare)
 library(lme4)
 latinsquare.with = 
-   simulate.latinsquare.fnc(latinsquare, nruns = 1000, with = TRUE) 
+   simulateLatinsquare.fnc(latinsquare, nruns = 1000, with = TRUE) 
 latinsquare.without = 
-   simulate.latinsquare.fnc(latinsquare, nruns = 1000, with = FALSE)
+   simulateLatinsquare.fnc(latinsquare, nruns = 1000, with = FALSE)
 latinsquare.with$alpha05
 latinsquare.without$alpha05
 }}

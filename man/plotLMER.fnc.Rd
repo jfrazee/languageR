@@ -7,9 +7,9 @@
   intervals can be added.
 }
 \usage{
-plotLMER.fnc(model, xlabel = NA, xlabs = NA, ylabel = NA, ylimit = NA, 
+plotLMER.fnc(model, xlabel = NA, xlabs = NA, ylabel = NA, ylimit = NA, ilabel = NA, 
    fun = NA, pred = NA, n = 100, intr = NA, mcmcMat = NA, lockYlim = TRUE, 
-   addlines = FALSE, withList = FALSE, cexsize = 0.5, ...)
+   addlines = FALSE, withList = FALSE, cexsize = 0.5, linecolor = 1, ...)
 }
 \arguments{
   \item{model}{ a \code{mer} model object }
@@ -22,6 +22,7 @@ plotLMER.fnc(model, xlabel = NA, xlabs = NA, ylabel = NA, ylimit = NA,
     the dependent variable in the original model formula) }
   \item{ylimit}{ range for vertical axis; if not specified, this range will 
     be chosen such that all data points across all subplots, including HPD intervals, will be accommodated }
+  \item{ilabel}{ label for the interaction shown in the lower right-hand margin of the plot, overriding the original variable name in the model formula}
   \item{fun}{ a function to be applied for transforming the dependent variable, 
     if \code{NA}, no transformation is applied; for models with \code{family = "binomial"}, 
       fun is set to \code{plogis} by default; this can be disabled by setting
@@ -52,6 +53,7 @@ plotLMER.fnc(model, xlabel = NA, xlabs = NA, ylabel = NA, ylimit = NA,
   frames for the subplots}
   \item{cexsize}{ character expansion size (cex) for additional information in
   the plot for interactions}
+  \item{linecolor}{ color of lines in the plot, by default set to 1 (black) }
   \item{...}{ further graphical parameters to be passed down; warning: \code{col}, 
   \code{pch}, \code{lty} and \code{cex} will often generate an error as they are 
   internally already fully specified for specialized subplots}
