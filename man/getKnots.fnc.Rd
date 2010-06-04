@@ -19,7 +19,7 @@ getKnots.fnc(colnms, xlb)
 \value{
   an integer (number of knots)
 }
-\references{ ~put references to the literature/web site here ~ }
+%\references{ ~put references to the literature/web site here ~ }
 \author{R. H. Baayen}
 \note{ 
   not intended for independent use

@@ -16,7 +16,7 @@ implementInteractions.fnc(m)
 \value{
   an updated (model) matrix
 }
-\references{ ~put references to the literature/web site here ~ }
+%\references{ ~put references to the literature/web site here ~ }
 \author{R. H. Baayen}
 \note{not intended for independent use}
 \seealso{\code{\link{plotLMER.fnc}}}

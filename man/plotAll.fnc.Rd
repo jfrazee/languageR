@@ -8,7 +8,7 @@
 \usage{
 plotAll.fnc(reslist, sameYrange = TRUE, ylabel, xlabel = NA, intrName = NA, 
   pos = "end", ylimit = NA, addlines=FALSE, cexsize = 0.6, conditioningVals=NA,
-  conditioningColors=1, conditioningLines=1, lineColor=1, ...)
+  conditioningColors=1, conditioningLines=1, lineColor=1, addToExistingPlot = FALSE, ...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -32,6 +32,7 @@ plotAll.fnc(reslist, sameYrange = TRUE, ylabel, xlabel = NA, intrName = NA,
     for the levels of the conditioning factor in the interaction (the 
     factor with different lines in the plot), by default solid lines }
   \item{lineColor}{ name of color to be used for the lines in the plot}
+  \item{addToExistingPlot}{ if TRUE, the current plot is added to an already existing plot}
   \item{...}{ further graphical parameters to be passed down, none are currently implemented}
 }
 \details{
@@ -40,7 +41,7 @@ plotAll.fnc(reslist, sameYrange = TRUE, ylabel, xlabel = NA, intrName = NA,
 \value{
   A plot is produced on the graphics device.
 }
-\references{ ~put references to the literature/web site here ~ }
+%\references{ ~put references to the literature/web site here ~ }
 \author{R. H. Baayen}
 \note{
  not intended for independent use

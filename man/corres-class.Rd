@@ -10,7 +10,7 @@ Objects can be created by calls of the form \code{new("corres", ...)}.
 }
 \section{Slots}{
 	 \describe{
-    \item{\code{data}:}{Object of class \code{"list"} ~~ }
+    \item{\code{data}:}{Object of class \code{"list"}}
   }
 }
 \section{Methods}{

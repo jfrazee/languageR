@@ -16,7 +16,7 @@ getRoot.fnc(xlabel)
 \value{
   a character string (simple name of predictor)
 }
-\references{ ~put references to the literature/web site here ~ }
+%\references{ ~put references to the literature/web site here ~ }
 \author{R. H. Baayen}
 \note{ 
   not intended for independent use

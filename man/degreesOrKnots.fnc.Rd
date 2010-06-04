@@ -17,7 +17,7 @@ degreesOrKnots.fnc(name)
 \value{
   Returns an integer for degrees or knots
 }
-\references{ ~put references to the literature/web site here ~ }
+%\references{None.}
 \author{R. H. Baayen}
 \note{ 
   not intended for independent use

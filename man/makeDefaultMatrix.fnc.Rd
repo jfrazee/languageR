@@ -5,13 +5,14 @@
   Creates a model matrix with main effects only
 }
 \usage{
-makeDefaultMatrix.fnc(model, n = 100, conditioningPred = "", conditioningValue = NULL)
+makeDefaultMatrix.fnc(model, n = 100, conditioningPred = "", conditioningValue = NULL, control = NA)
 }
 \arguments{
   \item{model}{A model fit with \code{lmer}}
   \item{n}{integer specifying number of points to be plotted on X-axis}
   \item{conditioningPred}{name of predictor entering into interaction}
   \item{conditioningValue}{vector of values (numeric or factor level names) to be shown for interaction }
+  \item{control}{a two-element list (predictor, value) specifying an additional predictor to be fixed to the given value in a partial effect plot. May be useful for hand-made plots for three-way interactions.}
 }
 \details{
   not intended for independent use
@@ -19,7 +20,7 @@ makeDefaultMatrix.fnc(model, n = 100, conditioningPred = "", conditioningValue =
 \value{
   a (model) matrix
 }
-\references{ ~put references to the literature/web site here ~ }
+%\references{ ~put references to the literature/web site here ~ }
 \author{R. H. Baayen}
 \note{ 
   not intended for independent use

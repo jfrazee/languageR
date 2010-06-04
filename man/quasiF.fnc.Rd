@@ -28,7 +28,7 @@ quasiF.fnc(ms1, ms2, ms3, ms4, df1, df2, df3, df4)
   \item{p}{p-value.}
 }
 \author{R. H. Baayen}
-\seealso{ ~~objects to See Also as \code{\link{quasiFsim.fnc}}.}
+\seealso{See Also as \code{\link{quasiFsim.fnc}}.}
 \examples{
   data(quasif)
 

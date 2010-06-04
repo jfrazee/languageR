@@ -1,5 +1,5 @@
 `preparePredictor.fnc` <-
-function(pred, model, m, ylabel, fun, val, xlabel, mcmc, ...) {
+function(pred, model, m, ylabel, fun, val, xlabel, mcmc, ranefs, ...) {
    
 
 
@@ -48,6 +48,17 @@ function(pred, model, m, ylabel, fun, val, xlabel, mcmc, ...) {
   #  and later (else) handle the polynomial case
   ###############################################################################
 
+  fixefs = fixef(model) 
+  if (!is.na(ranefs[[1]])) {
+     nm = as.vector(ranefs[[4]])
+     if (nm %in% names(fixefs)) {
+       blup = ranef(model)[[ranefs[[1]]]][ranefs[[2]],ranefs[[3]]]
+       fixefs[nm] = fixefs[nm]+blup
+       fixefs = as.numeric(fixefs)
+     } else 
+       stop(paste(nm, "is not a valid predictor name, check 'fixef(model)'\n", sep=" "))
+  }
+
   if ((pred %in% colnames(model@frame)) & polynomial==FALSE & rcspline==FALSE) {
     if (is.numeric(model@frame[,pred])) {
       # oke, so this is a numeric predictor
@@ -56,7 +67,7 @@ function(pred, model, m, ylabel, fun, val, xlabel, mcmc, ...) {
         # adjust m so that interactions are now properly represented in the columns of m
         m = implementInteractions.fnc(m)
         # calculate predicted values
-        vals = m %*% as.numeric(fixef(model))
+        vals = m %*% fixefs
         # if necessary apply transformation to expected values
         vals = transforming.fnc(vals, fun)
         if (!is.na(mcmc[[1]][1])) {
@@ -91,7 +102,7 @@ function(pred, model, m, ylabel, fun, val, xlabel, mcmc, ...) {
         # and then implement the proper interactions in the model matrix
         m = implementInteractions.fnc(m)
         # calculate the expected values
-        vals = m %*% as.numeric(fixef(model))
+        vals = m %*% fixefs
         # and transform expected values if so desired
         vals = transforming.fnc(vals,fun)
         x = 1:nrow(m)
@@ -218,7 +229,7 @@ function(pred, model, m, ylabel, fun, val, xlabel, mcmc, ...) {
       # make sure the consequences for interactions are taken into account
       m = implementInteractions.fnc(m)
       # calculate expected values
-      vals = m %*% as.numeric(fixef(model))
+      vals = m %*% fixefs
       # and transform the expected values if necessary
       vals = transforming.fnc(vals, fun)
       if (!is.na(mcmc[[1]][1])) {

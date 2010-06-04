@@ -19,7 +19,7 @@ getPos.fnc(vec, pos)
 \value{
   an integer specifying position in vector for X and Y values in plot
 }
-\references{ ~put references to the literature/web site here ~ }
+%\references{ ~put references to the literature/web site here ~ }
 \author{R. H. Baayen}
 \note{
 not indended for independent use

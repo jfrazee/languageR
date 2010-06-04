@@ -9,6 +9,8 @@ function(model,
                     # fun should be a function object, not the name (string) for the function
                     # for binomial models, fun is taken to be plogis by default
    pred=NA,         # if not NA, single plot will be produced for pred
+   control = NA,    # if not NA,  list(predictor, val) for further control of the plot of the partial effect for pred
+   ranefs = NA,     # if not NA,  list(group, level, predictor, predname2) for plotting curve for specific subject, item, ...
    n=100,           # number of points on X-axis for numerical predictors
    intr=NA,         # a list specifying an interaction, with as
                     # obligatory arguments the name of the interaction variable,
@@ -27,6 +29,8 @@ function(model,
    withList=FALSE,  # if true, a list with data frames for the individual panels is produced
    cexsize=0.5,     # the character expansion for text in plots for interactions
    linecolor=1,     # the color for the lines in the display, by default black
+   addToExistingPlot = FALSE,  # if TRUE, plot will be added to previous plot, but only if pred is specified
+   verbose = TRUE,  # provide information on stdout
    ...) {           # further graphical parameters
 
 
@@ -74,10 +78,11 @@ function(model,
          (length(grep("binomial", as.character(model@call))) == 1)) {
        if (!is.function(fun)) {
          fun = plogis
-         cat("log odds are back-transformed to probabilities\n")
+         if (verbose == TRUE) cat("log odds are back-transformed to probabilities\n")
        }
    }
 
+   if (is.na(pred)) addToExistingPlot = FALSE
 
    ###############################################################################
    # define variables for displaying interactions
@@ -112,12 +117,25 @@ function(model,
      # user-specified ylimits override limits calculated from data
    }
 
+   if (!is.na(control[[1]])) {
+     if (!((length(control) == 2) & is.list(control))) {
+       stop("control should be a two-element list\n")
+     }
+   }
+
+   if (is.na(mcmcMat[[1]])) {
+     if (!is.na(ranefs[[1]])) {
+       if (!((length(ranefs) == 4) & is.list(ranefs))) {
+         stop("ranefs should be a four-element list\n")
+       }
+     }
+   }
 
    ###############################################################################
    # set label for Y-axis  (taken by default from model formula)
    ###############################################################################
 
-   if (is.na(ylabel)) ylabel = as.character(model@call[2]$formula)[2]
+   if (is.na(ylabel)) ylabel = as.character(eval(model@call[2]$formula))[2]
 
    ###############################################################################
    # check for multiple predictors for multiple subplots
@@ -127,7 +145,7 @@ function(model,
                         # in the model
      predictors = colnames(model@frame)
      ranefnames=unique(names(ranef(model)))
-     depvar = as.character(model@call[2]$formula)[2]
+     depvar = as.character(eval(model@call[2]$formula))[2]
      # predictors for random intercepts are also listed in the model frame, so
      # we have to restrict the predictors to those up to the first random effect name
      predictors = predictors[1: (which(predictors==ranefnames[1])-1)]
@@ -193,26 +211,32 @@ function(model,
        # given by val
        ###############################################################################
        val = conditioningVals[1]
-       cat(" preparing interaction for ", conditioningPred, " = ", val, "\n")
-       m = makeDefaultMatrix.fnc(model, n, conditioningPred, val)
+       m = makeDefaultMatrix.fnc(model, n, conditioningPred, val, control)
        #----------------------------------------------------------------------------
        # note: the matrix is upgraded within preparePredictor.fnc for the interactions
        #----------------------------------------------------------------------------
        subplots = list()
        dfr = preparePredictor.fnc(predictors[i], model, m, ylabel, fun, 
-         val, xlabel=xlabel, mcmc=mcmcMat, lty=1, col=0, ...)
+         val, xlabel=xlabel, mcmc=mcmcMat, ranefs, lty=1, col=0, ...)
        subplots[[1]] = dfr
+       if (verbose==TRUE) {
+         cat("effect sizes (ranges) for the interaction of ", 
+           predictors[i], " and ", conditioningPred, ":\n")
+         cat("   ", conditioningPred, " = ", val, ": ", max(dfr$Y)-min(dfr$Y), "\n")
+       }
        #----------------------------------------------------------------------------
        # finally loop over the different values of the interacting predictor, either
        # the factor levels or the numerical values (often quantiles)
        #----------------------------------------------------------------------------
        for (j in 2:length(conditioningVals)) {
          val = conditioningVals[j]
-         cat(" preparing interaction for ", conditioningPred, " = ", val, "\n")
-         m = makeDefaultMatrix.fnc(model, n, conditioningPred, val)
+         m = makeDefaultMatrix.fnc(model, n, conditioningPred, val, control)
          dfr = preparePredictor.fnc(predictors[i], model, m, ylabel, fun, 
-           val,  mcmc=mcmcMat, lty=j, xlabel=xlabel, ...)
+           val,  mcmc=mcmcMat, ranefs, lty=j, xlabel=xlabel, ...)
          subplots[[j]] = dfr
+         if (verbose==TRUE) {
+           cat("   ", conditioningPred, " = ", val, ": ", max(dfr$Y)-min(dfr$Y), "\n")
+         }
        }
        plots[[i]] = subplots
      } else {  # a straightforward (sub)plot
@@ -222,11 +246,14 @@ function(model,
        # and interactions
        ###############################################################################
        lineTypes = 1
-       m = makeDefaultMatrix.fnc(model, n, "", NULL)
+       m = makeDefaultMatrix.fnc(model, n, "", NULL, control)
        # and make the plot
        dfr = preparePredictor.fnc(predictors[i], model, m, ylabel, fun, 
-         val=NA, xlabel=xlabel, mcmc=mcmcMat, ...)
+         val=NA, xlabel=xlabel, mcmc=mcmcMat, ranefs, ...)
        plots[[i]] = dfr
+       if (verbose==TRUE) {
+         cat("effect size (range) for ", predictors[i], "is ", max(dfr$Y)-min(dfr$Y), "\n")
+       }
      }
    }
    names(plots) = predictors
@@ -239,7 +266,7 @@ function(model,
    plotAll.fnc(plots, sameYrange=lockYlim, ylabel, xlabel = xlabelShow, intrName=intrName, 
    pos=conditioningPos, ylimit=ylimit, addlines=addlines, cexsize = cexsize, 
    conditioningVals=conditioningVals, conditioningColors = colors, conditioningLines=lineTypes, 
-   lineColor=linecolor, ...)
+   lineColor=linecolor, addToExistingPlot, ...)
 
    if (withList) return(plots)
 

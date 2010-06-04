@@ -1,7 +1,8 @@
 `plotAll.fnc` <-
 function(reslist, sameYrange=TRUE, ylabel, xlabel=NA, intrName=NA, pos="end", 
   ylimit=NA, addlines=FALSE, cexsize = 0.6, conditioningVals=NA, 
-  conditioningColors=1, conditioningLines=1, lineColor=1, ...) {
+  conditioningColors=1, conditioningLines=1, lineColor=1, 
+  addToExistingPlot = FALSE, ...) {
 
    if (length(conditioningColors)==1) conditioningColors = rep(lineColor, 1000)  # 1000 should be more than enough
    if (length(conditioningLines)==1) conditioningLines = rep(1, 1000)   # 1000 should be more than enough
@@ -38,10 +39,15 @@ function(reslist, sameYrange=TRUE, ylabel, xlabel=NA, intrName=NA, pos="end",
        } else {
          xlabl = xlabel[i]
        }
-       plot(lst$X, lst$Y, ylim=ylimit, type="l", 
-         col = conditioningColors[1],
-         lty = conditioningLines[1],
-         xlab=xlabl, ylab=ylabel, ...)
+       if (!addToExistingPlot) {
+         plot(lst$X, lst$Y, ylim=ylimit, type="l", 
+           col = conditioningColors[1],
+           lty = conditioningLines[1],
+           xlab=xlabl, ylab=ylabel, ...)
+       } else {
+         lines(lst$X, lst$Y,  col = conditioningColors[1],
+           lty = conditioningLines[1], ...)
+       }
        if ("lower" %in% colnames(lst)) {
          lines(lst$X, lst$lower, lty=2, col = conditioningColors[1], ...)
          lines(lst$X, lst$upper, lty=2, col = conditioningColors[1], ...)
@@ -66,11 +72,19 @@ function(reslist, sameYrange=TRUE, ylabel, xlabel=NA, intrName=NA, pos="end",
        }
 
        if (addlines) {
-         plot(lst$X, lst$Y, ylim=ylimit, type="b", pch=21, xlim=xlimit,
-         xlab=xlabl, ylab=ylabel, xaxt="n", col=conditioningColors[1], ...)
+         if (!addToExistingPlot) {
+           plot(lst$X, lst$Y, ylim=ylimit, type="b", pch=21, xlim=xlimit,
+           xlab=xlabl, ylab=ylabel, xaxt="n", col=conditioningColors[1], ...)
+         } else {
+           lines(lst$X, lst$Y, type="b", pch=21, col=conditioningColors[1], ...)
+         }
        } else {
-         plot(lst$X, lst$Y, ylim=ylimit, type="p", pch=21, xlim=xlimit,
-         xlab=xlabl, ylab=ylabel, xaxt="n", col=lineColor, ...)
+         if (!addToExistingPlot) {
+           plot(lst$X, lst$Y, ylim=ylimit, type="p", pch=21, xlim=xlimit,
+           xlab=xlabl, ylab=ylabel, xaxt="n", col=lineColor, ...)
+         } else {
+           points(lst$X, lst$Y, pch=21, col=conditioningColors[1], ...)
+         }
        }
        mtext(lst$Levels, at=lst$X, side=1, line=1, cex=cexsize, ...)
        if (n > 1) {

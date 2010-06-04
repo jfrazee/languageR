@@ -27,12 +27,11 @@ addMCMCci.fnc(mcmcM, model, m, fun, pred, predname = NA, factor = FALSE)
   \item{lower}{lower bound 95\% prediction interval}
   \item{upper}{upper bound of 95\% prediction interval}
 }
-\references{ ~put references to the literature/web site here ~ }
 \author{R. H. Baayen}
 \note{Under development}
 \examples{
 \dontrun{
-  not intended for independent use.
+  Not intended for independent use.
 }
 }
 \seealso{See Also as \code{\link{plotLMER.fnc}}}

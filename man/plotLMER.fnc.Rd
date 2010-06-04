@@ -7,9 +7,11 @@
   intervals can be added.
 }
 \usage{
-plotLMER.fnc(model, xlabel = NA, xlabs = NA, ylabel = NA, ylimit = NA, ilabel = NA, 
-   fun = NA, pred = NA, n = 100, intr = NA, mcmcMat = NA, lockYlim = TRUE, 
-   addlines = FALSE, withList = FALSE, cexsize = 0.5, linecolor = 1, ...)
+plotLMER.fnc(model, xlabel = NA, xlabs = NA, ylabel = NA, ylimit = NA, 
+   ilabel = NA, fun = NA, pred = NA, control = NA, ranefs = NA, n = 100, 
+   intr = NA, mcmcMat = NA, lockYlim = TRUE, addlines = FALSE, 
+   withList = FALSE, cexsize = 0.5, linecolor = 1, addToExistingPlot = FALSE, 
+   verbose = TRUE, ...)
 }
 \arguments{
   \item{model}{ a \code{mer} model object }
@@ -30,6 +32,8 @@ plotLMER.fnc(model, xlabel = NA, xlabs = NA, ylabel = NA, ylimit = NA, ilabel = 
   \item{pred}{ character string with name of predictor; 
     if specified, a single plot will produced for the partial effect of this
     specific predictor}
+  \item{control}{ a two-element list \code{list(predictor, val)} specifying a \code{predictor} the value of which has to be set to \code{val} in the partial effect plot(s); the predictor name should be exactly as specified in \code{names(model@fixef)}.  It is up to the user to make sure that name and value make sense, the code here hands full 'control' to the user.} 
+  \item{ranefs}{a four-element list \code{Group, Level, Predictor}, specifying a random-effect Group (e.g. \code{Subject}), a level (e.g., \code{S10}) and a value (e.g., \code{LogFrequency}) for which partial effects have to be calibrated; implemented only for \code{mcmcMat=NA}.}
   \item{n}{ integer denoting number of points for the plot, chosen at equally
     spaced intervals across the empirical range of the predictor variable }
   \item{intr}{ a list specifying an interaction to be graphed; obligatory
@@ -54,6 +58,8 @@ plotLMER.fnc(model, xlabel = NA, xlabs = NA, ylabel = NA, ylimit = NA, ilabel = 
   \item{cexsize}{ character expansion size (cex) for additional information in
   the plot for interactions}
   \item{linecolor}{ color of lines in the plot, by default set to 1 (black) }
+  \item{addToExistingPlot}{ default FALSE, if set to TRUE, plot will be added to previous plot, but only if pred is specified}
+  \item{verbose}{ if TRUE (default), effect sizes and default transformations are reported}
   \item{...}{ further graphical parameters to be passed down; warning: \code{col}, 
   \code{pch}, \code{lty} and \code{cex} will often generate an error as they are 
   internally already fully specified for specialized subplots}
@@ -174,47 +180,76 @@ subset=abs(scale(resid(danish.lmer)))<2.5)
 mcmc = pvals.fnc(danish.lmerA, nsim=10000, withMCMC=TRUE)
 mcmc$fixed[,1:5]
 
-# this model has a significant three-way interaction
-# for visualization, we split the data by the sex of the subject
-
-males = danish[abs(scale(resid(danish.lmer)))<2.5 & danish$Sex=="M",]
-females = danish[abs(scale(resid(danish.lmer)))<2.5 & danish$Sex=="F",]
-
-# we now fit individual models to these subsets of the data
-
-males.lmer = lmer(LogRT ~ PC1 + PC2 + PrevError + Rank +
-ResidSemRating + ResidFamSize + LogWordFreq*LogAffixFreq +  
-poly(LogCUP, 2, raw=TRUE) + LogUP + LogCUPtoEnd + 
-(1|Subject) + (1|Word) + (1|Affix), data = males)
-females.lmer = lmer(LogRT ~ PC1 + PC2 + PrevError + Rank +
-ResidSemRating + ResidFamSize + LogWordFreq*LogAffixFreq +  
-poly(LogCUP, 2, raw=TRUE) + LogUP + LogCUPtoEnd + 
-(1|Subject) + (1|Word) + (1|Affix), data = females)
-femMCMC = pvals.fnc(females.lmer, nsim=500, withMCMC=TRUE, addPlot=FALSE)
-
-# for which we then plot the interaction 
-# of word frequency by affix frequency 
-
-par(mfrow=c(2,2),mar=c(5,5,2,2))
-plotLMER.fnc(females.lmer, pred = "LogAffixFreq", 
-intr=list("LogWordFreq", round(quantile(females$LogWordFreq),3), "beg",
+# plot for reference level of Sex
+plotLMER.fnc(danish.lmerA, pred = "LogAffixFreq", 
+intr=list("LogWordFreq", round(quantile(danish$LogWordFreq),3), "beg",
 list(c("red", "green", "blue", "yellow", "purple"), rep(1,5))), ylimit=c(6.5,7.0),
-mcmcMat=femMCMC$mcmc, xlabel = "log affix frequency", ylabel = "log RT auditory lexical decision")
-mtext("females", line=0.5, cex=0.8)
-plotLMER.fnc(males.lmer, pred = "LogAffixFreq", 
-intr=list("LogWordFreq", round(quantile(males$LogWordFreq),3), "beg",
-list(c("red", "green", "blue", "yellow", "purple"), 1:5)),
-ylimit=c(6.5,7.0))
-mtext("males", line=0.5, cex=0.8)
-plotLMER.fnc(females.lmer, pred = "LogWordFreq", 
-intr=list("LogAffixFreq", round(quantile(females$LogAffixFreq),3), "beg"),
-ylimit=c(6.5,7.0), cexsize=1.2)
-mtext("females", line=0.5, cex=0.8)
-plotLMER.fnc(males.lmer, pred = "LogWordFreq", 
-intr=list("LogAffixFreq", round(quantile(males$LogAffixFreq),3), "end"),
-ylimit=c(6.5,7.0), cexsize=1.0)
-mtext("males", line=0.5, cex=0.8)
+mcmcMat=mcmc$mcmc, xlabel = "log affix frequency", ylabel = "log RT auditory lexical decision")
+
+# this model has a significant three-way interaction
+# for visualization, we can either relevel Sex and refit,
+# or make use of the control option. First releveling:
+
+danish$Sex=relevel(danish$Sex, "F")
+danish.lmerF = lmer(LogRT ~ PC1 + PC2 + PrevError + Rank +
+  ResidSemRating + ResidFamSize + LogWordFreq*LogAffixFreq*Sex +  
+  poly(LogCUP, 2, raw=TRUE) + LogUP + LogCUPtoEnd + 
+  (1|Subject) + (1|Word) + (1|Affix), data = danish)
+danish$Sex=relevel(danish$Sex, "M")
+danish.lmerM = lmer(LogRT ~ PC1 + PC2 + PrevError + Rank +
+  ResidSemRating + ResidFamSize + LogWordFreq*LogAffixFreq*Sex +  
+  poly(LogCUP, 2, raw=TRUE) + LogUP + LogCUPtoEnd + 
+  (1|Subject) + (1|Word) + (1|Affix), data = danish)
+
+# Next preparing for using the control option:
+#
+# names(fixef(danish.lmer))[10]  # SexM
+# unique(danish.lmer@X[,10])     # 1 0
+
+par(mfrow=c(2,2))
+
+plotLMER.fnc(danish.lmer, pred="LogWordFreq", ylimit=c(6.5,7.0),
+intr=list("LogAffixFreq", quantile(danish$LogAffixFreq), "end"),
+control=list("SexM", 0))
+mtext("females", line=1.5, cex=0.9)
+
+plotLMER.fnc(danish.lmer, pred="LogWordFreq", ylimit=c(6.5,7.0),
+intr=list("LogAffixFreq", quantile(danish$LogAffixFreq), "end"),
+control=list("SexM", 1))
+mtext("males", line=1.5, cex=0.9)
+
+plotLMER.fnc(danish.lmerF, pred="LogWordFreq", ylimit=c(6.5,7.0), 
+intr=list("LogAffixFreq", quantile(danish$LogAffixFreq), "end"))
+mtext("females", line=1.5, cex=0.9)
+
+plotLMER.fnc(danish.lmerM, pred="LogWordFreq", ylimit=c(6.5, 7.0),
+intr=list("LogAffixFreq", quantile(danish$LogAffixFreq), "end"))
+mtext("males", line=1.5, cex=0.9)
+
 par(mfrow=c(1,1))
+
+#############################################################
+# calculating effect sizes, defined as max - min
+#############################################################
+
+# effect size for a covariate
+
+dfr = plotLMER.fnc(danish.lmerA, pred = "LogCUP", withList=TRUE)
+max(dfr$LogCUP$Y)-min(dfr$LogCUP$Y)
+
+# effect size for a factor
+
+dfr = plotLMER.fnc(danish.lmerA, pred = "PrevError", withList=TRUE)
+max(dfr$PrevError$Y)-min(dfr$PrevError$Y)
+
+
+# effect sizes for the quantiles in an interaction plot
+
+dfr = plotLMER.fnc(danish.lmerA, pred = "LogAffixFreq", 
+        withList=TRUE,
+        intr=list("LogWordFreq", round(quantile(danish$LogWordFreq),3), "beg"))
+
+unlist(lapply(dfr$LogAffixFreq, FUN=function(X)return(max(X$Y)-min(X$Y))))
 
 
 #############################################################

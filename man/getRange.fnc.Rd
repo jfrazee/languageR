@@ -17,7 +17,7 @@ getRange.fnc(lst)
 \value{
   \item{value}{a two-element vector specifying the range of values in \code{Y}}
 }
-\references{ ~put references to the literature/web site here ~ }
+%\references{ ~put references to the literature/web site here ~ }
 \author{R. H. Baayen}
 \note{
 not intended for separate use.

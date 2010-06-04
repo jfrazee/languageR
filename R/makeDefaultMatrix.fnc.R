@@ -1,7 +1,9 @@
 `makeDefaultMatrix.fnc` <-
 function(model, n = 100,  
   conditioningPred="", 
-  conditioningValue=NULL) {
+  conditioningValue=NULL,
+  control=NA) {
+
 
    coefs = fixef(model)
    ncoefs = length(coefs)
@@ -60,6 +62,17 @@ function(model, n = 100,
      }
    }
    colnames(m) = colnames(X)
+
+   
+   if (!is.na(control)[[1]]) {
+     controlPredName = as.vector(control[[1]])
+     if (!is.element(controlPredName, colnames(m))) {
+       stop(paste ("the control predictor name", controlPredName, "is not a valid column name\n", sep=" "))
+     } else {
+       m[,controlPredName] = rep(as.vector(control[[2]]), nrow(m))
+     }
+   }
+
    return(m)
 }
 

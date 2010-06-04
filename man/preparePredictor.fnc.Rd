@@ -6,7 +6,7 @@
   including upper and lower 95\% HPD intervals
 }
 \usage{
-preparePredictor.fnc(pred, model, m, ylabel, fun, val, xlabel, mcmc, ...)
+preparePredictor.fnc(pred, model, m, ylabel, fun, val, xlabel, mcmc, ranefs, ...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -18,11 +18,12 @@ preparePredictor.fnc(pred, model, m, ylabel, fun, val, xlabel, mcmc, ...)
   \item{val}{ value of interacting variable }
   \item{xlabel}{ label for horizontal axis }
   \item{mcmc}{ MCMC matrix as produced by \code{mcmcsamp} or \code{pvals.fnc()$mcmc}}
+  \item{ranefs}{ a three-element list \code{Group, Level, Predictor}, specifying a random-effect Group (e.g. \code{Subject}), a level (e.g., \code{S10}) and a value (e.g., \code{LogFrequency}) for which partial effects have to be calibrated; implemented only for \code{mcmcMat=NA}.}
   \item{\dots}{ further graphical parameters, currently not implemented }
 }
-\details{
-  ~~ If necessary, more details than the description above ~~
-}
+%\details{
+%  Not intended for independent use.
+%}
 \value{
   A data frame with values to be plotted, with columns
   \item{X}{values of predictor}
@@ -31,13 +32,13 @@ preparePredictor.fnc(pred, model, m, ylabel, fun, val, xlabel, mcmc, ...)
   \item{Interaction}{logical for whether predictor is interacting predictor}
   \item{Levels}{for factors, the factor level names (only present for factors)}
 }
-\references{ ~put references to the literature/web site here ~ }
+%\references{None}
 \author{R. H. Baayen}
 \note{
  not intended for independent use
 }
 \seealso{See Also as \code{\link{plotLMER.fnc}}}
 \examples{
-  \dontrun{not intended for independent use}
+  \dontrun{Not intended for independent use.}
 }
 \keyword{ regression }
