@@ -112,6 +112,7 @@ Evidence from Danish, Language and Cognitive Processes, in press.}
 #############################################################
 
 require("Design", quietly=TRUE, character=TRUE)
+require("lme4", quietly=TRUE, character=TRUE)
 dfr = makeSplineData.fnc()
 table(dfr$Subject)
 xylowess.fnc(Y ~ X | Subject, data = dfr)

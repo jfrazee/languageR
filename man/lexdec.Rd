@@ -64,7 +64,7 @@ Data collected with Jen Hay, University of Canterbury, Christchurch, New Zealand
 }
 \examples{\dontrun{
 data(lexdec)
-library(lme4, keep.source = FALSE)
+require(lme4, quietly=TRUE)
 
 lexdec.lmer = lmer(RT ~ 1 + Correct + Trial + PrevType * meanWeight + 
 Frequency + NativeLanguage * Length + (1|Subject) + (1|Word), 

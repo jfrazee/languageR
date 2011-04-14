@@ -43,6 +43,7 @@ recognition: Evidence from Danish. Submitted to Language and Cognitive Processes
 \examples{
 \dontrun{
 data(danish)
+require(lme4, quietly=TRUE)
 
 # ---- mixed-effects regression with three random intercepts
 

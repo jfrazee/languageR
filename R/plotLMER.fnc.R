@@ -54,9 +54,9 @@ function(model,
      if ((!is.numeric(ylimit)) | (length(ylimit)!=2)) 
        stop("ylimit should be a two-element numeric vector\n")
    }
-   if (!is.na(mcmcMat[[1]][1])) {
-     if (!is.data.frame(mcmcMat))
-       stop("mcmcMat should be a data frame\n")
+   if (!is.data.frame(mcmcMat)) {
+     if (!is.na(mcmcMat))
+       stop("mcmcMat not a valid\n")
    }
    if (!is.na(intr[1])) {
      if (!is.list(intr))
@@ -123,7 +123,7 @@ function(model,
      }
    }
 
-   if (is.na(mcmcMat[[1]])) {
+   if (!is.data.frame(mcmcMat)) {
      if (!is.na(ranefs[[1]])) {
        if (!((length(ranefs) == 4) & is.list(ranefs))) {
          stop("ranefs should be a four-element list\n")

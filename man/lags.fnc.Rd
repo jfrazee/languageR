@@ -25,7 +25,7 @@ lags.fnc(dat, time="Trial", group = "Subject", depvar = "RT", lag=1)
   for which there is/are no preceding value(s) for the dependent variable.
 }
 \author{R. H. Baayen}
-%\seealso{}
+\seealso{\link{acf.fnc}}
 \examples{\dontrun{
   dfr = data.frame(Subject=c(rep("a", 5), rep("b", 5)),
                    Trial = c(rep(1:5,2)),

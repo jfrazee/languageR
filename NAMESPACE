@@ -1,4 +1,4 @@
-import("methods", "Matrix")
+import("methods")
 
 export(
        "acf.fnc",

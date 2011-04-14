@@ -1,5 +1,4 @@
 \name{growth-class}
-\docType{growth}
 \alias{growth-class}
 
 \title{Class "growth" }

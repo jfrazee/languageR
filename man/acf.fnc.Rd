@@ -32,7 +32,7 @@ acf.fnc(dat, group="Subject", time="Trial", x = "RT", plot=TRUE, ...)
 R. H. Baayen (2001) \emph{Word Frequency Distributions}, Dordrecht: Kluwer.  
 }
 \author{R. H. Baayen}
-%\seealso{}
+\seealso{\link{lags.fnc}}
 \examples{\dontrun{
 data(beginningReaders)
 acf.fnc(beginningReaders, x="LogRT")   # autocorrelations even though nonword responses not included

@@ -37,7 +37,10 @@ lmerPlotInt.fnc(lmermodel, xname, yname, intxyname, qntls = seq(0, 1, by = 0.1),
 	This function should not be used to plot interactions when one of the predictors also has quadratic or higher terms in the model.
 }
 \examples{
+  \dontrun{
+  require(lme4, quietly=TRUE)
 	lexdec.lmer = lmer(RT~BNCw*Frequency+(1|Subject)+(1|Word), data=lexdec)
 	lmerPlotInt.fnc(lexdec.lmer, "BNCw", "Frequency", "BNCw:Frequency", which="matplot")
 }
+  }
 \keyword{hplot}
