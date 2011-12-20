@@ -4,9 +4,7 @@
 \description{
   This function creates a user-specified number of simulated  
   datasets, and compares mixed-effects models with quasi-F and 
-	F1 and F2 analyses.  It works only with older versions of lmer,
-  as current versions of mcmcsamp do not work for random effect
-  structure that includes correlation parameters.
+	F1 and F2 analyses.
 }
 \usage{
 simulateQuasif.fnc(dat, with = TRUE, nruns = 100, nsub = NA, nitem = NA, ...)

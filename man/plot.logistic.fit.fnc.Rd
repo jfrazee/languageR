@@ -1,5 +1,5 @@
-\name{plot.logistic.fit.fnc}
-\alias{plot.logistic.fit.fnc}
+\name{plotlogistic.fit.fnc}
+\alias{plotlogistic.fit.fnc}
 \title{Plot for goodness of fit of logistic regression}
 \description{
   This function plots observed proportions against mean predicted
@@ -7,7 +7,7 @@
   a straight line.
 }
 \usage{
-plot.logistic.fit.fnc(x, data, method, where, scalesize, ...)
+plotlogistic.fit.fnc(x, data, method, where, scalesize, ...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -50,13 +50,13 @@ dative.glmm = lmer(RealizationOfRecipient ~ AccessOfTheme +
    data = dative, family = "binomial")
 
 par(mfrow=c(2,2))
-plot.logistic.fit.fnc (dative.lrm, dative)
+plotlogistic.fit.fnc (dative.lrm, dative)
 mtext("lrm", 3, 3)
-plot.logistic.fit.fnc (dative.glmm, dative)
+plotlogistic.fit.fnc (dative.glmm, dative)
 mtext("lmer", 3, 3)
-plot.logistic.fit.fnc (dative.lrm, dative, scalesize=0.2)
+plotlogistic.fit.fnc (dative.lrm, dative, scalesize=0.2)
 mtext("lrm", 3, 3)
-plot.logistic.fit.fnc (dative.glmm, dative, method="shingle")
+plotlogistic.fit.fnc (dative.glmm, dative, method="shingle")
 mtext("lmer", 3, 3)
 par(mfrow=c(1,1))
 

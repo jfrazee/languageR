@@ -80,7 +80,7 @@ plotLMER.fnc(model, xlabel = NA, xlabs = NA, ylabel = NA, ylimit = NA,
   main predictor.  
   
   Polynomials have to be fitted with \code{poly(..., degree, raw=TRUE)} and
-  restricted cubic splines with \code{rcs()} from the \code{Design} package.
+  restricted cubic splines with \code{rcs()} from the \code{rms} package.
 
   When an MCMC object (as produced by the MCMC code in lme4, version 1.0 or
   higher) is specified (\code{mcmcMat = ... }), an attempt is made to plot
@@ -111,7 +111,7 @@ Evidence from Danish, Language and Cognitive Processes, in press.}
 # fitting a cosine with a spline (simulated data)
 #############################################################
 
-require("Design", quietly=TRUE, character=TRUE)
+require("rms", quietly=TRUE, character=TRUE)
 require("lme4", quietly=TRUE, character=TRUE)
 dfr = makeSplineData.fnc()
 table(dfr$Subject)

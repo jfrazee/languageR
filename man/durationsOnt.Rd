@@ -55,7 +55,7 @@ summary(prefix.lm)
 
 ###### modeling the presence of the /t/ 
 
-library(Design)
+library(rms)
 durationsOnt.dd = datadist(durationsOnt)
 options(datadist = 'durationsOnt.dd')
 

@@ -32,7 +32,7 @@ installed, as ancillary functions in this package depend on them.
 The following packages need to be installed for working through specific 
 examples.
 \describe{
-    \item{\code{Design}}{for regression modeling}
+    \item{\code{rms}}{for regression modeling}
     \item{\code{rpart}}{for CART trees}
     \item{\code{e1071}}{for support vector machines}
     \item{\code{MASS}}{for many useful functions}

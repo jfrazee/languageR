@@ -75,9 +75,9 @@ text(dative.rp1, use.n = TRUE, pretty = 0)
 
 # analysis with logistic regression
 
-# ---- logistic regression with the Design package
+# ---- logistic regression with the rms package
 
-library(Design)
+library(rms)
 dative.dd = datadist(dative)
 options(datadist = 'dative.dd')
 dative.lrm = lrm(RealizationOfRecipient ~ 
@@ -85,9 +85,7 @@ dative.lrm = lrm(RealizationOfRecipient ~
   AnimacyOfTheme + PronomOfTheme + DefinOfTheme + LengthOfTheme+
   SemanticClass + Modality, data = dative)
 anova(dative.lrm)
-par(mfrow = c(4,3))
-plot(dative.lrm)
-par(mfrow = c(1,1))
+plot(Predict(dative.lrm))
 
 # ---- mixed-effects logistic regression with the lme4 package
 
@@ -100,6 +98,15 @@ SemanticClass + Modality + (1|Verb),
 data = dative, family = "binomial") 
 
 print(dative.lmer, corr=FALSE) 
+
+# multiple comparisons for Accessibility of Theme
+library(multcomp)
+par(mar=c(5,8,3,1))
+AcOfTheme.glht <- glht(dative.lmer, linfct = mcp(AccessOfTheme = "Tukey"))
+plot(AcOfTheme.glht)
+abline(v=0)
+summary(AcOfTheme.glht)
+
 
 } }
 \keyword{datasets}

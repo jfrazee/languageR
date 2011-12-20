@@ -15,7 +15,7 @@ makeSplineData.fnc(intr=0)
     and with 2 a data set with a crossed interaction.}
 }
 \details{
-  Requires \code{Design} package to be attached.
+  Requires \code{rms} package to be attached.
 }
 \value{
   A data frame with as values:
@@ -33,7 +33,7 @@ makeSplineData.fnc(intr=0)
 \seealso{See Also as \code{\link{plotLMER.fnc}}}
 \examples{
 \dontrun{
-require("Design", quietly=TRUE, character=TRUE)
+require("rms", quietly=TRUE, character=TRUE)
 dfr = makeSplineData.fnc()
 table(dfr$Subject)
 xylowess.fnc(Y ~ X | Subject, data = dfr)

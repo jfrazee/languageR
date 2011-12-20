@@ -17,7 +17,7 @@ export(
        "make.reg.fnc",
        "mvrnormplot.fnc",
        "pairscor.fnc",
-       "plot.logistic.fit.fnc",
+       "plotlogistic.fit.fnc",
        "pvals.fnc",
        "quasiF.fnc",
        "quasiFsim.fnc",

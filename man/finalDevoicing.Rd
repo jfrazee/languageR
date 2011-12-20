@@ -50,7 +50,7 @@ text(finalDevoicing.pruned, use.n = TRUE, pretty = 0, cex=0.8)
 
 # ---- logistic regression 
 
-library(Design)
+library(rms)
 
 finalDevoicing.dd = datadist(finalDevoicing)
 options(datadist='finalDevoicing.dd')
@@ -66,10 +66,7 @@ fastbw(finalDevoicing.lrm)
 finalDevoicing.lrm = lrm(Voice ~ VowelType + ConsonantType + 
 Obstruent + Nsyll, data = finalDevoicing, x = TRUE, y = TRUE)
 
-par(mfrow=c(2,2))
-plot(finalDevoicing.lrm, fun = plogis, ylim = c(0, 1), 
-ylab = "p(voiceless)")
-par(mfrow=c(1,1))
+plot(Predict(finalDevoicing.lrm))
 
 # ---- model validation
 

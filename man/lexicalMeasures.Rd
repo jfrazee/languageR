@@ -52,7 +52,7 @@ Baayen, R.H., Feldman, L. and Schreuder, R. (2006)
 data(lexicalMeasures)
 data(lexicalMeasuresDist)
 
-library(Design)
+library(rms)
 library(cluster)
 plot(varclus(as.matrix(lexicalMeasures[,-1])))
 

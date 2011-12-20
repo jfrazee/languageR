@@ -108,9 +108,9 @@ english = rbind(items, items2)
 
 english$NVratio = log(english$NounFrequency+1)-log(english$VerbFrequency+1)
 
-# ---- build model with ols() from Design
+# ---- build model with ols() from rms
 
-library(Design)
+library(rms)
 english.dd = datadist(english)
 options(datadist = 'english.dd')
 
@@ -123,9 +123,7 @@ english.ols = ols(RTlexdec ~ Voice + PC1 + MeanBigramFrequency +
 
 # ---- plot partial effects
 
-par(mfrow = c(4, 3), mar = c(4, 4, 1, 1), oma = rep(1, 4))
-plot(english.ols, adj.subtitle = FALSE, ylim = c(6.4, 6.9), conf.int = FALSE)
-par(mfrow = c(1, 1))
+plot(Predict(english.ols))
 
 # ---- validate the model
 

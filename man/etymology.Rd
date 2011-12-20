@@ -51,7 +51,7 @@ etymology$EtymAge = ordered(etymology$EtymAge, levels = c("Dutch",
 "DutchGerman", "WestGermanic", "Germanic", "IndoEuropean")) 
 options(contrasts=c("contr.treatment","contr.treatment"))
 
-library(Design)
+library(rms)
 etymology.dd = datadist(etymology)
 options(datadist = 'etymology.dd')
 
@@ -78,11 +78,10 @@ validate(etymology.lrm, bw=TRUE, B=200)
 
 # ---- plot partial effects and check assumptions ordinal regression
 
-par(mfrow = c(3, 3))
+plot(Predict(etymology.lrm))
 plot(etymology.lrm)
 resid(etymology.lrm, 'score.binary', pl = TRUE)
 plot.xmean.ordinaly(EtymAge ~ NcountStem, data = etymology)
-par(mfrow = c(1, 1))
 }
 }
 \keyword{datasets}

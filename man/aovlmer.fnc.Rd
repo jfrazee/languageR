@@ -35,6 +35,7 @@ aovlmer.fnc(object, mcmc, which, noMCMC, ...)
 \examples{
 	\dontrun{
 	library(lme4, keep.source=FALSE)
+	library(coda)
 	data(latinsquare)
 	l.lmer = lmer(RT~SOA+(1|Word)+(1|Subject), data=latinsquare)
   mcmc = pvals.fnc(l.lmer, nsim=10000, withMCMC=TRUE)

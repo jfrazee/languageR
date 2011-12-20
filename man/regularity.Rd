@@ -44,7 +44,7 @@ data(regularity)
 
 # ---- predicting regularity with a logistic regression model
 
-library(Design)
+library(rms)
 regularity.dd = datadist(regularity)
 options(datadist = 'regularity.dd')
 
@@ -64,11 +64,7 @@ regularity.lrm.pen
 
 # ---- a plot of the partial effects
 
-par(mfrow = c(3, 3))
-plot(regularity.lrm.pen, fun = plogis, ylab = "Pr(regular)", 
-adj.subtitle = FALSE, ylim = c(0, 1))
-par(mfrow = c(1, 1))
-
+plot(Predict(regularity.lrm.pen))
 
 # predicting regularity with a support vector machine
 

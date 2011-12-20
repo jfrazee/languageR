@@ -1,7 +1,7 @@
-`plot.logistic.fit.fnc` <-
+`plotlogistic.fit.fnc` <-
 function(x, data, method = "cut", where = seq(0, 1, by=0.1), scalesize=NA, ...) {
   require(lme4, quietly = TRUE)
-  require(Design, quietly = TRUE)
+  require(rms, quietly = TRUE)
   if (class(x)[1]=="mer") {
     y=attr(x@frame, "terms")
     depvar = names(attr(terms(y),"dataClasses")[attr(terms(y),"response")])
