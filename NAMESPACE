@@ -13,7 +13,7 @@ export(
        "item.fnc",
        "items.quasif.fnc",
        "lags.fnc",
-			 "lmerPlotInt.fnc",
+       "lmerPlotInt.fnc",
        "make.reg.fnc",
        "mvrnormplot.fnc",
        "pairscor.fnc",
@@ -47,5 +47,5 @@ S3method(summary, growth)
 
 exportClasses(
               "corres",
-							"growth"
-							)
+              "growth"
+             )

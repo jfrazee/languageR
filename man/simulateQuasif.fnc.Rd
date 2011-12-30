@@ -4,7 +4,10 @@
 \description{
   This function creates a user-specified number of simulated  
   datasets, and compares mixed-effects models with quasi-F and 
-	F1 and F2 analyses.
+	F1 and F2 analyses.  It should be run with the version of R
+  and the version of languageR used by Baayen, Davidson & Bates
+  (2008, JML), as mcmcsamp no longer supports models with
+  random correlation parameters.
 }
 \usage{
 simulateQuasif.fnc(dat, with = TRUE, nruns = 100, nsub = NA, nitem = NA, ...)
