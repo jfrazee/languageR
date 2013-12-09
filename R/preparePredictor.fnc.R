@@ -1,5 +1,5 @@
 `preparePredictor.fnc` <-
-function(pred, model, m, ylabel, fun, val, xlabel, mcmc, ranefs, ...) {
+function(pred, model, m, ylabel, fun, val, xlabel, ranefs, ...) {
    
 
 
@@ -8,11 +8,7 @@ function(pred, model, m, ylabel, fun, val, xlabel, mcmc, ranefs, ...) {
   # perhaps a restricted cubic spline
   ###############################################################################
 
-  X = model@X
-  if (!is.null(names(model@fixef))) {   # so lmer 1.+
-	  colnames(X) = names(model@fixef)
-  }
-
+  X = model@pp$X
 
   polynomial = FALSE
   namesplit = strsplit(pred, ", ")[[1]]
@@ -67,15 +63,10 @@ function(pred, model, m, ylabel, fun, val, xlabel, mcmc, ranefs, ...) {
         # adjust m so that interactions are now properly represented in the columns of m
         m = implementInteractions.fnc(m)
         # calculate predicted values
-        vals = m %*% fixefs
+        vals = m %*% as.numeric(fixefs)
         # if necessary apply transformation to expected values
         vals = transforming.fnc(vals, fun)
-        if (!is.na(mcmc[[1]][1])) {
-          dfr = cbind(data.frame(X=m[,pred], Y = vals),
-                    addMCMCci.fnc(mcmcM=mcmc, model, m, fun, pred))
-        } else {
-          dfr = data.frame(X=m[,pred], Y = vals)
-        }
+        dfr = data.frame(X=m[,pred], Y = vals)
         dfr$Predictor = rep(xlabel, nrow(dfr))
         dfr$Type = rep(isfactor, nrow(dfr))
         if (is.na(val)) {
@@ -102,16 +93,11 @@ function(pred, model, m, ylabel, fun, val, xlabel, mcmc, ranefs, ...) {
         # and then implement the proper interactions in the model matrix
         m = implementInteractions.fnc(m)
         # calculate the expected values
-        vals = m %*% fixefs
+        vals = m %*% as.numeric(fixefs)
         # and transform expected values if so desired
         vals = transforming.fnc(vals,fun)
         x = 1:nrow(m)
-        if (!is.na(mcmc[[1]][1])) {
-          dfr = cbind(data.frame(X=x, Y = vals),
-                addMCMCci.fnc(mcmcM=mcmc, model, m, fun, pred=factnames[i],factor=TRUE))
-        } else {
-          dfr = data.frame(X=x, Y = vals)
-        }
+        dfr = data.frame(X=x, Y = vals)
         dfr$Predictor = rep(xlabel, nrow(dfr))
         dfr$Type = rep(isfactor, nrow(dfr))
         if (is.na(val)) {
@@ -229,15 +215,10 @@ function(pred, model, m, ylabel, fun, val, xlabel, mcmc, ranefs, ...) {
       # make sure the consequences for interactions are taken into account
       m = implementInteractions.fnc(m)
       # calculate expected values
-      vals = m %*% fixefs
+      vals = m %*% as.numeric(fixefs)
       # and transform the expected values if necessary
       vals = transforming.fnc(vals, fun)
-      if (!is.na(mcmc[[1]][1])) {
-        dfr = cbind(data.frame(X=m[,vec[1]], Y = vals),
-                  addMCMCci.fnc(mcmcM=mcmc, model, m, fun, pred, predname=name1))
-      } else {
-        dfr = data.frame(X=m[,vec[1]], Y = vals)
-      }
+      dfr = data.frame(X=m[,vec[1]], Y = vals)
       dfr$Predictor = rep(xlabel, nrow(dfr))
       dfr$Type = rep(isfactor, nrow(dfr))
       if (is.na(val)) {

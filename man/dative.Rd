@@ -89,18 +89,21 @@ plot(Predict(dative.lrm))
 
 # ---- mixed-effects logistic regression with the lme4 package
 
-library(lme4) 
+require(lme4) 
+require(lmerTest)
+require(optimx)
 
-dative.lmer = lmer(RealizationOfRecipient ~ AccessOfTheme +
-AccessOfRec + LengthOfRecipient + AnimacyOfRec + 
-AnimacyOfTheme + PronomOfTheme + DefinOfTheme + LengthOfTheme + 
-SemanticClass + Modality + (1|Verb), 
-data = dative, family = "binomial") 
+dative.lmer = glmer(RealizationOfRecipient ~ AccessOfTheme +
+  AccessOfRec + LengthOfRecipient + AnimacyOfRec + 
+  AnimacyOfTheme + PronomOfTheme + DefinOfTheme + LengthOfTheme + 
+  SemanticClass + Modality + (1|Verb), 
+  control=glmerControl(optimizer="optimx",optCtrl=list(method="nlminb")),
+  data = dative, family = "binomial") 
 
-print(dative.lmer, corr=FALSE) 
+summary(dative.lmer)
 
 # multiple comparisons for Accessibility of Theme
-library(multcomp)
+require(multcomp)
 par(mar=c(5,8,3,1))
 AcOfTheme.glht <- glht(dative.lmer, linfct = mcp(AccessOfTheme = "Tukey"))
 plot(AcOfTheme.glht)

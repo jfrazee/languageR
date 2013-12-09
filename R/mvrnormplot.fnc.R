@@ -1,6 +1,6 @@
 `mvrnormplot.fnc` <- 
 function(r = 0.9, n = 100, limits=NA) {
-	require("MASS", quietly = TRUE, character = TRUE)
+	require("MASS", quietly = TRUE)
   x = mvrnorm(n, mu = c(0, 0), Sigma=cbind(c(1, r), c(r, 1)))
 	if (is.na(limits)) 
     plot(x, xlab = "x", ylab = "y")

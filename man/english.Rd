@@ -85,7 +85,7 @@ Baayen, R.H., Feldman, L. and Schreuder, R. (2006)
    monomorphemic words, \emph{Journal of Memory and Language},
    53, 496-512.
 }
-\examples{
+\examples{\dontrun{
 data(english)
 
 # ---- orthogonalize orthographic consistency measures
@@ -129,5 +129,5 @@ plot(Predict(english.ols))
 
 validate(english.ols, bw = TRUE, B = 200)
 
-}
+}}
 \keyword{datasets}

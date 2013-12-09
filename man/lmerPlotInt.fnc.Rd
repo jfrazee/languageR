@@ -7,7 +7,11 @@ fitted with lmer}
  numeric predictors.
 }
 \usage{
-lmerPlotInt.fnc(lmermodel, xname, yname, intxyname, qntls = seq(0, 1, by = 0.1), view = 30, addStdError = FALSE, ndigits = 2, nlev = 30, which = "matplot", shadow = 0.5, colour = "lightblue", fun  = NA, ylabel = NA, ...)
+lmerPlotInt.fnc(lmermodel, xname, yname, intxyname, 
+                qntls = seq(0, 1, by = 0.1), view = 30, 
+                addStdError = FALSE, ndigits = 2, nlev = 30, 
+                which = "matplot", shadow = 0.5, colour = "lightblue", 
+                fun  = NA, ylabel = NA, ...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -38,9 +42,12 @@ lmerPlotInt.fnc(lmermodel, xname, yname, intxyname, qntls = seq(0, 1, by = 0.1),
 }
 \examples{
   \dontrun{
-  require(lme4, quietly=TRUE)
-	lexdec.lmer = lmer(RT~BNCw*Frequency+(1|Subject)+(1|Word), data=lexdec)
-	lmerPlotInt.fnc(lexdec.lmer, "BNCw", "Frequency", "BNCw:Frequency", which="matplot")
+  require(lme4)
+  require(optimx)
+	lexdec.lmer = lmer(RT~BNCw*Frequency+(1|Subject)+(1|Word), data=lexdec,
+    control=lmerControl(optimizer="optimx",optCtrl=list(method="nlminb")))
+	lmerPlotInt.fnc(lexdec.lmer, "BNCw", "Frequency", "BNCw:Frequency", 
+    which="matplot")
 }
   }
 \keyword{hplot}

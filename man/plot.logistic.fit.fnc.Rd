@@ -36,17 +36,22 @@ plotlogistic.fit.fnc(x, data, method, where, scalesize, ...)
 \author{R. H. Baayen}
 \examples{\dontrun{
 data(dative)
-library(lme4, keep.source=FALSE)
+require(lme4)
+require(rms)
+require(lmerTest)
+require(optimx)
 
 dative.lrm = lrm(RealizationOfRecipient ~ AccessOfTheme + 
    AccessOfRec + LengthOfRecipient + AnimacyOfRec +
    AnimacyOfTheme + PronomOfTheme + DefinOfTheme + LengthOfTheme +
-   SemanticClass + Modality, data = dative)
+   SemanticClass + Modality, 
+   data = dative)
 
-dative.glmm = lmer(RealizationOfRecipient ~ AccessOfTheme + 
+dative.glmm = glmer(RealizationOfRecipient ~ AccessOfTheme + 
    AccessOfRec + LengthOfRecipient + AnimacyOfRec +
    AnimacyOfTheme + PronomOfTheme + DefinOfTheme + LengthOfTheme +
    SemanticClass + Modality + (1|Verb), 
+   control=glmerControl(optimizer="optimx",optCtrl=list(method="nlminb")),
    data = dative, family = "binomial")
 
 par(mfrow=c(2,2))

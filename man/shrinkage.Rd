@@ -21,9 +21,13 @@
 \examples{\dontrun{
 data(shrinkage)
 
-library(lme4, keep.source=FALSE)
+require(lme4)
+require(lmerTest)
+require(optimx)
 
-shrinkage.lmer = lmer(RT ~ frequency + (1|subject), data = shrinkage)
+shrinkage.lmer = lmer(RT ~ frequency + (1|subject), 
+  data = shrinkage,
+  control=lmerControl(optimizer="optimx",optCtrl=list(method="nlminb"))
 shrinkage.lmList = lmList(RT ~ frequency | subject, data = shrinkage)
 
 # and visualize the difference between random regression 

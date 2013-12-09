@@ -44,17 +44,22 @@ Mental Lexicon}, 2, in press.
 \examples{\dontrun{
 data(primingHeid)
 
-library(lme4, keep.source=FALSE)
+require(lme4)
+require(lmerTest)
+require(optimx)
 
 primingHeid.lmer = lmer(RT ~ RTtoPrime * ResponseToPrime + Condition +
-(1|Subject) + (1|Word), data = primingHeid)
-pvals.fnc(primingHeid.lmer)$summary
+  (1|Subject) + (1|Word), 
+  control=lmerControl(optimizer="optimx",optCtrl=list(method="nlminb")),
+  data = primingHeid)
+summary(primingHeid.lmer)
 
 # model criticism
 
 primingHeid.lmer = lmer(RT ~ RTtoPrime * ResponseToPrime + Condition +
-(1|Subject) + (1|Word), 
-data = primingHeid[abs(scale(resid(primingHeid.lmer)))<2.5,])
-pvals.fnc(primingHeid.lmer)$summary
+  (1|Subject) + (1|Word), 
+  control=lmerControl(optimizer="optimx",optCtrl=list(method="nlminb")),
+  data = primingHeid[abs(scale(resid(primingHeid.lmer)))<2.5,])
+summary(primingHeid.lmer)
 }}
 \keyword{datasets}

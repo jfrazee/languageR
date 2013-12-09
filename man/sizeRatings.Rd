@@ -28,10 +28,13 @@
 }
 \examples{\dontrun{
 data(sizeRatings)
-library(lme4, keep.source = FALSE)
+require(lme4)
+require(lmerTest)
+require(optimx)
 sizeRatings.lmer = lmer(Rating ~ Class * Naive + 
   MeanFamiliarity * Language + (1|Subject) + (1|Word), 
+  control=lmerControl(optimizer="optimx",optCtrl=list(method="nlminb")),
   data = sizeRatings)
-pvals.fnc(sizeRatings.lmer)$summary
+summary(sizeRatings.lmer)
 }}
 \keyword{datasets}

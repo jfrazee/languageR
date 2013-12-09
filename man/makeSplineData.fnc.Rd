@@ -33,12 +33,15 @@ makeSplineData.fnc(intr=0)
 \seealso{See Also as \code{\link{plotLMER.fnc}}}
 \examples{
 \dontrun{
-require("rms", quietly=TRUE, character=TRUE)
+require("rms")
+require("optimx")
+require("lmerTest")
 dfr = makeSplineData.fnc()
 table(dfr$Subject)
 xylowess.fnc(Y ~ X | Subject, data = dfr)
 
-dfr.lmer = lmer(Y ~ rcs(X, 5) + (1|Subject), data = dfr)
+dfr.lmer = lmer(Y ~ rcs(X, 5) + (1|Subject), data = dfr,
+  control=lmerControl(optimizer="optimx",optCtrl=list(method="nlminb")))
 dfr$fittedLMER = as.vector(dfr.lmer@X \%*\% fixef(dfr.lmer))
 
 dfr.dd = datadist(dfr)

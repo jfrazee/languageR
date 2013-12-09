@@ -36,12 +36,19 @@ with crossed random effects for subjects and items.  Manuscript under revision f
 \examples{\dontrun{
 data(splitplot)
 table(splitplot$list, splitplot$subjects)
-library(lme4)
-dat.lmer1 = lmer2(RT ~ list*priming+(1+priming|subjects)+(1+list|items),data=dat)
-dat.lmer2 = lmer2(RT ~ list*priming+(1+priming|subjects)+(1|items),data=dat)
-dat.lmer3 = lmer2(RT ~ list*priming+(1|subjects)+(1|items),data=dat)
-dat.lmer4 = lmer2(RT ~ list*priming+(1|subjects),data=dat)
+dat=splitplot
+require(lme4)
+require(optimx)
+require(lmerTest)
+dat.lmer1 = lmer(RT ~ list*priming+(1+priming|subjects)+(1+list|items),data=dat,
+  control=lmerControl(optimizer="optimx",optCtrl=list(method="nlminb")))
+dat.lmer2 = lmer(RT ~ list*priming+(1+priming|subjects)+(1|items),data=dat,
+  control=lmerControl(optimizer="optimx",optCtrl=list(method="nlminb")))
+dat.lmer3 = lmer(RT ~ list*priming+(1|subjects)+(1|items),data=dat,
+  control=lmerControl(optimizer="optimx",optCtrl=list(method="nlminb")))
+dat.lmer4 = lmer(RT ~ list*priming+(1|subjects),data=dat,
+  control=lmerControl(optimizer="optimx",optCtrl=list(method="nlminb")))
 anova(dat.lmer1, dat.lmer2, dat.lmer3, dat.lmer4)
-print(dat.lmer3, corr=FALSE)
+summary(dat.lmer3)
 }}
 \keyword{datasets}

@@ -10,7 +10,7 @@ function(fmla,
     if (xlabel == "") xlabel = y[[3]][1]
     if (ylabel == "") ylabel = y[[2]]
 
-    require("lattice", quietly = TRUE, character = TRUE)
+    require("lattice", quietly = TRUE)
 
     # make the xyplot, this code is a simplified version of one of the
     # examples in the on-line help for xyplot

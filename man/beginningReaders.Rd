@@ -42,11 +42,17 @@ Dutch children).
 \examples{
 \dontrun{
 data(beginningReaders)
-library(lme4, keep.source = FALSE)
+require(lme4)
+require(optimx)
+require(lmerTest)
+
 beginningReaders.lmer = lmer(LogRT ~  PC1 + PC2 + PC3  + ReadingScore +
   OrthLength + I(OrthLength^2) + LogFrequency + LogFamilySize +
-  (1|Word) + (1|Subject) + (0+LogFrequency|Subject) + (0+OrthLength|Subject) + (0+PC1|Subject), 
-  data = beginningReaders)
+  (1|Word) + (1|Subject) + (0+LogFrequency|Subject) + 
+  (0+OrthLength|Subject) + (0+PC1|Subject), 
+  data = beginningReaders,
+  control=lmerControl(optimizer="optimx",optCtrl=list(method="nlminb")))
+summary(beginningReaders.lmer)
 }
 }
 \keyword{datasets}

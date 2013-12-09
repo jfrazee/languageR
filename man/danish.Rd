@@ -43,23 +43,26 @@ recognition: Evidence from Danish. Submitted to Language and Cognitive Processes
 \examples{
 \dontrun{
 data(danish)
-require(lme4, quietly=TRUE)
+require(lme4)
+require(lmerTest)
+require(optimx)
 
 # ---- mixed-effects regression with three random intercepts
 
 danish.lmer = lmer(LogRT ~ PC1 + PC2 + PrevError + Rank +
-ResidSemRating + ResidFamSize + LogWordFreq*LogAffixFreq*Sex +  
-poly(LogCUP, 2, raw=TRUE) + LogUP + LogCUPtoEnd + 
-(1|Subject) + (1|Word) + (1|Affix), data = danish)
+  ResidSemRating + ResidFamSize + LogWordFreq*LogAffixFreq*Sex +  
+  poly(LogCUP, 2, raw=TRUE) + LogUP + LogCUPtoEnd + 
+  (1|Subject) + (1|Word) + (1|Affix), data = danish,
+  control=lmerControl(optimizer="optimx",optCtrl=list(method="nlminb")))
  
 danish.lmerA = lmer(LogRT ~ PC1 + PC2 + PrevError + Rank +
-ResidSemRating + ResidFamSize + LogWordFreq*LogAffixFreq*Sex +  
-poly(LogCUP, 2, raw=TRUE) + LogUP + LogCUPtoEnd + 
-(1|Subject) + (1|Word) + (1|Affix), data = danish,
-subset=abs(scale(resid(danish.lmer)))<2.5)
+  ResidSemRating + ResidFamSize + LogWordFreq*LogAffixFreq*Sex +  
+  poly(LogCUP, 2, raw=TRUE) + LogUP + LogCUPtoEnd + 
+  (1|Subject) + (1|Word) + (1|Affix), data = danish,
+  control=lmerControl(optimizer="optimx",optCtrl=list(method="nlminb")),
+  subset=abs(scale(resid(danish.lmer)))<2.5)
 
-mcmc = pvals.fnc(danish.lmerA, nsim=10000, withMCMC=TRUE)
-mcmc$fixed[,1:5]
+summary(danish.lmerA)
 }
 }
 \keyword{datasets}

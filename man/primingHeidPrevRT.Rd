@@ -53,11 +53,14 @@ Mental Lexicon}, 2, in press.
 \examples{\dontrun{
 data(primingHeidPrevRT)
 
-library(lme4, keep.source=FALSE)
+require(lme4)
+require(optimx)
+require(lmerTest)
 
 primingHeid.lmer = lmer(RT ~ RTtoPrime * ResponseToPrime + Condition + 
-log(RTmin1) + (1|Subject) + (1|Word), data = primingHeidPrevRT)
-pvals.fnc(primingHeid.lmer)$summary
+  log(RTmin1) + (1|Subject) + (1|Word), data = primingHeidPrevRT,
+  control=lmerControl(optimizer="optimx",optCtrl=list(method="nlminb")))
+summary(primingHeid.lmer)
 }}
 \keyword{datasets}
 

@@ -1,6 +1,0 @@
-library(languageR)
-library(utils)
-data(dativeSimplified)
-write.table(dativeSimplified, "verbs.txt", quote=FALSE, row.names=FALSE)
-rm(dativeSimplified)
-cat("created verbs.txt in current directory\n")

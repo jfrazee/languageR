@@ -9,12 +9,12 @@
 \usage{
 plotLMER.fnc(model, xlabel = NA, xlabs = NA, ylabel = NA, ylimit = NA, 
    ilabel = NA, fun = NA, pred = NA, control = NA, ranefs = NA, n = 100, 
-   intr = NA, mcmcMat = NA, lockYlim = TRUE, addlines = FALSE, 
+   intr = NA,  lockYlim = TRUE, addlines = FALSE, 
    withList = FALSE, cexsize = 0.5, linecolor = 1, addToExistingPlot = FALSE, 
    verbose = TRUE, ...)
 }
 \arguments{
-  \item{model}{ a \code{mer} model object }
+  \item{model}{ a \code{LMM} or \code{GLMM} model object of class \code{lmerMod} }
   \item{xlabel}{ label for X-axis (if other than the variable name in the
     original model formula)}
   \item{xlabs}{ character vector with labels for X-axes in multipanel plot (if 
@@ -33,7 +33,7 @@ plotLMER.fnc(model, xlabel = NA, xlabs = NA, ylabel = NA, ylimit = NA,
     if specified, a single plot will produced for the partial effect of this
     specific predictor}
   \item{control}{ a two-element list \code{list(predictor, val)} specifying a \code{predictor} the value of which has to be set to \code{val} in the partial effect plot(s); the predictor name should be exactly as specified in \code{names(model@fixef)}.  It is up to the user to make sure that name and value make sense, the code here hands full 'control' to the user.} 
-  \item{ranefs}{a four-element list \code{Group, Level, Predictor}, specifying a random-effect Group (e.g. \code{Subject}), a level (e.g., \code{S10}) and a value (e.g., \code{LogFrequency}) for which partial effects have to be calibrated; implemented only for \code{mcmcMat=NA}.}
+  \item{ranefs}{a four-element list \code{Group, Level, Predictor}, specifying a random-effect Group (e.g. \code{Subject}), a level (e.g., \code{S10}) and a value (e.g., \code{LogFrequency}) for which partial effects have to be calibrated.}
   \item{n}{ integer denoting number of points for the plot, chosen at equally
     spaced intervals across the empirical range of the predictor variable }
   \item{intr}{ a list specifying an interaction to be graphed; obligatory
@@ -44,10 +44,6 @@ plotLMER.fnc(model, xlabel = NA, xlabs = NA, ylabel = NA, ylimit = NA,
   a vector of colors and as second element a vector of line types. The number
   of elements in both vectors should match the number of values specified 
   under (2) for the interaction predictor.}
-  \item{mcmcMat}{ an MCMC matrix as produced by \code{mcmcsamp} or 
-  \code{pvals.fnc()$mcmc} for the input model; when this matrix is specified, 
-  an attempt is made to add MCMC-based HPD intervals to the predicted values
-  in the plot.  Works only for R 2.6.2 or higher, and for lme4 0.999 or higher. }
   \item{lockYlim}{ logical specifying whether all subplots should have the same
   range of values for the vertical axis; if \code{TRUE}, this range will be
   chosen to accomodate all fitted values including HDP intervals for all
@@ -69,8 +65,9 @@ plotLMER.fnc(model, xlabel = NA, xlabs = NA, ylabel = NA, ylimit = NA,
   When no predictor is specified, a series of plots is produced for the partial
   effects of each predictor.  The graphs are shown for the reference level for
   factors and are adjusted for the median value for the other numerical
-  predicors in the model.  Interactions are not shown.  The user should set up the
-  appropriate number of subplots on the graphics device before running plotLMER.fnc().
+  predicors in the model.  Interactions are not shown.  The user should set up
+  the appropriate number of subplots on the graphics device before running
+  plotLMER.fnc().
 
   Instead of showing all predictors jointly, plotLMER.fnc() can also be used to
   plot the partial effect of a specific predictor.  When a specific predictor
@@ -81,16 +78,6 @@ plotLMER.fnc(model, xlabel = NA, xlabs = NA, ylabel = NA, ylimit = NA,
   
   Polynomials have to be fitted with \code{poly(..., degree, raw=TRUE)} and
   restricted cubic splines with \code{rcs()} from the \code{rms} package.
-
-  When an MCMC object (as produced by the MCMC code in lme4, version 1.0 or
-  higher) is specified (\code{mcmcMat = ... }), an attempt is made to plot
-  MCMC HPD intervals for the predicted values.  This code is under development.
-  For each MCMC sample, the posterior values of the fixed effects are used
-  to predict the dependent variable for a range of its values, with other 
-  predictors in the model held constant (factors at the reference level, 
-  covariates at their medians).  For each of the predicted 'posterior' values,
-  the HPD interval is obtained, and added to the graph.
-
 }
 \value{
   A plot is produced on the graphical device.
@@ -107,9 +94,15 @@ Evidence from Danish, Language and Cognitive Processes, in press.}
 \examples{
   \dontrun{
 
-#############################################################
+###########################################################################
+# we will stay as close to the older optimizer of lme4 as possible -
+# this requires the optimx package and using the control option of lmer()
+###########################################################################
+require(optimx)
+
+###########################################################################
 # fitting a cosine with a spline (simulated data)
-#############################################################
+###########################################################################
 
 require("rms", quietly=TRUE, character=TRUE)
 require("lme4", quietly=TRUE, character=TRUE)
@@ -119,73 +112,65 @@ xylowess.fnc(Y ~ X | Subject, data = dfr)
 # the smoother doesn't recognize the cosine function implemented in makeSplineData.fnc()
 dev.off()   
 
-dfr.lmer = lmer(Y ~ rcs(X, 5) + (1|Subject), data = dfr)
+dfr.lmer = lmer(Y ~ rcs(X, 5) + (1|Subject), data = dfr,
+  control = lmerControl(optimizer="optimx",optCtrl=list(method="nlminb")))
 plotLMER.fnc(dfr.lmer)
 
 # comparison with ols from Design package
-dfr.dd = datadist(dfr)
-options(datadist='dfr.dd')
-dfr.ols = ols(Y~Subject+rcs(X), data=dfr, x=T, y=T)
-dfr$fittedOLS = fitted(dfr.ols)
-dfr$fittedLMER = as.vector(dfr.lmer@X \%*\% fixef(dfr.lmer))
+dfr.lm = lm(Y~Subject+rcs(X), data=dfr, x=T, y=T)
+dfr$fittedOLS = fitted(dfr.lm)
+dfr$fittedLMER = as.vector(dfr.lmer@pp$X \%*\% fixef(dfr.lmer))
 
 # we plot the lmer() fit in blue, the ols() fit in red (both adjusted for
 # subject S1), and plot the underlying model in green
 
-plot(dfr[dfr$Subject=="S1",]$X, dfr[dfr$Subject=="S1",]$fittedLMER +
-  ranef(dfr.lmer)[[1]]["S1",], type="l", col="blue",
-  ylim = range(dfr$y + ranef(dfr.lmer)[[1]]["S1",],
-  dfr[dfr$Subject == "S1",]$fittedLMER,
-  dfr[dfr$Subject == "S1",]$fittedOLS),
-  xlab="X", ylab="Y")   
-lines(dfr[dfr$Subject=="S1",]$X, dfr[dfr$Subject=="S1",]$fittedOLS, 
-col="red")
+plot(dfr[dfr$Subject=="S1",]$X, 
+  dfr[dfr$Subject=="S1",]$fittedLMER + ranef(dfr.lmer)[[1]]["S1",], 
+  col="blue", ylim = c(24,30), xlab="X", ylab="Y", type="n")   
+
+lines(dfr[dfr$Subject=="S1",]$X, dfr[dfr$Subject=="S1",]$fittedOLS, col="red")
+lines(dfr[dfr$Subject=="S1",]$X, dfr[dfr$Subject=="S1",]$fittedLMER, col="blue")
 lines(dfr[dfr$Subject=="S1",]$X, dfr[dfr$Subject=="S1",]$y+
-ranef(dfr.lmer)[[1]]["S1",], col="green")
-legend(2,29,c("30+cos(x)", "lmer (S1)", "ols (S1)"), lty=rep(1,3), 
-col=c("green", "blue", "red"))
-
-
-
+  ranef(dfr.lmer)[[1]]["S1",], col="green")
+legend(2,30,c("30+cos(x)", "lmer (S1)", "ols (S1)"), lty=rep(1,3), 
+  col=c("green", "blue", "red"))
 
 
 #############################################################
-# a model with a raw polynomial: the mcmc credible intervals
-# will be different each time this example is run; for large
-# numbers of samples, the plotting code will become quite slow
+# a model with a raw polynomial
 #############################################################
 
 bg.lmer = lmer(LogRT ~ PC1+PC2+PC3 + ReadingScore +
-poly(OrthLength, 2, raw=TRUE) + LogFrequency + LogFamilySize +
-(1|Word) + (1|Subject)+(0+OrthLength|Subject) +
-(0+LogFrequency|Subject), data = beginningReaders)
-mcmc = pvals.fnc(bg.lmer, nsim=1000, withMCMC=TRUE)
+  poly(OrthLength, 2, raw=TRUE) + LogFrequency + LogFamilySize +
+  (1|Word) + (1|Subject)+(0+OrthLength|Subject) +
+  (0+LogFrequency|Subject), data = beginningReaders,
+  control=lmerControl(optimizer="optimx",optCtrl=list(method="nlminb")))
 
 pars = par()
 par(mfrow=c(3,3), mar=c(5,5,1,1))
-plotLMER.fnc(bg.lmer, mcmcMat=mcmc$mcmc, fun=exp, ylabel = "RT (ms)")
+plotLMER.fnc(bg.lmer, fun=exp, ylabel = "RT (ms)")
 
 #############################################################
 # a model with an interaction involving numeric predictors
 #############################################################
 
 danish.lmer = lmer(LogRT ~ PC1 + PC2 + PrevError + Rank +
-ResidSemRating + ResidFamSize + LogWordFreq*LogAffixFreq*Sex +  
-poly(LogCUP, 2, raw=TRUE) + LogUP + LogCUPtoEnd + 
-(1|Subject) + (1|Word) + (1|Affix), data = danish)
+  ResidSemRating + ResidFamSize + LogWordFreq*LogAffixFreq*Sex +  
+  poly(LogCUP, 2, raw=TRUE) + LogUP + LogCUPtoEnd + 
+  (1|Subject) + (1|Word) + (1|Affix), data = danish,
+  control=lmerControl(optimizer="optimx",optCtrl=list(method="nlminb")))
 danish.lmerA = lmer(LogRT ~ PC1 + PC2 + PrevError + Rank +
-ResidSemRating + ResidFamSize + LogWordFreq*LogAffixFreq*Sex +  
-poly(LogCUP, 2, raw=TRUE) + LogUP + LogCUPtoEnd + 
-(1|Subject) + (1|Word) + (1|Affix), data = danish,
-subset=abs(scale(resid(danish.lmer)))<2.5)
-mcmc = pvals.fnc(danish.lmerA, nsim=10000, withMCMC=TRUE)
-mcmc$fixed[,1:5]
+  ResidSemRating + ResidFamSize + LogWordFreq*LogAffixFreq*Sex +  
+  poly(LogCUP, 2, raw=TRUE) + LogUP + LogCUPtoEnd + 
+  (1|Subject) + (1|Word) + (1|Affix), data = danish,
+  subset=abs(scale(resid(danish.lmer)))<2.5,
+  control=lmerControl(optimizer="optimx",optCtrl=list(method="nlminb")))
 
 # plot for reference level of Sex
 plotLMER.fnc(danish.lmerA, pred = "LogAffixFreq", 
-intr=list("LogWordFreq", round(quantile(danish$LogWordFreq),3), "beg",
-list(c("red", "green", "blue", "yellow", "purple"), rep(1,5))), ylimit=c(6.5,7.0),
-mcmcMat=mcmc$mcmc, xlabel = "log affix frequency", ylabel = "log RT auditory lexical decision")
+  intr=list("LogWordFreq", round(quantile(danish$LogWordFreq),3), "beg",
+  list(c("red", "green", "blue", "yellow", "purple"), rep(1,5))), 
+  ylimit=c(6.5,7.0))
 
 # this model has a significant three-way interaction
 # for visualization, we can either relevel Sex and refit,
@@ -195,36 +180,38 @@ danish$Sex=relevel(danish$Sex, "F")
 danish.lmerF = lmer(LogRT ~ PC1 + PC2 + PrevError + Rank +
   ResidSemRating + ResidFamSize + LogWordFreq*LogAffixFreq*Sex +  
   poly(LogCUP, 2, raw=TRUE) + LogUP + LogCUPtoEnd + 
-  (1|Subject) + (1|Word) + (1|Affix), data = danish)
+  (1|Subject) + (1|Word) + (1|Affix), data = danish,
+  control=lmerControl(optimizer="optimx",optCtrl=list(method="nlminb")))
 danish$Sex=relevel(danish$Sex, "M")
 danish.lmerM = lmer(LogRT ~ PC1 + PC2 + PrevError + Rank +
   ResidSemRating + ResidFamSize + LogWordFreq*LogAffixFreq*Sex +  
   poly(LogCUP, 2, raw=TRUE) + LogUP + LogCUPtoEnd + 
-  (1|Subject) + (1|Word) + (1|Affix), data = danish)
+  (1|Subject) + (1|Word) + (1|Affix), data = danish,
+  control=lmerControl(optimizer="optimx",optCtrl=list(method="nlminb")))
 
 # Next preparing for using the control option:
 #
-# names(fixef(danish.lmer))[10]  # SexM
-# unique(danish.lmer@X[,10])     # 1 0
+# names(fixef(danish.lmer))[10]     # SexM
+# unique(danish.lmer@pp$X[,10])     # 1 0
 
 par(mfrow=c(2,2))
 
 plotLMER.fnc(danish.lmer, pred="LogWordFreq", ylimit=c(6.5,7.0),
-intr=list("LogAffixFreq", quantile(danish$LogAffixFreq), "end"),
+intr=list("LogAffixFreq", round(quantile(danish$LogAffixFreq),2), "end"),
 control=list("SexM", 0))
 mtext("females", line=1.5, cex=0.9)
 
 plotLMER.fnc(danish.lmer, pred="LogWordFreq", ylimit=c(6.5,7.0),
-intr=list("LogAffixFreq", quantile(danish$LogAffixFreq), "end"),
+intr=list("LogAffixFreq", round(quantile(danish$LogAffixFreq),2), "end"),
 control=list("SexM", 1))
 mtext("males", line=1.5, cex=0.9)
 
 plotLMER.fnc(danish.lmerF, pred="LogWordFreq", ylimit=c(6.5,7.0), 
-intr=list("LogAffixFreq", quantile(danish$LogAffixFreq), "end"))
+intr=list("LogAffixFreq", round(quantile(danish$LogAffixFreq),2), "end"))
 mtext("females", line=1.5, cex=0.9)
 
 plotLMER.fnc(danish.lmerM, pred="LogWordFreq", ylimit=c(6.5, 7.0),
-intr=list("LogAffixFreq", quantile(danish$LogAffixFreq), "end"))
+intr=list("LogAffixFreq", round(quantile(danish$LogAffixFreq),2), "end"))
 mtext("males", line=1.5, cex=0.9)
 
 par(mfrow=c(1,1))
@@ -247,8 +234,8 @@ max(dfr$PrevError$Y)-min(dfr$PrevError$Y)
 # effect sizes for the quantiles in an interaction plot
 
 dfr = plotLMER.fnc(danish.lmerA, pred = "LogAffixFreq", 
-        withList=TRUE,
-        intr=list("LogWordFreq", round(quantile(danish$LogWordFreq),3), "beg"))
+  withList=TRUE,
+  intr=list("LogWordFreq", round(quantile(danish$LogWordFreq),3), "beg"))
 
 unlist(lapply(dfr$LogAffixFreq, FUN=function(X)return(max(X$Y)-min(X$Y))))
 
@@ -259,23 +246,24 @@ unlist(lapply(dfr$LogAffixFreq, FUN=function(X)return(max(X$Y)-min(X$Y))))
 
 danish$WordFreqFac = danish$LogWordFreq > median(danish$LogWordFreq)
 danish.lmer2 = lmer(LogRT ~ WordFreqFac*Sex +  
-(1|Subject) + (1|Word) + (1|Affix), data = danish)
-mcmc = pvals.fnc(danish.lmer2,nsim=1000,withMCMC=TRUE)
+  (1|Subject) + (1|Word) + (1|Affix), data = danish,
+  control=lmerControl(optimizer="optimx",optCtrl=list(method="nlminb")))
 
 plotLMER.fnc(danish.lmer2, pred = "Sex", 
-intr=list("WordFreqFac", c("TRUE", "FALSE"), "end", 
-list(c("red",  "blue"), rep(1,2))),
-ylimit=c(6.5,7.0), cexsize=1.0, addlines=TRUE, mcmcMat=mcmc$mcmc)
+  intr=list("WordFreqFac", c("TRUE", "FALSE"), "end", 
+  list(c("red",  "blue"), rep(1,2))),
+  ylimit=c(6.7,6.9), cexsize=1.0, addlines=TRUE)
 
 #############################################################
 # a generalized linear mixed-effects model
 #############################################################
 
-dative.lmer = lmer(RealizationOfRecipient ~ 
-AccessOfTheme + AccessOfRec + LengthOfRecipient + AnimacyOfRec +
-AnimacyOfTheme + PronomOfTheme + DefinOfTheme + LengthOfTheme +
-SemanticClass + Modality + (1|Verb), 
-data = dative, family = "binomial")
+dative.lmer = glmer(RealizationOfRecipient ~ 
+  AccessOfTheme + AccessOfRec + LengthOfRecipient + AnimacyOfRec +
+  AnimacyOfTheme + PronomOfTheme + DefinOfTheme + LengthOfTheme +
+  SemanticClass + Modality + (1|Verb), 
+  data = dative, family = "binomial",
+  control=glmerControl(optimizer="optimx",optCtrl=list(method="nlminb")))
 
 par(mfrow=c(3,4),mar=c(5,5,1,1))
 plotLMER.fnc(dative.lmer, fun=plogis, addlines=TRUE)
@@ -283,7 +271,7 @@ plotLMER.fnc(dative.lmer, fun=plogis, addlines=TRUE)
 # with user-specified labels for the x-axis
 par(mfrow=c(3,4),mar=c(5,5,1,1))
 plotLMER.fnc(dative.lmer, fun=plogis, addlines=TRUE,
-xlabs=unlist(strsplit("abcdefghij","")))
+  xlabs=unlist(strsplit("abcdefghij","")))
 
 par(pars)
 

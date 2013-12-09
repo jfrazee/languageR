@@ -7,11 +7,7 @@ function(model, n = 100,
 
    coefs = fixef(model)
    ncoefs = length(coefs)
-   X = model@X
-   #if (is(model, "mer")) colnames(X) = names(model@fixef)
-   if (!is.null(names(model@fixef))) {   # so lmer 1.+
-	  colnames(X) = names(model@fixef)
-   }
+   X = model@pp$X
 
    nams =  strsplit(names(coefs), ":")
 

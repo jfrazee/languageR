@@ -7,6 +7,9 @@ function(
   learn = FALSE, learnRate = 10, ...) 
 {
 
+  stop("this function is not working due to changes in lme4.
+        an update using lmerTest is in progress")
+
   require("lme4", quietly = TRUE)
 
   # some matrices for storing results

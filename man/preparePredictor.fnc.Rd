@@ -6,7 +6,7 @@
   including upper and lower 95\% HPD intervals
 }
 \usage{
-preparePredictor.fnc(pred, model, m, ylabel, fun, val, xlabel, mcmc, ranefs, ...)
+preparePredictor.fnc(pred, model, m, ylabel, fun, val, xlabel, ranefs, ...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -17,7 +17,6 @@ preparePredictor.fnc(pred, model, m, ylabel, fun, val, xlabel, mcmc, ranefs, ...
   \item{fun}{ character string denoting transformation function for dependent variable, currently only '"plogis"' or '"exp"' }
   \item{val}{ value of interacting variable }
   \item{xlabel}{ label for horizontal axis }
-  \item{mcmc}{ MCMC matrix as produced by \code{mcmcsamp} or \code{pvals.fnc()$mcmc}}
   \item{ranefs}{ a three-element list \code{Group, Level, Predictor}, specifying a random-effect Group (e.g. \code{Subject}), a level (e.g., \code{S10}) and a value (e.g., \code{LogFrequency}) for which partial effects have to be calibrated; implemented only for \code{mcmcMat=NA}.}
   \item{\dots}{ further graphical parameters, currently not implemented }
 }

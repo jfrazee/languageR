@@ -65,24 +65,27 @@ selfPacedReadingHeid = selfPacedReadingHeid[selfPacedReadingHeid$RT > 5 &
 
 # fitting a mixed-effects model
 
-library(lme4, keep.source = FALSE)
+require(lme4)
+require(lmerTest)
+require(optimx)
 x = selfPacedReadingHeid[,12:15]
 x.pr = prcomp(x, center = TRUE, scale = TRUE)
 selfPacedReadingHeid$PC1 = x.pr$x[,1]
 
 selfPacedReadingHeid.lmer = lmer(RT ~ RTtoPrime + LengthInLetters + 
   PC1 * Condition + (1|Subject) + (1|Word), 
+  control=lmerControl(optimizer="optimx",optCtrl=list(method="nlminb")),
   data = selfPacedReadingHeid)  
-pvals.fnc(selfPacedReadingHeid.lmer)$summary
+summary(selfPacedReadingHeid.lmer)
 
 # model criticism
 
 selfPacedReadingHeid.lmerA = lmer(RT ~ RTtoPrime + LengthInLetters + 
-PC1 * Condition + (1|Subject) + (1|Word), data = 
-selfPacedReadingHeid[abs(scale(resid(selfPacedReadingHeid.lmer))) < 2.5, ])
+  PC1 * Condition + (1|Subject) + (1|Word), 
+  control=lmerControl(optimizer="optimx",optCtrl=list(method="nlminb")),
+  data = selfPacedReadingHeid[abs(scale(resid(selfPacedReadingHeid.lmer))) < 2.5, ])
 
 qqnorm(resid(selfPacedReadingHeid.lmerA))
-
-pvals.fnc(selfPacedReadingHeid.lmerA)$summary
+summary(selfPacedReadingHeid.lmerA)
 }}
 \keyword{datasets}

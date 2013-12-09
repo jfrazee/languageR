@@ -1,7 +1,7 @@
 `compare.richness.fnc` <-
 function(text1, text2, digits = 5) {
 
-  if (!require("zipfR", quietly = TRUE, character = TRUE)) {
+  if (!require("zipfR", quietly = TRUE)) {
     stop("please install the zipfR library first")
   } else {
 

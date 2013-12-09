@@ -2,10 +2,10 @@ lmerPlotInt.fnc = function(lmermodel, xname, yname, intxyname,
 qntls=seq(0,1,by=0.1), view = 30, addStdError = FALSE, ndigits=2,
   nlev=30, which="matplot", shadow = 0.5, colour = "lightblue", fun=NA, ylabel=NA, ...){
 
-  require("lme4", quietly = TRUE, character = TRUE)
+  require("lme4", quietly = TRUE)
 
-  if (!(is(lmermodel, "lmer") | is(lmermodel, "mer") | is(lmermodel, "glmer")))
-    stop("model object must be fitted with lmer")
+  if (!(isLMM(lmermodel) | isGLMM(lmermodel)))
+    stop("model object must be fitted with lmer or glmer")
   f <- function(x,y) {return(intercept + slopeX*x + slopeY*y + interactionxy*x*y)}
 
   if (!is.function(fun)) {

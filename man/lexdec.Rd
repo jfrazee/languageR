@@ -64,23 +64,28 @@ Data collected with Jen Hay, University of Canterbury, Christchurch, New Zealand
 }
 \examples{\dontrun{
 data(lexdec)
-require(lme4, quietly=TRUE)
+require(lme4)
+require(lmerTest)
+require(optimx)
 
 lexdec.lmer = lmer(RT ~ 1 + Correct + Trial + PrevType * meanWeight + 
-Frequency + NativeLanguage * Length + (1|Subject) + (1|Word), 
-data = lexdec)
-pvals.fnc(lexdec.lmer)$summary
+  Frequency + NativeLanguage * Length + (1|Subject) + (1|Word), 
+  control=lmerControl(optimizer="optimx",optCtrl=list(method="nlminb")),
+  data = lexdec)
+summary(lexdec.lmer)
 
 # random slopes
 
 lexdec.lmerA = lmer(RT ~ 1 + Correct + Trial + PrevType * meanWeight + 
-Frequency + NativeLanguage * Length + (Trial|Subject) + (1|Word), 
-data = lexdec)
+  Frequency + NativeLanguage * Length + (Trial|Subject) + (1|Word), 
+  control=lmerControl(optimizer="optimx",optCtrl=list(method="nlminb")),
+  data = lexdec)
 anova(lexdec.lmer, lexdec.lmerA)
 
 lexdec.lmerB = lmer(RT ~ 1 + Correct + Trial + PrevType * meanWeight + 
-Frequency + NativeLanguage * Length + (Trial|Subject) + 
-(Length|Subject) + (1|Word), data = lexdec)
+  Frequency + NativeLanguage * Length + (Trial|Subject) + 
+  (Length|Subject) + (1|Word), data = lexdec,
+  control=lmerControl(optimizer="optimx",optCtrl=list(method="nlminb")))
 anova(lexdec.lmerA, lexdec.lmerB)
 
 # model criticism
@@ -88,14 +93,15 @@ anova(lexdec.lmerA, lexdec.lmerB)
 qqnorm(resid(lexdec.lmerB))
 
 lexdec.lmerC = lmer(RT ~ 1 + Correct + Trial + PrevType * meanWeight + 
-Frequency + NativeLanguage * Length + 
-(Trial|Subject) + (Length|Subject) + (1|Word), 
-data = lexdec[abs(scale(resid(lexdec.lmerB)))<2,])
+  Frequency + NativeLanguage * Length + 
+  (Trial|Subject) + (Length|Subject) + (1|Word), 
+  data = lexdec[abs(scale(resid(lexdec.lmerB)))<2,],
+  control=lmerControl(optimizer="optimx",optCtrl=list(method="nlminb")))
 
 qqnorm(resid(lexdec.lmerC))
-# for models with random correlation parameters, pvals.fnc does not work 
-# as mcmcsamp() (now in lme4) is currently under reconstruction 
-# pvals.fnc(lexdec.lmerC)$summary    (currently broken)
+
+# p values
+summary(lexdec.lmerC)
 
 }}
 \keyword{datasets}

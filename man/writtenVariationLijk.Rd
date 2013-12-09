@@ -36,15 +36,20 @@ spoken 'mok', \emph{Corpus Linguistics and Linguistic Theory}, 1, 183-223.
 \examples{\dontrun{
 data(writtenVariationLijk)
 
-library(lme4, keep.source=FALSE)
+require(lme4)
+require(lmerTest)
+require(lme4)
 
-writtenVariationLijk.lmer = lmer(Count ~ Country * Register + (1|Word), 
-  data = writtenVariationLijk, family = "poisson", method = "Laplace")
+writtenVariationLijk.lmer = glmer(Count ~ Country * Register + (1|Word), 
+  control=glmerControl(optimizer="optimx",optCtrl=list(method="nlminb")),
+  data = writtenVariationLijk, family = "poisson")
 
-writtenVariationLijk.lmerA = lmer(Count ~ Country * Register + (Country|Word), 
-  data = writtenVariationLijk, family = "poisson", method = "Laplace")
+writtenVariationLijk.lmerA = glmer(Count ~ Country * Register + (Country|Word), 
+  control=glmerControl(optimizer="optimx",optCtrl=list(method="nlminb")),
+  data = writtenVariationLijk, family = "poisson")
+
 anova(writtenVariationLijk.lmer, writtenVariationLijk.lmerA)
 
-writtenVariationLijk.lmerA
+summary(writtenVariationLijk.lmerA)
 }}
 \keyword{datasets}

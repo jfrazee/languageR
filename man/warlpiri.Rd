@@ -35,10 +35,13 @@ University of Sydney, Australia.
 }
 \examples{\dontrun{
 data(warlpiri)
-library(lme4, keep.source = FALSE)
-warlpiri.lmer = lmer(CaseMarking ~ WordOrder * AgeGroup + 
+require(lme4)
+require(lmerTest)
+require(optimx)
+warlpiri.lmer = glmer(CaseMarking ~ WordOrder * AgeGroup + 
   AnimacyOfSubject + (1|Text) + (1|Speaker), 
-  family = "binomial", data = warlpiri, method = "Laplace")
-warlpiri.lmer
+  control=glmerControl(optimizer="optimx",optCtrl=list(method="nlminb")),
+  family = "binomial", data = warlpiri)
+summary(warlpiri.lmer)
 }}
 \keyword{datasets}

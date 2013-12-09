@@ -18,11 +18,6 @@ function(model,
                     # the position for interaction labels ("beg", "mid", or "end", or NA, 
                     # in which case labels will not be shown),
                     # optionally followed by a list with a vector of colors and a vector of line types
-   mcmcMat=NA,      # if supplied with MCMC matrix of posterior parameters,
-                    # 95% HPD ci's will be added to the graph
-                    # intervals wil be added to plots without interactions
-                    # --- note --- for this to work, use R 2.6.2 or higher with lme4 1.0 or higher
-                    # --- WARNING --- under development, may not work correctly
    lockYlim=TRUE,   # lock ylim for all subplots to fit range of all predictors and
                     # ci's
    addlines=FALSE,  # for interaction plots for two factors, add lines to plot
@@ -39,9 +34,6 @@ function(model,
    ###############################################################################
    # validate the input
    ###############################################################################
-   if (!is(model, "mer")) {
-     stop("argument should be a mer model object")
-   }
    if (!is.na(xlabel[1])) {
      if (!is.character(xlabel)) 
        stop("xlabel should be a string\n")
@@ -53,10 +45,6 @@ function(model,
    if (!is.na(ylimit[1])) {
      if ((!is.numeric(ylimit)) | (length(ylimit)!=2)) 
        stop("ylimit should be a two-element numeric vector\n")
-   }
-   if (!is.data.frame(mcmcMat)) {
-     if (!is.na(mcmcMat))
-       stop("mcmcMat not a valid\n")
    }
    if (!is.na(intr[1])) {
      if (!is.list(intr))
@@ -123,12 +111,10 @@ function(model,
      }
    }
 
-   if (!is.data.frame(mcmcMat)) {
-     if (!is.na(ranefs[[1]])) {
+   if (!is.na(ranefs[[1]])) {
        if (!((length(ranefs) == 4) & is.list(ranefs))) {
          stop("ranefs should be a four-element list\n")
        }
-     }
    }
 
    ###############################################################################
@@ -217,7 +203,7 @@ function(model,
        #----------------------------------------------------------------------------
        subplots = list()
        dfr = preparePredictor.fnc(predictors[i], model, m, ylabel, fun, 
-         val, xlabel=xlabel, mcmc=mcmcMat, ranefs, lty=1, col=0, ...)
+         val, xlabel=xlabel, ranefs, lty=1, col=0, ...)
        subplots[[1]] = dfr
        if (verbose==TRUE) {
          cat("effect sizes (ranges) for the interaction of ", 
@@ -232,7 +218,7 @@ function(model,
          val = conditioningVals[j]
          m = makeDefaultMatrix.fnc(model, n, conditioningPred, val, control)
          dfr = preparePredictor.fnc(predictors[i], model, m, ylabel, fun, 
-           val,  mcmc=mcmcMat, ranefs, lty=j, xlabel=xlabel, ...)
+           val,  ranefs, lty=j, xlabel=xlabel, ...)
          subplots[[j]] = dfr
          if (verbose==TRUE) {
            cat("   ", conditioningPred, " = ", val, ": ", max(dfr$Y)-min(dfr$Y), "\n")
@@ -249,7 +235,7 @@ function(model,
        m = makeDefaultMatrix.fnc(model, n, "", NULL, control)
        # and make the plot
        dfr = preparePredictor.fnc(predictors[i], model, m, ylabel, fun, 
-         val=NA, xlabel=xlabel, mcmc=mcmcMat, ranefs, ...)
+         val=NA, xlabel=xlabel, ranefs, ...)
        plots[[i]] = dfr
        if (verbose==TRUE) {
          cat("effect size (range) for ", predictors[i], "is ", max(dfr$Y)-min(dfr$Y), "\n")
